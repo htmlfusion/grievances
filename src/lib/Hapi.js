@@ -60,14 +60,18 @@ export default class Hapi extends Backend{
       body: data
     })
       .then((response) => {
-        var json = JSON.parse(response._bodyInit);
-        if (response.status === 200 || response.status === 201) {
-          return json;
-        } else {
-          throw(json);
-        }
+
+        return response.json().then((res) => {
+          if (response.status === 200 || response.status === 201) {
+            return res;
+          } else {
+            throw(res);
+          }
+        });
+
       })
       .catch((error) => {
+        console.error(error);
         throw(error);
       });
 
@@ -97,12 +101,13 @@ export default class Hapi extends Backend{
       body: data
     })
       .then((response) => {
-        var json = JSON.parse(response._bodyInit);
-        if (response.status === 200 || response.status === 201) {
-          return json;
-        } else {
-          throw(json);
-        }
+        return response.json().then((res) => {
+          if (response.status === 200 || response.status === 201) {
+            return res;
+          } else {
+            throw(res);
+          }
+        });
       })
       .catch((error) => {
         throw(error);
@@ -120,14 +125,18 @@ export default class Hapi extends Backend{
       body: {}
     })
       .then((response) => {
-        var  res = JSON.parse(response._bodyInit);
-        if ((response.status === 200 || response.status === 201)
-            || //invalid session token
-            (response.status === 400 && res.code === 209)) {
-          return {};
-        } else {
-          throw({code: res.statusCode, error: res.message});
-        }
+
+        return response.json().then((res) => {
+
+          if ((response.status === 200 || response.status === 201)
+              || //invalid session token
+              (response.status === 400 && res.code === 209)) {
+            return {};
+          } else {
+            throw({code: res.statusCode, error: res.message});
+          }
+        });
+
       })
       .catch((error) => {
         throw(error);
@@ -152,12 +161,13 @@ export default class Hapi extends Backend{
       body: data
     })
       .then((response) => {
-        if ((response.status === 200 || response.status === 201)) {
-          return {};
-        } else {
-          var  res = JSON.parse(response._bodyInit);
-          throw(res);
-        }
+        return response.json().then((res) => {
+          if ((response.status === 200 || response.status === 201)) {
+            return {};
+          } else {
+            throw(res);
+          }
+        });
       })
       .catch((error) => {
         throw(error);
@@ -186,12 +196,13 @@ export default class Hapi extends Backend{
       url: '/account/profile/me'
     })
       .then((response) => {
-        var  res = JSON.parse(response._bodyInit);
-        if ((response.status === 200 || response.status === 201)) {
-          return res;
-        } else {
-          throw(res);
-        }
+        return response.json().then((res) => {
+          if ((response.status === 200 || response.status === 201)) {
+            return res;
+          } else {
+            throw(res);
+          }
+        });
       })
       .catch((error) => {
         throw(error);
@@ -213,12 +224,13 @@ export default class Hapi extends Backend{
       body: data
     })
       .then((response) => {
-        if ((response.status === 200 || response.status === 201)) {
-          return {};
-        } else {
-          var  res = JSON.parse(response._bodyInit);
-          throw(res);
-        }
+        return response.json().then((res) => {
+          if ((response.status === 200 || response.status === 201)) {
+            return {};
+          } else {
+            throw(res);
+          }
+        });
       })
       .catch((error) => {
         throw(error);
@@ -255,7 +267,7 @@ export default class Hapi extends Backend{
     if (opts.body) {
       reqOpts.body = JSON.stringify(opts.body);
     }
-
+    console.log('cool to debug', this.API_BASE_URL + opts.url, reqOpts);
     return await fetch(this.API_BASE_URL + opts.url, reqOpts);
 
   }

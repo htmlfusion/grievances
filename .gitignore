@@ -36,4 +36,9 @@ node_modules/
 # jest
 coverage/
 
+# BUCK
+buck-out/
+\.buckd/
+android/app/libs
+android/keystores/debug.keystore
 src/lib/config.js
