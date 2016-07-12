@@ -1,20 +1,20 @@
 /**
  * # app.js
- *  Display startup screen and 
- *  getSessionTokenAtStartup which will navigate upon completion 
+ *  Display startup screen and
+ *  getSessionTokenAtStartup which will navigate upon completion
  *
- *   
- *  
+ *
+ *
  */
 'use strict';
 /*
  * ## Imports
- *  
+ *
  * Imports from redux
  */
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-
+import {Container, Content, Text} from 'native-base';
 /**
  * Immutable Map
  */
@@ -30,11 +30,11 @@ import * as globalActions from '../reducers/global/globalActions';
 /**
  * The components we need from ReactNative
  */
-import React,
-{ 	
+import React from 'react';
+import
+{
   StyleSheet,
-  View,
-  Text
+  View
 }
 from 'react-native';
 
@@ -74,38 +74,23 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-
-var styles = StyleSheet.create({
-  container: {
-    borderTopWidth: 2,
-    borderBottomWidth:2,
-    marginTop: 80,
-    padding: 10
-  },
-  summary: {
-    fontFamily: 'BodoniSvtyTwoITCTT-Book',
-    fontSize: 18,
-    fontWeight: 'bold'
-  }
-});
-
 /**
  * ## App class
  */
 let App = React.createClass({
   /**
    * See if there's a sessionToken from a previous login
-   * 
+   *
    */
   componentDidMount() {
     this.props.actions.getSessionToken();
   },
-  
+
   render() {
     return(
-      <View style={ styles.container }>
-	<Text style={ styles.summary }>App Startup Screen</Text>
-      </View>
+      <Container>
+	       <Content><Text>App Startup Screen</Text></Content>
+      </Container>
     );
   }
 });
@@ -114,4 +99,3 @@ let App = React.createClass({
  * Connect the properties
  */
 export default connect(mapStateToProps, mapDispatchToProps)(App);
-

@@ -1,6 +1,6 @@
 /**
  * # authInitialState.js
- * 
+ *
  * This class is a Immutable object
  * Working *successfully* with Redux, requires
  * state that is immutable.
@@ -29,8 +29,7 @@ const Form = Record({
   isValid: false,
   isFetching: false,
   fields: new (Record({
-    username: '',
-    usernameHasError: false,
+    fullname: '',
     email: '',
     emailHasError: false,
     password: '',
@@ -43,10 +42,9 @@ const Form = Record({
 
 /**
  * ## InitialState
- * The form is set 
+ * The form is set
  */
 var InitialState = Record({
   form: new Form
 });
 export default InitialState;
-

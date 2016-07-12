@@ -248,7 +248,6 @@ export function getSessionToken() {
           Actions.InitialLoginForm();
         }
       })
-
       .catch((error) => {
         dispatch(sessionTokenRequestFailure(error));
         dispatch(loginState());
@@ -267,7 +266,7 @@ export function saveSessionToken(json) {
 }
 /**
  * ## signup
- * @param {string} username - name of user
+ * @param {string} fullname - name of user
  * @param {string} email - user's email
  * @param {string} password - user's password
  *
@@ -276,12 +275,12 @@ export function saveSessionToken(json) {
  *
  * Otherwise, dispatch the error so the user can see
  */
-export function signup(username, email, password) {
+export function signup(fullname, email, password) {
 
   return dispatch => {
     dispatch(signupRequest());
     return  BackendFactory().signup({
-      username: username,
+      fullname: fullname,
       email: email,
       password: password
     })
@@ -290,7 +289,6 @@ export function signup(username, email, password) {
 	return saveSessionToken(
 	  Object.assign({}, json,
 			{
-			  username: username,
 			  email: email
 			})
 	)
@@ -299,7 +297,6 @@ export function signup(username, email, password) {
 	    dispatch(signupSuccess(
 	      Object.assign({}, json,
 			    {
-			      username: username,
 			      email: email
 			    }
 			   )
@@ -340,7 +337,7 @@ export function loginFailure(error) {
 }
 /**
  * ## Login
- * @param {string} username - user's name
+ * @param {string} email - user's email
  * @param {string} password - user's password
  *
  * After calling Backend, if response is good, save the json
@@ -350,11 +347,11 @@ export function loginFailure(error) {
  * otherwise, dispatch a failure
  */
 
-export function login(username,  password) {
+export function login(email,  password) {
   return dispatch => {
     dispatch(loginRequest());
     return BackendFactory().login({
-      username: username,
+      email: email,
       password: password
     })
 

@@ -1,6 +1,6 @@
 /**
  * # LoginForm.js
- * 
+ *
  * This class utilizes the ```tcomb-form-native``` library and just
  * sets up the options required for the 3 states of Login, namely
  * Login, Register or Reset Password
@@ -12,12 +12,12 @@
  *
  * React
  */
-const React = require('react-native');
+const React = require('react');
 const {
   PropTypes
 } = React;
 
-/** 
+/**
  * States of login display
  */
 const {
@@ -51,29 +51,24 @@ var LoginForm = React.createClass({
    * ## render
    *
    * setup all the fields using the props and default messages
-   * 
+   *
    */
   render() {
 
     let formType = this.props.formType;
-    
+
     let options = {
       auto: 'placeholders',
       fields: {
-        
+
       }
     };
 
-    let username = {
-      label: 'Username',
-      maxLength: 12,
-      editable: !this.props.form.isFetching,
-      hasError: this.props.form.fields.usernameHasError,
-      error: 'Must have 6-12 characters and/or numbers'
+    let fullName = {
+      editable: !this.props.form.isFetching
     };
-    
+
     let email = {
-      label: 'Email',
       keyboardType: 'email-address',
       editable: !this.props.form.isFetching,
       hasError: this.props.form.fields.emailHasError,
@@ -83,7 +78,6 @@ var LoginForm = React.createClass({
     let secureTextEntry = !this.props.form.fields.showPassword;
 
     let password = {
-      label: 'Password',
       maxLength: 12,
       secureTextEntry: secureTextEntry,
       editable: !this.props.form.isFetching,
@@ -92,7 +86,6 @@ var LoginForm = React.createClass({
     };
 
     let passwordAgain= {
-      label: 'Please enter password again',
       secureTextEntry: secureTextEntry,
       maxLength: 12,
       editable: !this.props.form.isFetching,
@@ -108,12 +101,12 @@ var LoginForm = React.createClass({
        */
     case(REGISTER):
       loginForm = t.struct({
-        username: t.String,
+        fullname: t.String,
         email: t.String,
         password: t.String,
         passwordAgain: t.String
       });
-      options.fields['username'] = username;
+      options.fields['fullname'] = fullName;
       options.fields['email'] = email;
       options.fields['password'] = password;
       options.fields['passwordAgain'] = passwordAgain;
@@ -125,13 +118,13 @@ var LoginForm = React.createClass({
        */
     case(LOGIN):
       loginForm = t.struct({
-        username: t.String,
+        email: t.String,
         password: t.String
       });
-      options.fields['username'] = username;
+      options.fields['email'] = email;
       options.fields['password'] = password;
       break;
-      
+
       /**
        * ### Reset password
        * The password reset form has only 1 field
@@ -161,4 +154,3 @@ var LoginForm = React.createClass({
 });
 
 module.exports = LoginForm;
-

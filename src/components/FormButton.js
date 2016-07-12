@@ -9,17 +9,16 @@
  *
  * React
  */
-const  React = require('react-native');
+const  ReactNative = require('react-native');
+const React = require('react');
 const
 {
   StyleSheet,
   View
-} = React;
-  
-/**
- * The platform neutral button
- */
-const  Button = require('apsl-react-native-button');
+} = ReactNative;
+
+import {Button} from 'native-base';
+
 
 /**
  * ## Styles
@@ -28,10 +27,6 @@ var styles = StyleSheet.create({
   signin: {
     marginLeft: 10,
     marginRight: 10
-  },
-  button: {
-    backgroundColor: '#FF3366',
-    borderColor:  '#FF3366'
   }
 
 });
@@ -40,12 +35,12 @@ var FormButton = React.createClass({
   /**
    * ### render
    *
-   * Display the Button 
+   * Display the Button
    */
   render() {
     return (
       <View style={styles.signin}>
-        <Button style={styles.button}
+        <Button block
             isDisabled={this.props.isDisabled}
             onPress={this.props.onPress}
         >

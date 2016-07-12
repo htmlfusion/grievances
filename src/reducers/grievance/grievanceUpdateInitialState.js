@@ -20,28 +20,32 @@ const  {Record} = require('immutable');
  * The originalProfile is what Parse.com provided and has the objectId
  * The fields are what display on the UI
  */
-const Form = Record({
-  originalProfile: new (Record({
-    fullname: null,
-    email: null,
-    objectId: null,
-    emailVerified: null
+
+const UpdateForm = Record({
+  originalGrievance: new (Record({
+    address: null,
+    location: null,
+    reportedUser: null,
+    description: null,
+    dateOfReporting: null,
+    dateOfResolving: null,
+    resolvedUser: null,
+    status: null,
+    tag: null,
+    _id: null
   })),
   disabled: false,
   error: null,
   isValid: false,
   isFetching: false,
   fields: new (Record({
-    fullname: '',
-    email: '',
-    emailHasError: false,
-    emailVerified: false
+    description: ''
   }))
 });
 
 
 var InitialState = Record({
-  form: new Form
+  form: new UpdateForm
 });
 
 export default InitialState;

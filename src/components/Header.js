@@ -2,17 +2,17 @@
 * # Header.js
 *
  * This component initially displays a image. But when clicked, things
- * get interesting. 
+ * get interesting.
  *
  * On the initial display after being clicked, the
  * textinput will display the current ```state``` of the application.
  *
  * The button will be enabled and if clicked, whatever state is now
  * contained in the textinput will be processed and the application
- * will be restored to that state. 
+ * will be restored to that state.
  *
  * By pasting in a previous state, the application will reset to that
- * state  
+ * state
  *
  * When the mark image is clicked, it is just toggled to display or hide.
 */
@@ -23,18 +23,18 @@
  *
  * React
 */
-const React = require('react-native');
-
+const ReactNative = require('react-native');
+const React = require('react');
+const {PropTypes} = React;
 const {
   Image,
-  PropTypes,
   StyleSheet,
   Text,
   TextInput,
   TouchableHighlight,
   View
 
-} = React;
+} = ReactNative;
 /**
  * A spiner
  */
@@ -123,7 +123,7 @@ var Header = React.createClass({
    *
    * When the value of the input changes, call ```_onChangeText```
    *
-   * When the 'Update State' button is pressed, we're off to the 
+   * When the 'Update State' button is pressed, we're off to the
    * races with Hot Loading...just call the
    * ```_updateStateButtonPress``` and away we go...
    *
@@ -132,7 +132,7 @@ var Header = React.createClass({
     let showState = <Text> </Text>;
     if (this.props.showState) {
       let displayText = JSON.stringify(this.props.currentState);
-      
+
      console.log(displayText);
 
       showState =
@@ -152,11 +152,11 @@ var Header = React.createClass({
                        onPress={this._updateStateButtonPress}
                        buttonText={'Update State'}>
           </FormButton>
-          
+
         </View>
       </View>
     }
-    
+
     let spinner = <Text> </Text>;
     if (this.props.isFetching) {
       spinner =  <GiftedSpinner/>;

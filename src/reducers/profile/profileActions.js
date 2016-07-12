@@ -1,12 +1,12 @@
 /**
  * # profileActions.js
- * 
+ *
  * The actions to support the users profile
  */
 'use strict';
 /**
  * ## Imports
- * 
+ *
  * The actions for profile
  */
 const {
@@ -23,7 +23,7 @@ const {
 
 /**
  * BackendFactory - base class for server implementation
- * AppAuthToken for localStorage sessionToken access 
+ * AppAuthToken for localStorage sessionToken access
  */
 const BackendFactory = require('../../lib/BackendFactory').default;
 const AppAuthToken = require('../../lib/AppAuthToken').default;
@@ -92,8 +92,8 @@ export function profileUpdateFailure(json) {
 }
 /**
  * ## updateProfile
- * @param {string} userId -  objectId 
- * @param {string} username - the users name
+ * @param {string} userId -  objectId
+ * @param {string} fullname - the users name
  * @param {string] email - user's email
  * @param {Object} sessionToken - the sessionToken from Parse.com
  *
@@ -104,14 +104,14 @@ export function profileUpdateFailure(json) {
  * the data as now persisted on Parse.com
  *
  */
-export function updateProfile(userId, username, email, sessionToken) {
+export function updateProfile(userId, fullname, email, sessionToken) {
   return dispatch => {
     dispatch(profileUpdateRequest());
     return new AppAuthToken().getSessionToken(sessionToken)
       .then((token) => {
         return BackendFactory(token).updateProfile(userId,
           {
-            username: username,
+            fullname: fullname,
             email: email
           }
         );
@@ -127,7 +127,7 @@ export function updateProfile(userId, username, email, sessionToken) {
 }
 /**
  * ## onProfileFormFieldChange
- * 
+ *
  */
 export function onProfileFormFieldChange(field,value) {
   return {

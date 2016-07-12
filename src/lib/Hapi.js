@@ -44,7 +44,7 @@ export default class Hapi extends Backend{
    *
    * @param data object
    *
-   * {username: "barton", email: "foo@gmail.com", password: "Passw0rd!"}
+   * {fullname: "barton", email: "foo@gmail.com", password: "Passw0rd!"}
    *
    * @return
    * if ok, {createdAt: "2015-12-30T15:17:05.379Z",
@@ -82,7 +82,7 @@ export default class Hapi extends Backend{
    *
    * @param data
    *
-   *  {username: "barton", password: "Passw0rd!"}
+   *  {fullname: "barton", password: "Passw0rd!"}
    *
    * @returns
    *
@@ -91,7 +91,7 @@ export default class Hapi extends Backend{
    * objectId: "Z4yvP19OeL"
    * email: "barton@foo.com"
    * sessionToken: "r:Kt9wXIBWD0dNijNIq2u5rRllW"
-   * username: "barton"
+   * fullname: "barton"
    *
    */
   async login(data) {
@@ -186,7 +186,7 @@ export default class Hapi extends Backend{
    *  objectId: "Z4yvP19OeL"
    *  sessionToken: "r:uFeYONgIsZMPyxOWVJ6VqJGqv"
    *  updatedAt: "2015-12-30T15:29:36.611Z"
-   *  username: "barton"}
+   *  fullname: "barton"}
    *
    * if error, {code: xxx, error: 'message'}
    */
@@ -215,7 +215,7 @@ export default class Hapi extends Backend{
    *
    * @param userId  _id of Parse.com
    * @param data object:
-   * {username: "barton", email: "barton@foo.com"}
+   * {fullname: "barton", email: "barton@foo.com"}
    */
   async updateProfile(userId,data) {
     return await this._fetch({
@@ -237,6 +237,127 @@ export default class Hapi extends Backend{
       });
 
   }
+  /**
+   * ### createGrievance
+   *
+   * @param data object
+   *
+   * {address: "Bangalore, Karnataka", reportedUser: "", location: [34.33, 44.33], description: "This problem accours repeatedly", tag: "drainage"}
+   * reportedUser may be either null or actual logged-in userId
+   * @return
+   * if ok, {address: "Bangalore, Karnataka",
+   *   _id: "5TgExo2wBA",
+   *   reportedUser: "",
+   *   location: [34.33, 44.33],
+   *   description: "This problem accours repeatedly",
+   *   tag: "drainage",
+   *   dateOfReporting: "2016-07-08T23:03:45Z",
+   *   status: "new"
+   * }
+   *
+   * if error, {code: xxx, error: 'message'}
+   */
+  async createGrievance(data) {
+    return await this._fetch({
+      method: 'POST',
+      url: '/grievance/report',
+      body: data
+    })
+      .then((response) => {
+
+        return response.json().then((res) => {
+          if (response.status === 200 || response.status === 201) {
+            return res;
+          } else {
+            throw(res);
+          }
+        });
+
+      })
+      .catch((error) => {
+        console.error(error);
+        throw(error);
+      });
+
+  }
+  /**
+   * ### updateGrievance
+   *
+   * @param data object
+   *
+   * {description: "This problem accours repeatedly"}
+   * @param id string
+   * "5TgExo2wBA"
+   * @return
+   * if ok, {address: "Bangalore, Karnataka",
+   *   _id: "5TgExo2wBA",
+   *   reportedUser: "",
+   *   location: [34.33, 44.33],
+   *   description: "This problem accours repeatedly",
+   *   tag: "drainage",
+   *   dateOfReporting: "2016-07-08T23:03:45Z",
+   *   status: "new"
+   * }
+   *
+   * if error, {code: xxx, error: 'message'}
+   */
+  async updateGrievance(data, id) {
+    return await this._fetch({
+      method: 'POST',
+      url: '/grievance/report/'+id,
+      body: data
+    })
+      .then((response) => {
+
+        return response.json().then((res) => {
+          if (response.status === 200 || response.status === 201) {
+            return res;
+          } else {
+            throw(res);
+          }
+        });
+
+      })
+      .catch((error) => {
+        console.error(error);
+        throw(error);
+      });
+
+  }
+
+  /**
+   * ### deleteGrievance
+   *
+   * @param id string
+   * "5TgExo2wBA"
+   * @return
+   * if ok, {}
+   *
+   * if error, {code: xxx, error: 'message'}
+   */
+  async deleteGrievance(id) {
+    return await this._fetch({
+      method: 'POST',
+      url: '/grievance/delete/'+id
+    })
+      .then((response) => {
+
+        return response.json().then((res) => {
+          if (response.status === 200 || response.status === 201) {
+            return res;
+          } else {
+            throw(res);
+          }
+        });
+
+      })
+      .catch((error) => {
+        console.error(error);
+        throw(error);
+      });
+
+  }
+
   /**
    * ### _fetch
    * A generic function that prepares the request to Parse.com

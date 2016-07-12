@@ -1,7 +1,7 @@
 /**
  * # authFormValidation.js
- * 
- * This class determines only if the form is valid 
+ *
+ * This class determines only if the form is valid
  * so that the form button can be enabled.
  * if all the fields on the form are without error,
  * the form is considered valid
@@ -33,17 +33,15 @@ export default function formValidation (state) {
     return state.setIn(['form','isValid'],true);
     /**
      * ### Registration has 4 fields
-     */     
+     */
   case REGISTER:
-    if (state.form.fields.username != ''
+    if (state.form.fields.fullname != ''
         &&
         state.form.fields.email !== ''
         &&
         state.form.fields.password !== ''
         &&
         state.form.fields.passwordAgain !== ''
-        &&
-        !state.form.fields.usernameHasError
         &&
         !state.form.fields.emailHasError
         &&
@@ -58,11 +56,11 @@ export default function formValidation (state) {
      * ### Login has 2 fields
      */
   case LOGIN:
-    if (state.form.fields.username !== ''
+    if (state.form.fields.email !== ''
         &&
         state.form.fields.password !== ''
         &&
-        !state.form.fields.usernameHasError
+        !state.form.fields.emailHasError
         &&
         !state.form.fields.passwordHasError) {
       return state.setIn(['form','isValid'],true);
@@ -71,16 +69,16 @@ export default function formValidation (state) {
     }
     /**
      * ### Reset password has 1 field
-     */     
+     */
   case FORGOT_PASSWORD:
     if (state.form.fields.email !== ''
         &&
-        !state.form.fields.emailHasError){ 
+        !state.form.fields.emailHasError){
       return state.setIn(['form','isValid'],true);
     } else {
       return state.setIn(['form','isValid'],false);
     }
-    
+
   }
   /**
    * Default, return the state

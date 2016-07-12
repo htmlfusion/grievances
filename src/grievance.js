@@ -8,21 +8,23 @@
  *
  * Necessary components from ReactNative
  */
-import React, {
+import React, {Component} from 'react';
+import {Text} from 'native-base';
+import {
   AppRegistry,
   Navigator,
-  View,
-  Text } from 'react-native';
+  View } from 'react-native';
 
 /**
  * ### Router-Flux
  *
  * Necessary components from Router-Flux
  */
-import RNRF, {
+const RNRF = require('react-native-router-flux');
+const {
   Route,
   Scene,
-  TabBar} from 'react-native-router-flux';
+  TabBar } = RNRF;
 
 /**
  * ### Redux
@@ -50,12 +52,13 @@ import configureStore from './lib/configureStore';
  */
 import App from './containers/App';
 import Login from './containers/Login';
-import Logout from './containers/Logout';
+/*import Logout from './containers/Logout';*/
 import Register from './containers/Register';
 import ForgotPassword from './containers/ForgotPassword';
 import Profile from './containers/Profile';
 import Main from './containers/Main';
-import Subview from './containers/Subview';
+import CreateGrievance from './containers/CreateGrievance';
+import UpdateGrievance from './containers/UpdateGrievance';
 
 /**
  * ### icons
@@ -81,6 +84,7 @@ import authInitialState from './reducers/auth/authInitialState';
 import deviceInitialState from './reducers/device/deviceInitialState';
 import globalInitialState from './reducers/global/globalInitialState';
 import profileInitialState from './reducers/profile/profileInitialState';
+import grievanceInitialState from './reducers/grievance/grievanceInitialState';
 
 /**
  *  The version of the app but not  displayed yet
@@ -98,7 +102,8 @@ function getInitialState() {
     auth: new authInitialState,
     device: (new deviceInitialState).set('isMobile',true),
     global: (new globalInitialState),
-    profile: new profileInitialState
+    profile: new profileInitialState,
+    grievance: new grievanceInitialState
   };
   return _initState;
 }
@@ -108,7 +113,7 @@ function getInitialState() {
 * Displays the icon for the tab w/ color dependent upon selection
 */
 
-class TabIcon extends React.Component {
+class TabIcon extends Component {
   render(){
     var color = this.props.selected ? '#FF3366' : '#FFB3B3';
     return (
@@ -131,11 +136,10 @@ class TabIcon extends React.Component {
 
 export default function native(platform) {
 
-  let Snowflake = React.createClass( {
+  let Snowflake = React.createClass({
     render() {
 
       const store = configureStore(getInitialState());
-
       //Connect w/ the Router
       const Router = connect()(RNRF.Router);
 
@@ -172,20 +176,22 @@ export default function native(platform) {
                      title="ForgotPassword"
                      type="replace" />
 
-	      <Scene key="Subview"
-                     component={Subview}
-                     title="Subview"/>
-
+	      <Scene key="CreateGrievance"
+                     component={CreateGrievance}
+                     title="Create Grievance"/>
+         <Scene key="UpdateGrievance"
+                      component={UpdateGrievance}
+                      title="Update Grievance"/>
 	      <Scene key="Tabbar" tabs={true} default="Main">
-	        <Scene key="Logout"
-                       title="logout"
+	        {/*<Scene key="Logout"
+                       title="Logout"
                        icon={TabIcon}
                        iconName={"sign-out"}
                        hideNavBar={true}
-                       component={Logout}/>
+                       component={Logout}/>*/}
 
 	        <Scene key="Main"
-                       title="main"
+                       title="Grievances"
                        iconName={"home"}
                        icon={TabIcon}
                        hideNavBar={true}
@@ -193,7 +199,7 @@ export default function native(platform) {
                        initial={true}/>
 
                 <Scene key="Profile"
-                       title="profile"
+                       title="Settings"
                        icon={TabIcon}
                        iconName={"gear"}
                        hideNavBar={true}

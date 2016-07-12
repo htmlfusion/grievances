@@ -3,8 +3,8 @@
  *
  * This class was initially written by
  * https://github.com/mhollweck/react-native-item-checkbox
- * 
- * I've opened an issue to attempt to merge this back in 
+ *
+ * I've opened an issue to attempt to merge this back in
  */
 'use strict';
 
@@ -13,21 +13,21 @@
  *
  * React
  */
-var React = require('react-native');
-
+var ReactNative = require('react-native');
+const React = require('react');
+const {PropTypes} = React;
  /**
   * The vector icon
   */
 var Icon = require('react-native-vector-icons/FontAwesome');
 
 var {
-  PropTypes,
   View,
-  Text,
   TouchableHighlight,
   TouchableWithoutFeedback
-} = React;
+} = ReactNative;
 
+import {Text} from 'native-base';
 
 var ItemCheckbox = React.createClass({
   /**

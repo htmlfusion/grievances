@@ -10,7 +10,7 @@
  */
 'use strict';
 
-const  {Record} = require('immutable');
+const  {Record, List} = require('immutable');
 
 /**
  * ## Form
@@ -20,28 +20,14 @@ const  {Record} = require('immutable');
  * The originalProfile is what Parse.com provided and has the objectId
  * The fields are what display on the UI
  */
-const Form = Record({
-  originalProfile: new (Record({
-    fullname: null,
-    email: null,
-    objectId: null,
-    emailVerified: null
-  })),
+
+const ListForm = Record({
   disabled: false,
   error: null,
   isValid: false,
   isFetching: false,
-  fields: new (Record({
-    fullname: '',
-    email: '',
-    emailHasError: false,
-    emailVerified: false
-  }))
+  grievances: new List()
 });
 
 
-var InitialState = Record({
-  form: new Form
-});
-
-export default InitialState;
+export default ListForm;

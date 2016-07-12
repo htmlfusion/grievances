@@ -1,6 +1,6 @@
 /**
  * # Profile.js
- * 
+ *
  * This component provides an interface for a logged in user to change
  * their username and email.
  * It too is a container so there is boilerplate from Redux similar to
@@ -14,12 +14,14 @@
 */
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import {Container, Content} from 'native-base';
 
 /**
  * The actions we need
  */
 import * as profileActions from '../reducers/profile/profileActions';
 import * as globalActions from '../reducers/global/globalActions';
+import * as authActions from '../reducers/auth/authActions';
 
 /**
  * Immutable Mapn
@@ -37,7 +39,7 @@ import FormButton from '../components/FormButton';
 /**
  * The Header will display a Image and support Hot Loading
  */
-import Header from '../components/Header';
+/*import Header from '../components/Header';*/
 
 /**
  * The itemCheckbox will display the state of the email verified
@@ -46,9 +48,9 @@ import ItemCheckbox from '../components/ItemCheckbox';
 /**
  * The necessary React components
  */
-import React,
+import React, {Component} from 'react';
+import
 {
-  Component,
   StyleSheet,
   View
 }
@@ -66,24 +68,21 @@ let Form = t.form.Form;
  */
 var styles = StyleSheet.create({
   container: {
-    flexDirection: 'column',
-    flex: 1,
+    paddingTop: 10,
     backgroundColor: 'transparent'
   },
-  inputs: {
-    marginTop: 10,
-    marginBottom: 10,
-    marginLeft: 10,
-    marginRight: 10
+  btn: {
+    marginTop: 10
   }
 });
 
-/** 
+/**
 * ## Redux boilerplate
 */
 const actions = [
   profileActions,
-  globalActions
+  globalActions,
+  authActions
 ];
 
 function mapStateToProps(state) {
@@ -115,7 +114,7 @@ class Profile extends Component {
     this.errorAlert = new ErrorAlert();
     this.state = {
       formValues: {
-        username: '',
+        fullname: '',
         email: ''
       }
     };
@@ -125,11 +124,11 @@ class Profile extends Component {
    *
    * When any fields change in the form, fire this action so they can
    * be validated.
-   * 
+   *
    */
   onChange(value) {
     this.props.actions.onProfileFormFieldChange(value);
-    this.setState({value});
+    this.setState({formValues: value});
   }
   /**
    * ### componentWillReceiveProps
@@ -140,7 +139,7 @@ class Profile extends Component {
   componentWillReceiveProps(props) {
     this.setState({
       formValues: {
-        username: props.profile.form.fields.username,
+        fullname: props.profile.form.fields.fullname,
         email: props.profile.form.fields.email
       }
     });
@@ -154,16 +153,16 @@ class Profile extends Component {
    * form fields.  Otherwise, we need to go fetch the fields
    */
   componentDidMount() {
-    if (this.props.profile.form.fields.username == '' && this.props.profile.form.fields.email == '') {
+    if (this.props.profile.form.fields.fullname == '' && this.props.profile.form.fields.email == '') {
       this.props.actions.getProfile(this.props.global.currentUser);
     } else {
       this.setState({
         formValues: {
-          username: this.props.profile.form.fields.username,
+          fullname: this.props.profile.form.fields.fullname,
           email: this.props.profile.form.fields.email
         }
       });
-    }      
+    }
   }
 
   /**
@@ -174,27 +173,22 @@ class Profile extends Component {
     this.errorAlert.checkError(this.props.profile.form.error);
 
     let self = this;
-    
+
     let ProfileForm = t.struct({
-      username: t.String,
+      fullname: t.String,
       email: t.String
     });
     /**
      * Set up the field definitions.  If we're fetching, the fields
-     * are disabled.  
+     * are disabled.
      */
     let options = {
       auto: 'placeholders',
       fields: {
-        username: {
-          label: 'Username',
-          maxLength: 12,
-          editable: !this.props.profile.form.isFetching,
-          hasError: this.props.profile.form.fields.usernameHasError,
-          error: 'Must have 6-12 characters and/or numbers'
+        fullname: {
+          editable: !this.props.profile.form.isFetching
         },
         email: {
-          label: 'Email',
           keyboardType: 'email-address',
           editable: !this.props.profile.form.isFetching,
           hasError: this.props.profile.form.fields.emailHasError,
@@ -212,24 +206,28 @@ class Profile extends Component {
     let onButtonPress = () => {
       this.props.actions.updateProfile(
         this.props.profile.form.originalProfile.objectId,
-        this.props.profile.form.fields.username,
+        this.props.profile.form.fields.fullname,
         this.props.profile.form.fields.email,
         this.props.global.currentUser);
     };
+
+    let onLogoutButtonPress = () => {
+			this.props.actions.logout();
+		};
     /**
      * Wrap the form with the header and button.  The header props are
      * mostly for support of Hot reloading. See the docs for Header
      * for more info.
      */
     return (
-      <View style={styles.container}>
-        <Header isFetching={this.props.profile.form.isFetching}
+      <Container style={styles.container}>
+        {/*<Header isFetching={this.props.profile.form.isFetching}
                 showState={this.props.global.showState}
                 currentState={this.props.global.currentState}
                 onGetState={this.props.actions.getState}
                 onSetState={this.props.actions.setState}
-        />
-        <View style={styles.inputs}>
+        />*/}
+        <Content>
           <Form
               ref="form"
               type={ProfileForm}
@@ -241,15 +239,21 @@ class Profile extends Component {
                         disabled={true}
                         checked={this.props.profile.form.fields.emailVerified}
           />
-        </View>
 
-        <FormButton
+        <View style={styles.btn}>
+          <FormButton
             isDisabled={!this.props.profile.form.isValid || this.props.profile.form.isFetching}
             onPress={onButtonPress.bind(self)}
             buttonText={profileButtonText}/>
-
-
-      </View>
+        </View>
+        <View style={styles.btn}>
+          <FormButton
+              isDisabled={!this.props.auth.form.isValid || this.props.auth.form.isFetching}
+              onPress={onLogoutButtonPress.bind(self)}
+              buttonText={'Log out'}/>
+        </View>
+        </Content>
+      </Container>
     );
   }
 }

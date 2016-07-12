@@ -1,21 +1,21 @@
 /**
  * # Backend.js
- * 
+ *
  * Abstract Base class for Backend support
  *
  */
 'use strict';
 /**
  * ## Async support
- * 
- */ 
+ *
+ */
 require('regenerator/runtime');
 
 /**
  * ## Imports
- * 
+ *
  * Config for defaults and underscore for a couple of features
- */ 
+ */
 import CONFIG from './config';
 import _ from 'underscore';
 
@@ -33,15 +33,15 @@ export default class Backend {
    *
    * @param data object
    *
-   * {username: "barton", email: "foo@gmail.com", password: "Passw0rd!"}
+   * {fullname: "barton", email: "foo@gmail.com", password: "Passw0rd!"}
    *
    * @return
    * if ok, {createdAt: "2015-12-30T15:17:05.379Z",
-   *   objectId: "5TgExo2wBA", 
+   *   objectId: "5TgExo2wBA",
    *   sessionToken: "r:dEgdUkcs2ydMV9Y9mt8HcBrDM"}
    *
    * if error, {code: xxx, error: 'message'}
-   */  
+   */
   async signup(data) {
 
   }
@@ -51,7 +51,7 @@ export default class Backend {
    *
    * @param data
    *
-   *  {username: "barton", password: "Passw0rd!"}
+   *  {fullname: "barton", password: "Passw0rd!"}
    *
    * @returns
    *
@@ -60,7 +60,7 @@ export default class Backend {
    * objectId: "Z4yvP19OeL"
    * sessionToken: "r:Kt9wXIBWD0dNijNIq2u5rRllW"
    * updatedAt: "2015-12-30T16:08:50.419Z"
-   * username: "barton"
+   * fullname: "barton"
    *
    */
   async login(data) {
@@ -69,7 +69,7 @@ export default class Backend {
   /**
    * ### logout
    * prepare the request and call _fetch
-   */  
+   */
   async logout() {
 
   }
@@ -77,7 +77,7 @@ export default class Backend {
    * ### resetPassword
    * the data is already in a JSON format, so call _fetch
    *
-   * @param data 
+   * @param data
    * {email: "barton@foo.com"}
    *
    * @returns empty object
@@ -86,7 +86,7 @@ export default class Backend {
    */
   async resetPassword(data) {
 
-  }  
+  }
   /**
    * ### getProfile
    * Using the sessionToken, we'll get everything about
@@ -100,7 +100,7 @@ export default class Backend {
    *  objectId: "Z4yvP19OeL"
    *  sessionToken: "r:uFeYONgIsZMPyxOWVJ6VqJGqv"
    *  updatedAt: "2015-12-30T15:29:36.611Z"
-   *  username: "barton"}
+   *  fullname: "barton"}
    *
    * if error, {code: xxx, error: 'message'}
    */
@@ -113,10 +113,9 @@ export default class Backend {
    *
    * @param userId  _id of Parse.com
    * @param data object:
-   * {username: "barton", email: "barton@foo.com"}
+   * {fullname: "barton", email: "barton@foo.com"}
    */
   async updateProfile(userId,data) {
-  }  
+  }
 
 };
-

@@ -1,14 +1,14 @@
 /**
  * # Login.js
- * 
- *  The container to display the Login form 
- * 
+ *
+ *  The container to display the Login form
+ *
  */
 'use strict';
 /**
  * ## Imports
- * 
- * Redux 
+ *
+ * Redux
  */
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -20,7 +20,7 @@ import * as authActions from '../reducers/auth/authActions';
 
 /**
  * Immutable
- */ 
+ */
 import {Map} from 'immutable';
 
 /**
@@ -31,13 +31,13 @@ import LoginRender from '../components/LoginRender';
 /**
  * The necessary React components
  */
-import React from 'react-native';
+import React from 'react';
 
 
 const {
   LOGIN,
-  REGISTER, 
-  FORGOT_PASSWORD 
+  REGISTER,
+  FORGOT_PASSWORD
 } = require('../lib/constants').default;
 
 /**
@@ -65,8 +65,8 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-function buttonPressHandler(login, username, password) {
-  login (username, password);
+function buttonPressHandler(login, email, password) {
+  login (email, password);
 }
 
 let Login = React.createClass({
@@ -75,12 +75,12 @@ let Login = React.createClass({
     let loginButtonText = 'Log in';
     let onButtonPress = buttonPressHandler.bind(null,
 				                this.props.actions.login,
-				                this.props.auth.form.fields.username, 
+				                this.props.auth.form.fields.email,
 				                this.props.auth.form.fields.password
 		                               );
 
     return(
-      <LoginRender 
+      <LoginRender
           formType={ LOGIN }
           loginButtonText={ loginButtonText }
           onButtonPress={ onButtonPress }
