@@ -100,16 +100,31 @@ var styles = StyleSheet.create({
  * ## App class
  */
 class Main extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      currentLoc: [16.878147, 79.277344]
+    }
+  }
 
   handlePress() {
-    Actions.CreateGrievance();
+    Actions.CreateGrievance({
+      location: this.state.currentLoc
+    });
   }
 
   updateGrievance(updateState) {
     Actions.UpdateGrievance(updateState);
   }
 
+  setCurrentLoc({longitude, latitude}) {
+    this.setState({
+      currentLoc: [longitude, latitude]
+    });
+  }
+
   render() {
+    console.log('check grievances', this.props.grievance.grievanceList.grievances);
     return(
       <Container>
         <Content>
@@ -119,7 +134,7 @@ class Main extends Component {
                 onGetState={this.props.actions.getState}
                 onSetState={this.props.actions.setState}
         />*/}
-          <GMap data={this.props.grievance.grievanceList.grievances}/>
+          <GMap data={this.props.grievance.grievanceList.grievances} setCurrentLoc={this.setCurrentLoc.bind(this)}/>
         </Content>
         <Footer>
           <Button onPress={ this.handlePress.bind(this) } rounded style={styles.roundBtn}>

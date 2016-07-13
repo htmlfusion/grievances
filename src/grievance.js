@@ -9,7 +9,7 @@
  * Necessary components from ReactNative
  */
 import React, {Component} from 'react';
-import {Text} from 'native-base';
+import {Text, Icon} from 'native-base';
 import {
   AppRegistry,
   Navigator,
@@ -66,7 +66,7 @@ import UpdateGrievance from './containers/UpdateGrievance';
  * Add icon support for use in Tabbar
  *
  */
-import Icon from 'react-native-vector-icons/FontAwesome';
+/*import Icon from 'react-native-vector-icons/FontAwesome';*/
 
 /**
  * ## Actions
@@ -115,11 +115,10 @@ function getInitialState() {
 
 class TabIcon extends Component {
   render(){
-    var color = this.props.selected ? '#FF3366' : '#FFB3B3';
+    var color = this.props.selected ? '#337ab7' : '#fff';
     return (
       <View style={{flex:1, flexDirection:'column', alignItems:'center', alignSelf:'center'}}>
         <Icon style={{color: color}} name={this.props.iconName} size={30} />
-        <Text style={{color: color}}>{this.props.title}</Text>
       </View>
       );
   }
@@ -192,7 +191,7 @@ export default function native(platform) {
 
 	        <Scene key="Main"
                        title="Grievances"
-                       iconName={"home"}
+                       iconName={"ios-home"}
                        icon={TabIcon}
                        hideNavBar={true}
                        component={Main}
@@ -201,7 +200,7 @@ export default function native(platform) {
                 <Scene key="Profile"
                        title="Settings"
                        icon={TabIcon}
-                       iconName={"gear"}
+                       iconName={"ios-person"}
                        hideNavBar={true}
                        component={Profile}/>
 	      </Scene>

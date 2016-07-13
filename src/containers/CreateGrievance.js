@@ -15,7 +15,7 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import {Actions} from 'react-native-router-flux';
-import {Container, Content, Header, Button, Icon, Title} from 'native-base';
+import {Container, Content, Header, Button, Icon, Title, Text} from 'native-base';
 /**
  * The actions we need
  */
@@ -74,6 +74,13 @@ const actions = [
 const styles = StyleSheet.create({
   content: {
     marginTop: 10
+  },
+  header: {
+    backgroundColor: '#337ab7',
+    borderColor: '#2e6da4'
+  },
+  headerFont: {
+    color: '#fff'
   }
 });
 
@@ -107,7 +114,6 @@ class CreateGrievance extends Component {
     this.state = {
       formValues: {
         address: '',
-        location: [],
         description: '',
         tag: ''
       }
@@ -135,7 +141,6 @@ class CreateGrievance extends Component {
     this.setState({
       formValues: {
         address: props.grievance.grievanceCreate.form.fields.address,
-        location: props.grievance.grievanceCreate.form.fields.location,
         description: props.grievance.grievanceCreate.form.fields.description,
         tag: props.grievance.grievanceCreate.form.fields.tag
       }
@@ -180,7 +185,7 @@ class CreateGrievance extends Component {
       this.props.actions.createGrievance(
         this.props.grievance.grievanceCreate.form.fields.address,
         this.props.grievance.grievanceCreate.form.fields.description,
-        this.props.grievance.grievanceCreate.form.fields.location,
+        this.props.location,
         this.props.global.currentUser.objectId,
         this.props.grievance.grievanceCreate.form.fields.tag,
         this.props.global.currentUser.sessionToken
@@ -199,11 +204,11 @@ class CreateGrievance extends Component {
                 onGetState={this.props.actions.getState}
                 onSetState={this.props.actions.setState}
         />*/}
-        <Header>
+        <Header style = {styles.header}>
           <Button transparent onPress={() => Actions.pop()}>
-            <Icon name="ios-arrow-back" />
+            <Icon name="ios-arrow-back" style={styles.headerFont}/>
           </Button>
-          <Title>Report Grievance</Title>
+          <Title><Text style={styles.headerFont}>Report Grievance</Text></Title>
           {/*{<NavigationBar
                   leftButton={ leftButtonConfig }
       	           />}*/}

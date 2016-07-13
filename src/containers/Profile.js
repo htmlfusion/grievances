@@ -14,7 +14,7 @@
 */
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import {Container, Content} from 'native-base';
+import {Container, Content, Header, Button, Icon, Text} from 'native-base';
 
 /**
  * The actions we need
@@ -27,7 +27,7 @@ import * as authActions from '../reducers/auth/authActions';
  * Immutable Mapn
  */
 import {Map} from 'immutable';
-
+import {Actions} from 'react-native-router-flux';
 /**
  * The ErrorAlert will display any and all errors
  */
@@ -68,10 +68,21 @@ let Form = t.form.Form;
  */
 var styles = StyleSheet.create({
   container: {
-    paddingTop: 10,
     backgroundColor: 'transparent'
   },
   btn: {
+    marginTop: 10
+  },
+  header: {
+    backgroundColor: '#337ab7',
+    borderColor: '#2e6da4',
+    flexDirection: 'row-reverse',
+    justifyContent: 'space-between'
+  },
+  headerFont: {
+    color: '#fff'
+  },
+  content: {
     marginTop: 10
   }
 });
@@ -227,7 +238,12 @@ class Profile extends Component {
                 onGetState={this.props.actions.getState}
                 onSetState={this.props.actions.setState}
         />*/}
-        <Content>
+        <Header style = {styles.header}>
+          <Button transparent onPress={onLogoutButtonPress.bind(self)}>
+            <Icon name="md-exit" style={styles.headerFont} isDisabled={!this.props.auth.form.isValid || this.props.auth.form.isFetching}/>
+          </Button>
+        </Header>
+        <Content style={styles.content}>
           <Form
               ref="form"
               type={ProfileForm}
@@ -245,12 +261,6 @@ class Profile extends Component {
             isDisabled={!this.props.profile.form.isValid || this.props.profile.form.isFetching}
             onPress={onButtonPress.bind(self)}
             buttonText={profileButtonText}/>
-        </View>
-        <View style={styles.btn}>
-          <FormButton
-              isDisabled={!this.props.auth.form.isValid || this.props.auth.form.isFetching}
-              onPress={onLogoutButtonPress.bind(self)}
-              buttonText={'Log out'}/>
         </View>
         </Content>
       </Container>
