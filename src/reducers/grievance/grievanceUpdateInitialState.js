@@ -23,15 +23,15 @@ const  {Record} = require('immutable');
 
 const UpdateForm = Record({
   originalGrievance: new (Record({
-    address: null,
-    location: null,
-    reportedUser: null,
-    description: null,
-    dateOfReporting: null,
-    dateOfResolving: null,
-    resolvedUser: null,
-    status: null,
-    tag: null,
+    address: '',
+    location: [],
+    reportedUser: undefined,
+    description: '',
+    dateOfReporting: '',
+    dateOfResolving: '',
+    resolvedUser: undefined,
+    status: '',
+    tag: '',
     _id: "0",
     idx: undefined
   })),

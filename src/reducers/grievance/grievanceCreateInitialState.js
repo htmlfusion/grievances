@@ -29,11 +29,11 @@ const CreateForm = Record({
   fields: new (Record({
     address: '',
     location: [],
-    reportedUser: '',
+    reportedUser: undefined,
     description: '',
     dateOfReporting: '',
     dateOfResolving: '',
-    resolvedUser: '',
+    resolvedUser: undefined,
     status: '',
     tag: '',
     tagHasError: false

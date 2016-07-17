@@ -10,3 +10,10 @@ To work on this,
 >> Run `npm install` and `rnpm link` (install rnpm globally)
 
 >> Open Xcode, click on file menubar, click on open file, select ios/grievances.xcodeproj, click start(play) button in the xcode
+
+
+Todo
+>> Design updateGrievance
+>> Design Marker
+>> User's current location
+>> Report as anonymous

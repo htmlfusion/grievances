@@ -84,6 +84,11 @@ const styles = StyleSheet.create({
   }
 });
 
+let designAnonymous = {
+  borderColor: '#2e6da4',
+  borderWidth: 1
+};
+
 function mapStateToProps(state) {
   return {
       ...state
@@ -116,7 +121,9 @@ class CreateGrievance extends Component {
         address: '',
         description: '',
         tag: ''
-      }
+      },
+      anonymousStyle: designAnonymous,
+      reportedUser: this.props.global.currentUser.objectId
     };
   }
   /**
@@ -174,7 +181,20 @@ class CreateGrievance extends Component {
     let options = {
       auto: 'placeholders'
     };
-
+    let btnAnonymous = () => {
+      if (this.state.anonymousStyle.backgroundColor) {
+        this.setState({
+          anonymousStyle: designAnonymous,
+          reportedUser: this.props.global.currentUser.objectId
+        });
+      }
+      else {
+        this.setState({
+          anonymousStyle: Object.assign({}, this.state.anonymousStyle, {backgroundColor: '#337ab7'}),
+          reportedUser: undefined
+        });
+      }
+    };
     /**
      * When the button is pressed, send the users info including the
      * ```currrentUser``` object as it contains the sessionToken and
@@ -186,7 +206,7 @@ class CreateGrievance extends Component {
         this.props.grievance.grievanceCreate.form.fields.address,
         this.props.grievance.grievanceCreate.form.fields.description,
         this.props.location,
-        this.props.global.currentUser.objectId,
+        this.state.reportedUser,
         this.props.grievance.grievanceCreate.form.fields.tag,
         this.props.global.currentUser
       );
@@ -214,6 +234,9 @@ class CreateGrievance extends Component {
       	           />}*/}
         </Header>
         <Content style={styles.content}>
+          <Button ref='anonymous' transparent style={this.state.anonymousStyle} onPress={btnAnonymous}>
+            <Text style={styles.headerFont}>Anonymous</Text>
+          </Button>
           <Form
               ref="form"
               type={GrievanceForm}
@@ -221,6 +244,7 @@ class CreateGrievance extends Component {
               value={this.state.formValues}
               onChange={this.onChange.bind(self)}
           />
+
           <FormButton
               /*isDisabled={!this.props.grievance.grievanceCreate.form.isValid}*/
               onPress={onButtonPress.bind(self)}
