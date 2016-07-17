@@ -5,7 +5,7 @@
  */
 'use strict';
 
-const {fromJS} = require('immutable');
+const {fromJS, List, Record} = require('immutable');
 /**
  * ## Imports
  *
@@ -61,6 +61,32 @@ export default function grievanceReducer(state = initialState, action) {
 
   if (!(state instanceof InitialState)) return initialState.mergeDeep(state);
 
+  let grievanceRec = Record({
+    _id: "0",
+    address: '',
+    location: [],
+    reportedUser: "0",
+    description: '',
+    dateOfReporting: '',
+    dateOfResolving: '',
+    resolvedUser: "0",
+    status: '',
+    tag: ''
+  });
+  let recordMap;
+  let newGrievance = (grievance) => new grievanceRec({
+    _id: grievance._id,
+    address: grievance.address,
+    location: grievance.location,
+    reportedUser: grievance.reportedUser,
+    description: grievance.description,
+    dateOfReporting: grievance.dateOfReporting,
+    dateOfResolving: grievance.dateOfResolving,
+    resolvedUser: grievance.resolvedUser,
+    status: grievance.status,
+    tag: grievance.tag
+  });
+
   switch (action.type) {
     /**
      * ### Request starts
@@ -71,8 +97,8 @@ export default function grievanceReducer(state = initialState, action) {
       .setIn([ 'grievanceCreate', 'form', 'error'], null);
 
   case GET_GRIEVANCE_REQUEST:
-    return state.setIn([ 'grievanceList', 'form', 'isFetching'], true)
-      .setIn([ 'grievanceList', 'form','error'], null);
+    return state.setIn([ 'grievanceList', 'isFetching'], true)
+      .setIn([ 'grievanceList', 'error'], null);
 
   case GRIEVANCE_UPDATE_REQUEST:
   case GRIEVANCE_DELETE_REQUEST:
@@ -84,12 +110,13 @@ export default function grievanceReducer(state = initialState, action) {
      * set the form to fetching as done
      */
   case GRIEVANCE_DELETE_SUCCESS:
-    return state.setIn([ 'grievanceUpdate', 'form', 'isFetching'], false);
+    return state.setIn(['grievanceUpdate', 'form', 'isFetching'], false).
+      deleteIn(['grievanceList','grievances', state.getIn([ 'grievanceUpdate', 'form', 'originalGrievance', 'idx'])]);
 
     /**
      * ### Request ends successfully
      *
-     * the fetching is done, set the UI fields and the originalProfile
+     * the fetching is done, set the UI fields and the originalGrievance
      *
      * Validate the data to make sure it's all good and someone didn't
      * mung it up through some other mechanism
@@ -105,15 +132,26 @@ export default function grievanceReducer(state = initialState, action) {
       .setIn([ 'grievanceUpdate', 'form','originalGrievance','dateOfResolving'],action.payload.dateOfResolving)
       .setIn([ 'grievanceUpdate', 'form','originalGrievance','status'],action.payload.status)
       .setIn([ 'grievanceUpdate', 'form','originalGrievance','tag'],action.payload.tag)
+      .setIn([ 'grievanceUpdate', 'form','originalGrievance','_id'],action.payload._id)
+      .setIn([ 'grievanceUpdate', 'form','originalGrievance','idx'],action.idx)
       .setIn([ 'grievanceUpdate', 'form','error'],null);
 
     return nextGrievanceState;
 
-  case GET_GRIEVANCE_SUCCESS:
-    nextGrievanceState = state.setIn([ 'grievanceList', 'isFetching'], false)
-      .setIn([ 'grievanceList','grievances'], fromJS(action.payload))
-      .setIn([ 'grievanceList','error'],null);
+  case GRIEVANCE_UPDATE_SUCCESS:
 
+    return state.setIn([ 'grievanceUpdate', 'form', 'isFetching'], false).updateIn(['grievanceList','grievances', state.getIn([ 'grievanceUpdate', 'form', 'originalGrievance', 'idx'])], function(grievance) {
+      return grievance.set('description', state.getIn([ 'grievanceUpdate', 'form', 'fields', 'description']));
+    });
+
+  case GET_GRIEVANCE_SUCCESS:
+    recordMap = new List(action.payload.map(function(grievance) {
+      return newGrievance(grievance);
+    }));
+
+    nextGrievanceState = state.setIn([ 'grievanceList', 'isFetching'], false)
+      .setIn([ 'grievanceList','grievances'], recordMap)
+      .setIn([ 'grievanceList','error'], null);
     return nextGrievanceState;
 
   case GET_GRIEVANCE_FAILURE:
@@ -124,14 +162,15 @@ export default function grievanceReducer(state = initialState, action) {
      *
      */
   case GRIEVANCE_CREATE_SUCCESS:
-    state.setIn([ 'grievanceCreate','form', 'isFetching'], false)
+    recordMap = state.getIn(['grievanceList', 'grievances']).push(newGrievance(action.payload));
+    nextGrievanceState = state.setIn([ 'grievanceCreate','form', 'isFetching'], false)
       .setIn([ 'grievanceCreate', 'form', 'error'], null)
       .setIn([ 'grievanceCreate', 'form', 'fields', 'address'], '')
       .setIn([ 'grievanceCreate', 'form', 'fields', 'description'], '')
       .setIn([ 'grievanceCreate', 'form', 'fields', 'location'], [])
       .setIn([ 'grievanceCreate', 'form', 'fields', 'tag'], '')
-      .getIn(['grievanceList', 'grievances']).push(fromJS(action.payload));
-    return state;
+      .setIn(['grievanceList', 'grievances'], recordMap);
+    return nextGrievanceState;
       //Push value to grievance list
     /**
      * ### Request fails

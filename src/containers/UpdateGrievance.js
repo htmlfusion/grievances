@@ -15,7 +15,7 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import {Actions} from 'react-native-router-flux';
-import {Container, Content, Header, Text} from 'native-base';
+import {Container, Content, Header, Text, Button, Icon} from 'native-base';
 
 /**
  * The actions we need
@@ -64,6 +64,17 @@ let Form = t.form.Form;
  * ## Styles
  */
 var styles = StyleSheet.create({
+  content: {
+    marginTop: 10
+  },
+  header: {
+    backgroundColor: '#337ab7',
+    borderColor: '#2e6da4',
+    justifyContent: 'flex-start'
+  },
+  headerFont: {
+    color: '#fff'
+  }
 });
 
 /**
@@ -103,7 +114,7 @@ class UpdateGrievance extends Component {
     this.errorAlert = new ErrorAlert();
     this.state = {
       formValues: {
-        description: this.props.grievance.grievanceUpdate.form.fields.description
+        description: props.grievance.grievanceUpdate.form.fields.description
       }
     };
   }
@@ -145,7 +156,7 @@ class UpdateGrievance extends Component {
 
     let leftButtonConfig = {
       title: 'Back',
-      handler: Actions.pop()
+      handler: Actions.pop
     };
 
     let GrievanceForm = t.struct({
@@ -168,13 +179,13 @@ class UpdateGrievance extends Component {
       this.props.actions.updateGrievance(
         this.props.grievance.grievanceUpdate.form.originalGrievance._id,
         this.props.grievance.grievanceUpdate.form.fields.description,
-        this.props.global.currentUser.sessionToken
+        this.props.global.currentUser
       );
     };
     let onDeleteButtonPress = () => {
       this.props.actions.deleteGrievance(
         this.props.grievance.grievanceUpdate.form.originalGrievance._id,
-        this.props.global.currentUser.sessionToken
+        this.props.global.currentUser
       );
     };
     /**
@@ -183,19 +194,22 @@ class UpdateGrievance extends Component {
      * for more info.
      */
     return (
-      <Container style={styles.container}>
+      <Container>
         {/*<Header isFetching={this.props.grievance.grievanceCreate.form.isFetching}
                 showState={this.props.global.showState}
                 currentState={this.props.global.currentState}
                 onGetState={this.props.actions.getState}
                 onSetState={this.props.actions.setState}
         />*/}
-        <Header>
-          <NavigationBar
+        <Header style={styles.header}>
+          {/*<NavigationBar
                   leftButton={ leftButtonConfig }
-      	           />
+      	           />*/}
+           <Button transparent onPress={() => Actions.pop()}>
+             <Icon name="ios-arrow-back" style={styles.headerFont}/>
+           </Button>
         </Header>
-        <Content style={styles.inputs}>
+        <Content style={styles.content}>
           <Form
               ref="form"
               type={GrievanceForm}
@@ -204,6 +218,7 @@ class UpdateGrievance extends Component {
               onChange={this.onChange.bind(self)}
           />
           <Text>{this.props.grievance.grievanceUpdate.form.originalGrievance.tag}</Text>
+          {/*Get the location name based on location coordinates*/}
           <Text>{this.props.grievance.grievanceUpdate.form.originalGrievance.location}</Text>
           <Text>{this.props.grievance.grievanceUpdate.form.originalGrievance.dateOfReporting}</Text>
           <Text>{this.props.grievance.grievanceUpdate.form.originalGrievance.address}</Text>

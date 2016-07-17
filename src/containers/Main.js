@@ -18,6 +18,7 @@ import {Container, Content, Footer, Button} from 'native-base';
  */
 import * as authActions from '../reducers/auth/authActions';
 import * as globalActions from '../reducers/global/globalActions';
+import * as grievanceActions from '../reducers/grievance/grievanceActions';
 import GMap from '../components/GMap';
 /**
  * Immutable
@@ -56,7 +57,8 @@ from 'react-native';
  */
 const actions = [
   authActions,
-  globalActions
+  globalActions,
+  grievanceActions
 ];
 
 /**
@@ -103,8 +105,13 @@ class Main extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentLoc: [16.878147, 79.277344]
+      currentLoc: [12.2958104, 76.63938050000002] //This has to be set to empty [] once navigator's currentLocation is working
     }
+    this.updateGrievance = this.updateGrievance.bind(this);
+  }
+
+  componentDidMount() {
+    this.props.actions.getGrievances(this.props.global.currentUser);
   }
 
   handlePress() {
@@ -113,8 +120,9 @@ class Main extends Component {
     });
   }
 
-  updateGrievance(updateState) {
-    Actions.UpdateGrievance(updateState);
+  updateGrievance(updateState, idx) {
+    this.props.actions.grievanceSetUpdate(updateState, idx);
+    Actions.UpdateGrievance();
   }
 
   setCurrentLoc({longitude, latitude}) {
@@ -124,7 +132,6 @@ class Main extends Component {
   }
 
   render() {
-    console.log('check grievances', this.props.grievance.grievanceList.grievances);
     return(
       <Container>
         <Content>
@@ -134,7 +141,7 @@ class Main extends Component {
                 onGetState={this.props.actions.getState}
                 onSetState={this.props.actions.setState}
         />*/}
-          <GMap data={this.props.grievance.grievanceList.grievances} setCurrentLoc={this.setCurrentLoc.bind(this)}/>
+          <GMap data={this.props.grievance.grievanceList.grievances} updateGrievance={this.updateGrievance} setCurrentLoc={this.setCurrentLoc.bind(this)}/>
         </Content>
         <Footer>
           <Button onPress={ this.handlePress.bind(this) } rounded style={styles.roundBtn}>

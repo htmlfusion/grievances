@@ -70,6 +70,7 @@ export function getGrievances(sessionToken) {
   return dispatch => {
     dispatch(getGrievanceRequest());
     //store or get a sessionToken
+
     return new AppAuthToken().getSessionToken(sessionToken)
       .then((token) => {
         return BackendFactory(token).getGrievances();
@@ -150,10 +151,11 @@ export function grievanceUpdateFailure(json) {
     payload: json
   };
 }
-export function grievanceSetUpdate(json) {
+export function grievanceSetUpdate(json, idx) {
   return {
     type: SET_GRIEVANCE_UPDATE,
-    payload: json
+    payload: json,
+    idx: idx
   };
 }
 /**
@@ -218,6 +220,7 @@ export function deleteGrievance(grievanceId, sessionToken) {
       })
       .then(() => {
           dispatch(grievanceDeleteSuccess());
+          Actions.pop();
       })
       .catch((error) => {
         dispatch(grievanceDeleteFailure(error));

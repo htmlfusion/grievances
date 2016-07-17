@@ -301,9 +301,9 @@ export default class Hapi extends Backend{
    *
    * if error, {code: xxx, error: 'message'}
    */
-  async updateGrievance(data, id) {
+  async updateGrievance(id, data) {
     return await this._fetch({
-      method: 'POST',
+      method: 'PUT',
       url: '/grievance/report/'+id,
       body: data
     })
@@ -337,7 +337,7 @@ export default class Hapi extends Backend{
    */
   async deleteGrievance(id) {
     return await this._fetch({
-      method: 'POST',
+      method: 'DELETE',
       url: '/grievance/delete/'+id
     })
       .then((response) => {
@@ -358,6 +358,24 @@ export default class Hapi extends Backend{
 
   }
 
+  async getGrievances() {
+    return await this._fetch({
+      method: 'GET',
+      url: '/grievance/reports'
+    })
+      .then((response) => {
+        return response.json().then((res) => {
+          if ((response.status === 200 || response.status === 201)) {
+            return res;
+          } else {
+            throw(res);
+          }
+        });
+      })
+      .catch((error) => {
+        throw(error);
+      });
+  }
   /**
    * ### _fetch
    * A generic function that prepares the request to Parse.com

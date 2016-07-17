@@ -188,7 +188,7 @@ class CreateGrievance extends Component {
         this.props.location,
         this.props.global.currentUser.objectId,
         this.props.grievance.grievanceCreate.form.fields.tag,
-        this.props.global.currentUser.sessionToken
+        this.props.global.currentUser
       );
     };
     /**

@@ -36,7 +36,9 @@ export default class GMap extends Component {
       markers: this.props.data
     };
   }
-
+  componentWillReceiveProps(props) {
+    this.state.markers = props.data;
+  }
   componentDidMount() {
     navigator.geolocation.getCurrentPosition(
       (position) => {
@@ -44,7 +46,7 @@ export default class GMap extends Component {
         this.setState({initialRegion: initialPosition.coords});
         this.props.setCurrentLoc(initialPosition.coords);
       },
-      (error) => this.errorAlert.checkError(error.message),
+      (error) => {console.log('nav error', error); this.errorAlert.checkError(error.message);},
       {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
     );
     this.watchID = navigator.geolocation.watchPosition((position) => {
@@ -59,17 +61,28 @@ export default class GMap extends Component {
   }
 
   render() {
+
     return (
       <View style={styles.container}>
         <MapView style={styles.map}
           initialRegion={this.state.initialRegion}
           region={this.state.region}
         >
-          {this.state.markers.map(marker => (
+        {/*circle is not working now, have to fix it. Once it is working replace default values with this.state.initialRegion*/}
+        <MapView.Circle
+            center={{latitude: 12.2958104, longitude: 76.63938050000002}}
+            radius={200}
+            fillColor="rgba(200, 0, 0, 0.5)"
+            strokeColor="rgba(0,0,0,0.5)"
+          />
+        {/*onPress is not working, so using onSelect(this will work only in ios). Once issue is fixed we can use onPress*/}
+          {this.state.markers.map((marker, idx) => (
             <MapView.Marker
-              coordinate={marker.location}
+              key={marker._id}
+              coordinate={{latitude:marker.location[0], longitude:marker.location[1]}}
               title={marker.tag}
               description={marker.description}
+              onSelect={() => {this.props.updateGrievance(marker, idx);}}
             />
           ))}
         </MapView>

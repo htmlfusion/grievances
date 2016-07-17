@@ -32,7 +32,8 @@ const UpdateForm = Record({
     resolvedUser: null,
     status: null,
     tag: null,
-    _id: null
+    _id: "0",
+    idx: undefined
   })),
   disabled: false,
   error: null,
