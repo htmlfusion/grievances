@@ -60,6 +60,7 @@ from 'react-native';
 * The form processing component
 */
 import t from 'tcomb-form-native';
+import templates from '../components/NativeTemplates';
 
 let Form = t.form.Form;
 
@@ -193,17 +194,20 @@ class Profile extends Component {
      * Set up the field definitions.  If we're fetching, the fields
      * are disabled.
      */
+     let nativeTextbox = templates.nativeTextbox;
     let options = {
       auto: 'placeholders',
       fields: {
         fullname: {
-          editable: !this.props.profile.form.isFetching
+          editable: !this.props.profile.form.isFetching,
+          template: nativeTextbox
         },
         email: {
           keyboardType: 'email-address',
           editable: !this.props.profile.form.isFetching,
           hasError: this.props.profile.form.fields.emailHasError,
-          error: 'Please enter valid email'
+          error: 'Please enter valid email',
+          template: nativeTextbox
         }
       }
     };
@@ -230,6 +234,10 @@ class Profile extends Component {
      * mostly for support of Hot reloading. See the docs for Header
      * for more info.
      */
+     let emailVerifiedMsg = "Verify your email by clicking on this box";
+     if (this.props.profile.form.originalProfile.emailVerified) {
+       emailVerifiedMsg = "Your email has been verified";
+     }
     return (
       <Container style={styles.container}>
         {/*<Header isFetching={this.props.profile.form.isFetching}
@@ -244,6 +252,7 @@ class Profile extends Component {
           </Button>
         </Header>
         <Content style={styles.content}>
+
           <Form
               ref="form"
               type={ProfileForm}
@@ -251,10 +260,10 @@ class Profile extends Component {
               value={this.state.formValues}
               onChange={this.onChange.bind(self)}
           />
-          <ItemCheckbox text="Email verified (display only)"
-                        disabled={true}
-                        checked={this.props.profile.form.fields.emailVerified}
-          />
+          <ItemCheckbox text={emailVerifiedMsg}
+                         disabled={this.props.profile.form.originalProfile.emailVerified}
+                         checked={this.props.profile.form.fields.emailVerified}
+           />
 
         <View style={styles.btn}>
           <FormButton

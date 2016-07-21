@@ -40,14 +40,14 @@ export default function formValidation (state) {
         state.form.fields.email !== ''
         &&
         state.form.fields.password !== ''
-        &&
-        state.form.fields.passwordAgain !== ''
+        /*&&
+        state.form.fields.passwordAgain !== ''*/
         &&
         !state.form.fields.emailHasError
-        &&
-        !state.form.fields.passwordHasError
-        &&
-        !state.form.fields.passwordAgainHasError) {
+        /*&&
+        !state.form.fields.passwordHasError*/
+        /*&&
+        !state.form.fields.passwordAgainHasError*/) {
       return state.setIn(['form','isValid'],true);
     } else {
       return state.setIn(['form','isValid'],false);
@@ -61,8 +61,8 @@ export default function formValidation (state) {
         state.form.fields.password !== ''
         &&
         !state.form.fields.emailHasError
-        &&
-        !state.form.fields.passwordHasError) {
+        /*&&
+        !state.form.fields.passwordHasError*/) {
       return state.setIn(['form','isValid'],true);
     } else {
       return state.setIn(['form','isValid'],false);

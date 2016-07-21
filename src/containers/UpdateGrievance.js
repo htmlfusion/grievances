@@ -57,6 +57,7 @@ import NavigationBar from 'react-native-navbar';
 * The form processing component
 */
 import t from 'tcomb-form-native';
+import templates from '../components/NativeTemplates';
 
 let Form = t.form.Form;
 
@@ -158,7 +159,7 @@ class UpdateGrievance extends Component {
       title: 'Back',
       handler: Actions.pop
     };
-
+    let nativeTextbox = templates.nativeTextbox;
     let GrievanceForm = t.struct({
       description: t.maybe(t.String)
     });
@@ -166,7 +167,13 @@ class UpdateGrievance extends Component {
      * Set up the field definitions.  If we're fetching, the fields
      * are disabled.
      */
-    let options = {};
+    let options = {
+      fields: {
+        description: {
+          template: nativeTextbox
+        }
+      }
+    };
 
     /**
      * When the button is pressed, send the users info including the

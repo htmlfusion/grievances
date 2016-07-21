@@ -56,6 +56,7 @@ import NavigationBar from 'react-native-navbar';
 * The form processing component
 */
 import t from 'tcomb-form-native';
+import templates from '../components/NativeTemplates';
 
 let Form = t.form.Form;
 
@@ -118,7 +119,7 @@ class CreateGrievance extends Component {
     this.errorAlert = new ErrorAlert();
     this.state = {
       formValues: {
-        address: '',
+        /*address: '',*/
         description: '',
         tag: ''
       },
@@ -147,7 +148,7 @@ class CreateGrievance extends Component {
 
     this.setState({
       formValues: {
-        address: props.grievance.grievanceCreate.form.fields.address,
+        /*address: props.grievance.grievanceCreate.form.fields.address,*/
         description: props.grievance.grievanceCreate.form.fields.description,
         tag: props.grievance.grievanceCreate.form.fields.tag
       }
@@ -168,9 +169,9 @@ class CreateGrievance extends Component {
       title: 'Back',
       handler: Actions.pop
     };
-
+    let nativeTextbox = templates.nativeTextbox;
     let GrievanceForm = t.struct({
-      address: t.String,
+      /*address: t.String,*/
       description: t.maybe(t.String),
       tag: t.String,
     });
@@ -179,7 +180,15 @@ class CreateGrievance extends Component {
      * are disabled.
      */
     let options = {
-      auto: 'placeholders'
+      auto: 'placeholders',
+      fields: {
+        description: {
+          template: nativeTextbox
+        },
+        tag: {
+          template: nativeTextbox
+        }
+      }
     };
     let btnAnonymous = () => {
       if (this.state.anonymousStyle.backgroundColor) {
@@ -195,6 +204,10 @@ class CreateGrievance extends Component {
         });
       }
     };
+    //Here get address based on location co-ordinates
+    let getAddress = (location) => {
+      return;
+    }
     /**
      * When the button is pressed, send the users info including the
      * ```currrentUser``` object as it contains the sessionToken and
@@ -203,7 +216,8 @@ class CreateGrievance extends Component {
     let grievanceButtonText = 'Submit Grievance';
     let onButtonPress = () => {
       this.props.actions.createGrievance(
-        this.props.grievance.grievanceCreate.form.fields.address,
+        getAddress(this.props.location),
+        /*this.props.grievance.grievanceCreate.form.fields.address,*/
         this.props.grievance.grievanceCreate.form.fields.description,
         this.props.location,
         this.state.reportedUser,

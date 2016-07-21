@@ -165,7 +165,7 @@ export default function grievanceReducer(state = initialState, action) {
     recordMap = state.getIn(['grievanceList', 'grievances']).push(newGrievance(action.payload));
     nextGrievanceState = state.setIn([ 'grievanceCreate','form', 'isFetching'], false)
       .setIn([ 'grievanceCreate', 'form', 'error'], null)
-      .setIn([ 'grievanceCreate', 'form', 'fields', 'address'], '')
+      /*.setIn([ 'grievanceCreate', 'form', 'fields', 'address'], '')*/
       .setIn([ 'grievanceCreate', 'form', 'fields', 'description'], '')
       .setIn([ 'grievanceCreate', 'form', 'fields', 'location'], [])
       .setIn([ 'grievanceCreate', 'form', 'fields', 'tag'], '')
@@ -264,7 +264,7 @@ export default function grievanceReducer(state = initialState, action) {
 
     case ON_GRIEVANCE_FORM_FIELD_CHANGE:
       return state.setIn([ 'grievanceCreate', 'form','fields','description'], action.payload.field.description)
-        .setIn([ 'grievanceCreate', 'form','fields','address'],action.payload.field.address)
+        /*.setIn([ 'grievanceCreate', 'form','fields','address'],action.payload.field.address)*/
         .setIn([ 'grievanceCreate', 'form','fields','tag'],action.payload.field.tag)
         .setIn([ 'grievanceCreate', 'form','fields','location'],action.payload.field.location)
         .setIn([ 'grievanceCreate', 'form','error'],null);

@@ -32,11 +32,11 @@ const Form = Record({
     fullname: '',
     email: '',
     emailHasError: false,
-    password: '',
+    password: ''/*,
     passwordHasError: false,
     passwordAgain: '',
     passwordAgainHasError: false,
-    showPassword: false
+    showPassword: false*/
   }))
 });
 

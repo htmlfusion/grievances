@@ -130,8 +130,8 @@ class LoginRender extends Component {
       value: {
         fullname: this.props.auth.form.fields.fullname,
         email: this.props.auth.form.fields.email,
-        password: this.props.auth.form.fields.password,
-        passwordAgain: this.props.auth.form.fields.passwordAgain
+        password: this.props.auth.form.fields.password/*,
+        passwordAgain: this.props.auth.form.fields.passwordAgain*/
       }
     };
   }
@@ -145,8 +145,8 @@ class LoginRender extends Component {
       value: {
 	fullname: nextprops.auth.form.fields.fullname,
 	email: nextprops.auth.form.fields.email,
-	password: nextprops.auth.form.fields.password,
-	passwordAgain: nextprops.auth.form.fields.passwordAgain
+	password: nextprops.auth.form.fields.password/*,
+	passwordAgain: nextprops.auth.form.fields.passwordAgain*/
       }
     });
   }
@@ -170,9 +170,9 @@ class LoginRender extends Component {
     if (value.password != '') {
       this.props.actions.onAuthFormFieldChange('password',value.password);
     }
-    if (value.passwordAgain != '') {
+    /*if (value.passwordAgain != '') {
       this.props.actions.onAuthFormFieldChange('passwordAgain',value.passwordAgain);
-    }
+    }*/
     this.setState(
       {value}
     );
@@ -244,7 +244,7 @@ class LoginRender extends Component {
     /**
      * Toggle the display of the Password and PasswordAgain fields
      */
-    if (displayPasswordCheckbox) {
+    /*if (displayPasswordCheckbox) {
       passwordCheckbox =
       <ItemCheckbox
           text="Show Password"
@@ -256,7 +256,7 @@ class LoginRender extends Component {
 	      this.props.actions.onAuthFormFieldChange('showPassword',false);
             }}
       />;
-    }
+    }*/
 
     /**
      * The LoginForm is now defined with the required fields.  Just

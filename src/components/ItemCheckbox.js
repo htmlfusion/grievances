@@ -24,10 +24,21 @@ var Icon = require('react-native-vector-icons/FontAwesome');
 var {
   View,
   TouchableHighlight,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
+  StyleSheet
 } = ReactNative;
 
-import {Text} from 'native-base';
+import {Text, CheckBox} from 'native-base';
+
+let styles = StyleSheet.create({
+  checkboxCont: {
+    flexDirection: 'row',
+    flex:1
+  },
+  checkboxColor: {
+    backgroundColor: '#337ab7'
+  }
+});
 
 var ItemCheckbox = React.createClass({
   /**
@@ -102,6 +113,7 @@ var ItemCheckbox = React.createClass({
    * what the display should look like
    */
   _completeProgress: function() {
+    console.log('volls', this.state.checked);
     if (this.state.checked) {
       this.setState({
         checked: false,
@@ -141,18 +153,16 @@ var ItemCheckbox = React.createClass({
       iconName=this.props.icon_check;
     }
     if (this.props.disabled) {
-      iconName = this.props.checked ? this.props.icon_check : this.props.icon_open;
+      /*iconName = this.props.checked ? this.props.icon_check : this.props.icon_open;*/
       return (
         <View style={this.props.style}>
           <TouchableWithoutFeedback>
-            <View style={{
-                flexDirection: 'row',
-                flex:1
-              }}>
-              <Icon
+            <View style={styles.checkboxCont}>
+              {/*<Icon
                   name={iconName}
                   size={20}
-              />
+              />*/}
+              <CheckBox checked={this.state.checked}/>
               <Text> {this.props.text}</Text>
             </View>
           </TouchableWithoutFeedback>
@@ -164,14 +174,12 @@ var ItemCheckbox = React.createClass({
             <TouchableHighlight
                 onPress={this._completeProgress}
             >
-              <View style={{
-                  flexDirection: 'row',
-                  flex:1
-                }}>
-                <Icon
+              <View style={styles.checkboxCont}>
+                {/*<Icon
                     name={iconName}
                     size={20}
-                />
+                />*/}
+                <CheckBox checked={this.state.checked}/>
                 <Text> {this.props.text}</Text>
               </View>
             </TouchableHighlight>

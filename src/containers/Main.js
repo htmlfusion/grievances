@@ -11,7 +11,7 @@
  */
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import {Container, Content, Footer, Button} from 'native-base';
+import {Container, Content, Footer, Button, Text} from 'native-base';
 
 /**
  * The actions we need
@@ -45,7 +45,8 @@ import
   View
 }
 from 'react-native';
-
+import Dimensions from 'Dimensions';
+var {height, width} = Dimensions.get('window');
 /**
  * The platform neutral button
  */
@@ -92,9 +93,12 @@ function mapDispatchToProps(dispatch) {
 
 var styles = StyleSheet.create({
   roundBtn: {
-    position: 'absolute',
-    right:20,
-    bottom: 10
+    // position: 'absolute',
+    flexDirection: 'row',
+    bottom: 60,
+    right: 10,
+    width: width,
+    justifyContent: 'flex-end'
   }
 });
 
@@ -142,11 +146,14 @@ class Main extends Component {
                 onSetState={this.props.actions.setState}
         />*/}
           <GMap data={this.props.grievance.grievanceList.grievances} updateGrievance={this.updateGrievance} setCurrentLoc={this.setCurrentLoc.bind(this)}/>
+
         </Content>
         <Footer>
-          <Button onPress={ this.handlePress.bind(this) } rounded style={styles.roundBtn}>
-           {'+'}
-          </Button>
+          <View style={styles.roundBtn}>
+            <Button onPress={ this.handlePress.bind(this) } rounded >
+             {'+'}
+            </Button>
+          </View>
         </Footer>
       </Container>
     );

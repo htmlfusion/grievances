@@ -85,7 +85,7 @@ export default function authReducer(state = initialState, action) {
         .setIn(['form','fields','fullname'],'')
         .setIn(['form','fields','email'],'')
         .setIn(['form','fields','password'],'')
-        .setIn(['form','fields','passwordAgain'],'')
+        /*.setIn(['form','fields','passwordAgain'],'')*/
     );
 
     /**
@@ -164,9 +164,9 @@ export default function authReducer(state = initialState, action) {
           .setIn(['form','fields','email'],form.fields.email)
           .setIn(['form','fields','emailHasError'],form.fields.emailHasError)
           .setIn(['form','fields','password'],form.fields.password)
-          .setIn(['form','fields','passwordHasError'],form.fields.passwordHasError)
+          /*.setIn(['form','fields','passwordHasError'],form.fields.passwordHasError)
           .setIn(['form','fields','passwordAgain'],form.fields.passwordAgain)
-          .setIn(['form','fields','passwordAgainHasError'],form.fields.passwordAgainHasError);
+          .setIn(['form','fields','passwordAgainHasError'],form.fields.passwordAgainHasError)*/;
 
     return next;
 
