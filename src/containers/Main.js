@@ -109,7 +109,7 @@ class Main extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentLoc: [12.2958104, 76.63938050000002] //This has to be set to empty [] once navigator's currentLocation is working
+      currentLoc: [] //This has to be set to empty [] once navigator's currentLocation is working
     }
     this.updateGrievance = this.updateGrievance.bind(this);
   }
