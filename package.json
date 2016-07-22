@@ -43,6 +43,7 @@
     "immutable": "3.7.6",
     "key-mirror": "1.0.1",
     "native-base": "^0.5.0",
+    "querystring": "^0.2.0",
     "react": "^15.2.0",
     "react-native": "^0.29.0",
     "react-native-gifted-spinner": "0.0.5",

@@ -29,7 +29,7 @@ import {Map} from 'immutable';
  * Router
  */
 import {Actions} from 'react-native-router-flux';
-
+import Layout from '../components/Layout';
 /**
  * The Header will display a Image and support Hot Loading
  */
@@ -109,18 +109,25 @@ class Main extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentLoc: [12.2958104, 76.63938050000002] //This has to be set to empty [] once navigator's currentLocation is working
-    }
+      currentLoc: [12.2958104, 76.63938050000002], //This has to be set to empty [] once navigator's currentLocation is working
+      address: 'Mysore, Karnataka, India', //this is temprory address, have to set it based on currentLoc
+      radius: 10
+    };
     this.updateGrievance = this.updateGrievance.bind(this);
   }
 
   componentDidMount() {
-    this.props.actions.getGrievances(this.props.global.currentUser);
+    let data = {
+      location: this.state.currentLoc,
+      radius: this.state.radius
+    };
+    this.props.actions.getGrievances(data, this.props.global.currentUser);
   }
 
   handlePress() {
     Actions.CreateGrievance({
-      location: this.state.currentLoc
+      location: this.state.currentLoc,
+      address: this.state.address
     });
   }
 
@@ -130,32 +137,25 @@ class Main extends Component {
   }
 
   setCurrentLoc({longitude, latitude}) {
+    //Check how to update address
     this.setState({
       currentLoc: [longitude, latitude]
     });
   }
 
   render() {
+    let roundBtn = <View style={styles.roundBtn}>
+      <Button onPress={ this.handlePress.bind(this) } rounded >
+       {'+'}
+      </Button>
+    </View>;
     return(
-      <Container>
-        <Content>
-        {/*<Header isFetching={this.props.auth.form.isFetching}
-                showState={this.props.global.showState}
-                currentState={this.props.global.currentState}
-                onGetState={this.props.actions.getState}
-                onSetState={this.props.actions.setState}
-        />*/}
-          <GMap data={this.props.grievance.grievanceList.grievances} updateGrievance={this.updateGrievance} setCurrentLoc={this.setCurrentLoc.bind(this)}/>
 
-        </Content>
-        <Footer>
-          <View style={styles.roundBtn}>
-            <Button onPress={ this.handlePress.bind(this) } rounded >
-             {'+'}
-            </Button>
-          </View>
-        </Footer>
-      </Container>
+        <Layout footerContent={roundBtn}>
+          <GMap data={this.props.grievance.grievanceList.grievances} updateGrievance={this.updateGrievance} setCurrentLoc={this.setCurrentLoc.bind(this)} radius={this.state.radius}/>
+
+        </Layout>
+
     );
   }
 };

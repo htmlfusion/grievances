@@ -13,14 +13,14 @@ To work on this,
 
 
 Todo
->> Design updateGrievance (high) => MS
+>> Design updateGrievance (high) => S
 >> Design Marker (low)
 >> User's current location (high) => S
 >> Design grievances map View (refer foursquare) (high) => MS
 >> Display grievances based on current location with some radius (high) => S
 >> List grievances(high) => S
 >> Add location search functionality  for map view (low)
->> Add media while creating grievance (high) => MS
+>> Add media while creating grievance (high) => S
 >> Display grievance list before creating grievance on the same location or with in some delta (high) => S
 >> Add force touch feature for creating grievance (V2)
 >> Google and FB auth for login (medium)

@@ -57,7 +57,7 @@ import NavigationBar from 'react-native-navbar';
 */
 import t from 'tcomb-form-native';
 import templates from '../components/NativeTemplates';
-
+import Layout from '../components/Layout';
 let Form = t.form.Form;
 
 /**
@@ -204,10 +204,7 @@ class CreateGrievance extends Component {
         });
       }
     };
-    //Here get address based on location co-ordinates
-    let getAddress = (location) => {
-      return;
-    }
+    
     /**
      * When the button is pressed, send the users info including the
      * ```currrentUser``` object as it contains the sessionToken and
@@ -216,7 +213,7 @@ class CreateGrievance extends Component {
     let grievanceButtonText = 'Submit Grievance';
     let onButtonPress = () => {
       this.props.actions.createGrievance(
-        getAddress(this.props.location),
+        this.props.address,
         /*this.props.grievance.grievanceCreate.form.fields.address,*/
         this.props.grievance.grievanceCreate.form.fields.description,
         this.props.location,
@@ -225,50 +222,30 @@ class CreateGrievance extends Component {
         this.props.global.currentUser
       );
     };
+    let headerTitle = 'Report Grievance';
     /**
      * Wrap the form with the header and button.  The header props are
      * mostly for support of Hot reloading. See the docs for Header
      * for more info.
      */
     return (
-      <Container>
-        {/*<Header isFetching={this.props.grievance.grievanceCreate.form.isFetching}
-                showState={this.props.global.showState}
-                currentState={this.props.global.currentState}
-                onGetState={this.props.actions.getState}
-                onSetState={this.props.actions.setState}
-        />*/}
-        <Header style = {styles.header}>
-          <Button transparent onPress={() => Actions.pop()}>
-            <Icon name="ios-arrow-back" style={styles.headerFont}/>
-          </Button>
-          <Title><Text style={styles.headerFont}>Report Grievance</Text></Title>
-          {/*{<NavigationBar
-                  leftButton={ leftButtonConfig }
-      	           />}*/}
-        </Header>
-        <Content style={styles.content}>
-          <Button ref='anonymous' transparent style={this.state.anonymousStyle} onPress={btnAnonymous}>
-            <Text style={styles.headerFont}>Anonymous</Text>
-          </Button>
-          <Form
-              ref="form"
-              type={GrievanceForm}
-              options={options}
-              value={this.state.formValues}
-              onChange={this.onChange.bind(self)}
-          />
+      <Layout isHeaderBack={true} headerTitle={headerTitle}>
+        <Button ref='anonymous' transparent style={this.state.anonymousStyle} onPress={btnAnonymous}>
+          <Text style={styles.headerFont}>Anonymous</Text>
+        </Button>
+        <Form
+            ref="form"
+            type={GrievanceForm}
+            options={options}
+            value={this.state.formValues}
+            onChange={this.onChange.bind(self)}
+        />
 
-          <FormButton
-              /*isDisabled={!this.props.grievance.grievanceCreate.form.isValid}*/
-              onPress={onButtonPress.bind(self)}
-              buttonText={grievanceButtonText}/>
-        </Content>
-
-
-
-
-      </Container>
+        <FormButton
+            /*isDisabled={!this.props.grievance.grievanceCreate.form.isValid}*/
+            onPress={onButtonPress.bind(self)}
+            buttonText={grievanceButtonText}/>
+      </Layout>
     );
   }
 }

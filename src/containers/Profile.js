@@ -61,6 +61,7 @@ from 'react-native';
 */
 import t from 'tcomb-form-native';
 import templates from '../components/NativeTemplates';
+import Layout from '../components/Layout';
 
 let Form = t.form.Form;
 
@@ -74,12 +75,7 @@ var styles = StyleSheet.create({
   btn: {
     marginTop: 10
   },
-  header: {
-    backgroundColor: '#337ab7',
-    borderColor: '#2e6da4',
-    flexDirection: 'row-reverse',
-    justifyContent: 'space-between'
-  },
+
   headerFont: {
     color: '#fff'
   },
@@ -239,20 +235,7 @@ class Profile extends Component {
        emailVerifiedMsg = "Your email has been verified";
      }
     return (
-      <Container style={styles.container}>
-        {/*<Header isFetching={this.props.profile.form.isFetching}
-                showState={this.props.global.showState}
-                currentState={this.props.global.currentState}
-                onGetState={this.props.actions.getState}
-                onSetState={this.props.actions.setState}
-        />*/}
-        <Header style = {styles.header}>
-          <Button transparent onPress={onLogoutButtonPress.bind(self)}>
-            <Icon name="md-exit" style={styles.headerFont} isDisabled={!this.props.auth.form.isValid || this.props.auth.form.isFetching}/>
-          </Button>
-        </Header>
-        <Content style={styles.content}>
-
+        <Layout headerRight={{action: onLogoutButtonPress.bind(self), iconName: "md-exit", isDisabled: !this.props.auth.form.isValid || this.props.auth.form.isFetching}}>
           <Form
               ref="form"
               type={ProfileForm}
@@ -271,8 +254,7 @@ class Profile extends Component {
             onPress={onButtonPress.bind(self)}
             buttonText={profileButtonText}/>
         </View>
-        </Content>
-      </Container>
+      </Layout>
     );
   }
 }

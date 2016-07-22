@@ -58,7 +58,7 @@ import NavigationBar from 'react-native-navbar';
 */
 import t from 'tcomb-form-native';
 import templates from '../components/NativeTemplates';
-
+import Layout from '../components/Layout';
 let Form = t.form.Form;
 
 /**
@@ -168,6 +168,7 @@ class UpdateGrievance extends Component {
      * are disabled.
      */
     let options = {
+      auto: 'placeholders',
       fields: {
         description: {
           template: nativeTextbox
@@ -201,22 +202,7 @@ class UpdateGrievance extends Component {
      * for more info.
      */
     return (
-      <Container>
-        {/*<Header isFetching={this.props.grievance.grievanceCreate.form.isFetching}
-                showState={this.props.global.showState}
-                currentState={this.props.global.currentState}
-                onGetState={this.props.actions.getState}
-                onSetState={this.props.actions.setState}
-        />*/}
-        <Header style={styles.header}>
-          {/*<NavigationBar
-                  leftButton={ leftButtonConfig }
-      	           />*/}
-           <Button transparent onPress={() => Actions.pop()}>
-             <Icon name="ios-arrow-back" style={styles.headerFont}/>
-           </Button>
-        </Header>
-        <Content style={styles.content}>
+        <Layout isHeaderBack={true}>
           <Form
               ref="form"
               type={GrievanceForm}
@@ -226,7 +212,7 @@ class UpdateGrievance extends Component {
           />
           <Text>{this.props.grievance.grievanceUpdate.form.originalGrievance.tag}</Text>
           {/*Get the location name based on location coordinates*/}
-          <Text>{this.props.grievance.grievanceUpdate.form.originalGrievance.location}</Text>
+          {/*<Text>{this.props.grievance.grievanceUpdate.form.originalGrievance.location}</Text>*/}
           <Text>{this.props.grievance.grievanceUpdate.form.originalGrievance.dateOfReporting}</Text>
           <Text>{this.props.grievance.grievanceUpdate.form.originalGrievance.address}</Text>
           <Text>{this.props.grievance.grievanceUpdate.form.originalGrievance.reportedUser}</Text>
@@ -241,10 +227,7 @@ class UpdateGrievance extends Component {
               /*isDisabled={!this.props.grievance.grievanceCreate.form.isValid}*/
               onPress={onDeleteButtonPress.bind(self)}
               buttonText={grievanceDeleteButtonText}/>
-        </Content>
-
-
-      </Container>
+        </Layout>
     );
   }
 }

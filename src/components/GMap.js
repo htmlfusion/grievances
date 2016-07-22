@@ -71,7 +71,7 @@ export default class GMap extends Component {
         {/*circle is not working now, have to fix it. Once it is working replace default values with this.state.initialRegion*/}
         <MapView.Circle
             center={{latitude: 12.2958104, longitude: 76.63938050000002}}
-            radius={200}
+            radius={this.props.radius}
             fillColor="rgba(200, 0, 0, 0.5)"
             strokeColor="rgba(0,0,0,0.5)"
           />

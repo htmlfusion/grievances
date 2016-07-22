@@ -66,19 +66,21 @@ export function getGrievanceFailure(json) {
  * ## State actions
  * Have to write
  */
-export function getGrievances(sessionToken) {
+export function getGrievances(data, sessionToken) {
   return dispatch => {
     dispatch(getGrievanceRequest());
     //store or get a sessionToken
 
     return new AppAuthToken().getSessionToken(sessionToken)
       .then((token) => {
-        return BackendFactory(token).getGrievances();
+        return BackendFactory(token).getGrievances(data);
       })
       .then((json) => {
+          console.log('cool ma', json);
           dispatch(getGrievanceSuccess(json));
       })
       .catch((error) => {
+        console.log('cool ma error', error);
         dispatch(getGrievanceFailure(error));
       });
   };

@@ -19,6 +19,7 @@ require('regenerator/runtime');
  */
 import CONFIG from './config';
 import _ from 'underscore';
+import queryString from 'querystring';
 import Backend from './Backend';
 
 export default class Hapi extends Backend{
@@ -358,10 +359,11 @@ export default class Hapi extends Backend{
 
   }
 
-  async getGrievances() {
+  async getGrievances(data) {
     return await this._fetch({
       method: 'GET',
-      url: '/grievance/reports'
+      url: '/grievance/reports',
+      query: data
     })
       .then((response) => {
         return response.json().then((res) => {
@@ -392,7 +394,9 @@ export default class Hapi extends Backend{
       method: opts.method,
       headers: {
       }
-    };
+    },
+    url = this.API_BASE_URL + opts.url;
+
 
     if (this._sessionToken) {
       reqOpts.headers['Authorization'] = 'Bearer ' + this._sessionToken;
@@ -406,8 +410,15 @@ export default class Hapi extends Backend{
     if (opts.body) {
       reqOpts.body = JSON.stringify(opts.body);
     }
-    console.log('cool to debug', this.API_BASE_URL + opts.url, reqOpts);
-    return await fetch(this.API_BASE_URL + opts.url, reqOpts);
+    if (opts.query) {
+      let query = opts.query,
+        queryParams;
+
+      queryParams = queryString.stringify(query);
+      url = url + '?' + queryParams;
+    }
+    console.log('cool to debug', url, reqOpts);
+    return await fetch(url, reqOpts);
 
   }
 };
