@@ -40,18 +40,19 @@ export default class GMap extends Component {
     this.state.markers = props.data;
   }
   componentDidMount() {
+    let initialDelta = {latitudeDelta: 0.0922, longitudeDelta: 0.0421};
     navigator.geolocation.getCurrentPosition(
-      (position) => {
-        var initialPosition = JSON.stringify(position);
-        this.setState({initialRegion: initialPosition.coords});
+      (initialPosition) => {
+
+
+        this.setState({initialRegion: {...initialPosition.coords, ...initialDelta}});
         this.props.setCurrentLoc(initialPosition.coords);
       },
       (error) => {console.log('nav error', error); this.errorAlert.checkError(error.message);},
       {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
     );
-    this.watchID = navigator.geolocation.watchPosition((position) => {
-      var lastPosition = JSON.stringify(position);
-      this.setState({region: lastPosition.coords});
+    this.watchID = navigator.geolocation.watchPosition((lastPosition) => {
+      this.setState({region: {...lastPosition.coords, ...initialDelta}});
       this.props.setCurrentLoc(lastPosition.coords);
     });
   }
@@ -61,7 +62,6 @@ export default class GMap extends Component {
   }
 
   render() {
-
     return (
       <View style={styles.container}>
         <MapView style={styles.map}

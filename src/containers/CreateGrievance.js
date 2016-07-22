@@ -47,7 +47,8 @@ import React, {Component} from 'react';
 import
 {
   StyleSheet,
-  View
+  View,
+  Platform
 }
 from 'react-native';
 
@@ -58,6 +59,7 @@ import NavigationBar from 'react-native-navbar';
 import t from 'tcomb-form-native';
 import templates from '../components/NativeTemplates';
 import Layout from '../components/Layout';
+import ImagePicker from 'react-native-image-picker';
 let Form = t.form.Form;
 
 /**
@@ -121,7 +123,8 @@ class CreateGrievance extends Component {
       formValues: {
         /*address: '',*/
         description: '',
-        tag: ''
+        tag: '',
+        src: ''
       },
       anonymousStyle: designAnonymous,
       reportedUser: this.props.global.currentUser.objectId
@@ -190,6 +193,20 @@ class CreateGrievance extends Component {
         }
       }
     };
+    let uploadOptions = {
+      title: 'Select Avatar',
+      // storageOptions: {
+      //   skipBackup: true,
+      //   path: 'images'
+      // },
+      // takePhotoButtonTitle: 'Snap & Post'
+    };
+    //console.log('/**ImagePicker bbb: ',ImagePicker.showImagePicker);
+
+    ImagePicker.showImagePicker(uploadOptions, (response) => {
+      console.log('response: ',response);
+    });
+
     let btnAnonymous = () => {
       if (this.state.anonymousStyle.backgroundColor) {
         this.setState({
@@ -204,7 +221,7 @@ class CreateGrievance extends Component {
         });
       }
     };
-    
+
     /**
      * When the button is pressed, send the users info including the
      * ```currrentUser``` object as it contains the sessionToken and
