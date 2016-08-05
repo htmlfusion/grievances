@@ -9,9 +9,7 @@ let styles = StyleSheet.create({
   card: {
     flexDirection: 'column',
     justifyContent: 'space-between',
-    marginBottom: 10,
-    width: width-width/4,
-    height: height/5
+    flex:1
   },
   btns: {
     flexDirection: 'row',
@@ -35,7 +33,7 @@ export default class SwipeCard extends Component {
   }
 
   render() {
-    let upVoteMsg = "Nobody upvoted this issue",
+    let upVoteMsg = "",
       upVoteBtn = null,
       thumbnail = null;
 
@@ -53,9 +51,9 @@ export default class SwipeCard extends Component {
     if (this.props.marker.curlyUrlSmall) {
       thumbnail = <Thumbnail square small source={{uri: this.props.marker.curlyUrlSmall}}/>;
     }
+
     return (
-      <View>
-        <Card style={styles.card}>
+        <Card style={[styles.card, this.props.cardDimensions]}>
             <TouchableWithoutFeedback onPressIn={this.props.cardAction}>
               <CardItem style= {styles.cardItem}>
                 <View>{thumbnail}</View>
@@ -70,7 +68,6 @@ export default class SwipeCard extends Component {
               </CardItem>
             </TouchableWithoutFeedback>
         </Card>
-      </View>
     );
   }
 }

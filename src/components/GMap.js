@@ -1,11 +1,15 @@
 import React, {Component} from 'react';
-import {StyleSheet, View} from 'react-native';
+import { StyleSheet, View, ScrollView, Text, TouchableOpacity } from 'react-native';
 import SwipeCard from './SwipeCard';
 import Swiper from 'react-native-swiper';
 import MapView from 'react-native-maps';
 import ErrorAlert from './ErrorAlert';
 import Dimensions from 'Dimensions';
 var {height, width} = Dimensions.get('window');
+
+const CARD_PREVIEW_WIDTH = 20;
+const CARD_MARGIN = 5;
+const CARD_WIDTH = width - (CARD_MARGIN + CARD_PREVIEW_WIDTH) * 2;
 //Now having issues with react-native-maps, follow this steps https://github.com/lelandrichardson/react-native-maps/issues/371 to fix
 let styles = StyleSheet.create({
   container: {
@@ -20,7 +24,20 @@ let styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0
-  }
+  },
+  contentContainer: {
+    flex: 1
+    // paddingHorizontal: CARD_PREVIEW_WIDTH,
+    // alignItems: 'flex-end',
+    // alignItems: 'center',
+    // justifyContent: 'center',
+    // flex: 1,
+  },
+  content: {
+    marginTop: 20,
+    paddingHorizontal: CARD_PREVIEW_WIDTH,
+    alignItems: 'center'
+  },
 });
 
 export default class GMap extends Component {
@@ -64,12 +81,14 @@ export default class GMap extends Component {
   componentWillUnmount() {
     navigator.geolocation.clearWatch(this.watchID);
   }
-
+//Remove this height
   render() {
+    var _scrollView = ScrollView;
     let swipeCards = this.state.markers.map((marker, idx) => (
           <SwipeCard
             key={idx}
             marker = {marker}
+            cardDimensions = {{width: CARD_WIDTH, height: CARD_WIDTH, margin: CARD_MARGIN}}
             auth = {this.props.auth}
             cardAction={this.props.updateGrievance.bind(this, marker, idx)}
             grievanceFeedback={this.props.grievanceFeedback.bind(this, marker._id, idx)}
@@ -79,6 +98,7 @@ export default class GMap extends Component {
             <SwipeCard
               key={idx}
               marker = {marker}
+              cardDimensions = {{width: CARD_WIDTH, height: CARD_WIDTH, margin: CARD_MARGIN}}
               cardAction={this.props.updateGrievance.bind(this, marker, idx)}
               grievanceFeedback={this.props.grievanceFeedback.bind(this, marker._id, idx)}
             />
@@ -108,8 +128,22 @@ export default class GMap extends Component {
           ))}
 
         </MapView>
+
+        <ScrollView
+          style={styles.contentContainer}
+          ref={(scrollView) => {_scrollView = scrollView}}
+          automaticallyAdjustContentInsets={false}
+          horizontal={true}
+          decelerationRate={0}
+          snapToInterval={CARD_WIDTH + CARD_MARGIN*2}
+          snapToAlignment="start"
+          contentContainerStyle={styles.content}
+          showsHorizontalScrollIndicator={false}
+        >
         {swipeCards}
+        </ScrollView>
       </View>
+
     );
   }
 }
