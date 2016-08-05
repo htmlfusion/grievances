@@ -15,8 +15,9 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import {Actions} from 'react-native-router-flux';
-import {Container, Content, Header, Text, Button, Icon} from 'native-base';
-
+import {Container, Content, Header, Text, Button, Icon, Thumbnail} from 'native-base';
+import Dimensions from 'Dimensions';
+var {height, width} = Dimensions.get('window');
 /**
  * The actions we need
  */
@@ -201,6 +202,10 @@ class UpdateGrievance extends Component {
      * mostly for support of Hot reloading. See the docs for Header
      * for more info.
      */
+    let image = null;
+    if (this.props.grievance.grievanceUpdate.form.originalGrievance.curlyUrl) {
+      image = <Thumbnail square size={width/2} source={this.props.grievance.grievanceUpdate.form.originalGrievance.curlyUrlLarge}/>
+    }
     return (
         <Layout isHeaderBack={true}>
           <Form
@@ -213,6 +218,7 @@ class UpdateGrievance extends Component {
           <Text>{this.props.grievance.grievanceUpdate.form.originalGrievance.tag}</Text>
           {/*Get the location name based on location coordinates*/}
           {/*<Text>{this.props.grievance.grievanceUpdate.form.originalGrievance.location}</Text>*/}
+          {image}
           <Text>{this.props.grievance.grievanceUpdate.form.originalGrievance.dateOfReporting}</Text>
           <Text>{this.props.grievance.grievanceUpdate.form.originalGrievance.address}</Text>
           <Text>{this.props.grievance.grievanceUpdate.form.originalGrievance.reportedUser}</Text>

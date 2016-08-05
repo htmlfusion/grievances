@@ -326,6 +326,29 @@ export default class Hapi extends Backend{
 
   }
 
+  async grievanceUpdateFeedback(id, data) {
+    return await this._fetch({
+      method: 'PUT',
+      url: '/grievance/feedbackreport/'+id,
+      body: data
+    })
+      .then((response) => {
+
+        return response.json().then((res) => {
+          if (response.status === 200 || response.status === 201) {
+            return res;
+          } else {
+            throw(res);
+          }
+        });
+
+      })
+      .catch((error) => {
+        console.error(error);
+        throw(error);
+      });
+  }
+
   /**
    * ### deleteGrievance
    *

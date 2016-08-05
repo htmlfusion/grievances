@@ -29,7 +29,10 @@ const {
   ON_GRIEVANCE_FORM_FIELD_CHANGE,
   ON_GRIEVANCE_UPDATE_FORM_FIELD_CHANGE,
 
-  SET_GRIEVANCE_UPDATE
+  SET_GRIEVANCE_UPDATE,
+
+  GRIEVANCE_UPDATE_FEEDBACK_SUCCESS,
+  GRIEVANCE_UPDATE_FEEDBACK_FAILURE
 } = require('../../lib/constants').default;
 
 import {Actions} from 'react-native-router-flux';
@@ -70,17 +73,14 @@ export function getGrievances(data, sessionToken) {
   return dispatch => {
     dispatch(getGrievanceRequest());
     //store or get a sessionToken
-
     return new AppAuthToken().getSessionToken(sessionToken)
       .then((token) => {
         return BackendFactory(token).getGrievances(data);
       })
       .then((json) => {
-          console.log('cool ma', json);
           dispatch(getGrievanceSuccess(json));
       })
       .catch((error) => {
-        console.log('cool ma error', error);
         dispatch(getGrievanceFailure(error));
       });
   };
@@ -107,7 +107,7 @@ export function grievanceCreateFailure(json) {
   };
 }
 
-export function createGrievance(address, description, location, reportedUser, tag, sessionToken) {
+export function createGrievance(address, description, location, reportedUser, tag, curlyUrl, sessionToken) {
   return dispatch => {
     dispatch(grievanceCreateRequest());
     return new AppAuthToken().getSessionToken(sessionToken)
@@ -118,7 +118,8 @@ export function createGrievance(address, description, location, reportedUser, ta
             description: description,
             location: location,
             reportedUser: reportedUser,
-            tag: tag
+            tag: tag,
+            curlyUrl: curlyUrl
           }
         );
       })
@@ -141,10 +142,10 @@ export function grievanceUpdateRequest() {
     type: GRIEVANCE_UPDATE_REQUEST
   };
 }
-export function grievanceUpdateSuccess(json) {
+export function grievanceUpdateSuccess(idx) {
   return {
     type: GRIEVANCE_UPDATE_SUCCESS,
-    payload: json
+    idx: idx
   };
 }
 export function grievanceUpdateFailure(json) {
@@ -193,6 +194,35 @@ export function updateGrievance(grievanceId, description, sessionToken) {
   };
 }
 
+export function grievanceUpdateFeedbackSuccess(idx, json) {
+  return {
+    type: GRIEVANCE_UPDATE_FEEDBACK_SUCCESS,
+    idx: idx,
+    payload: json
+  };
+}
+export function grievanceUpdateFeedbackFailure(idx, json) {
+  return {
+    type: GRIEVANCE_UPDATE_FEEDBACK_FAILURE,
+    idx: idx,
+    payload: json
+  };
+}
+
+export function grievanceUpdateFeedback(grievanceId, sessionToken, idx, feedback) {
+  return dispatch => {
+    return new AppAuthToken().getSessionToken(sessionToken)
+      .then((token) => {
+        return BackendFactory(token).grievanceUpdateFeedback(grievanceId, {isUpVoted: feedback, user: sessionToken.objectId});
+      })
+      .then((json) => {
+          dispatch(grievanceUpdateFeedbackSuccess(idx, json));
+      })
+      .catch((error) => {
+        dispatch(grievanceUpdateFeedbackFailure(idx, error));
+      });
+  };
+}
 /**
  * ## Grievance delete actions
  */

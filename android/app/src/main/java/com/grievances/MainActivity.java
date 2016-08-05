@@ -1,6 +1,7 @@
 package com.grievances;
 
 import com.facebook.react.ReactActivity;
+import com.imagepicker.ImagePickerPackage;
 import com.airbnb.android.react.maps.MapsPackage;
 import com.burnweb.rnsimplealertdialog.RNSimpleAlertDialogPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
@@ -38,6 +39,7 @@ public class MainActivity extends ReactActivity {
     protected List<ReactPackage> getPackages() {
         return Arrays.<ReactPackage>asList(
             new MainReactPackage(),
+            new ImagePickerPackage(),
             new MapsPackage(),
             new RNSimpleAlertDialogPackage(),
             new VectorIconsPackage()

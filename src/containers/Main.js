@@ -93,12 +93,14 @@ function mapDispatchToProps(dispatch) {
 
 var styles = StyleSheet.create({
   roundBtn: {
-    // position: 'absolute',
-    flexDirection: 'row',
-    bottom: 60,
-    right: 10,
-    width: width,
-    justifyContent: 'flex-end'
+    position: 'absolute',
+    // flexDirection: 'column',
+    bottom: 200,
+    right: 10
+    /*width: width,
+    height: height,
+    justifyContent: 'center',
+    alignItems: 'center'*/
   }
 });
 
@@ -114,6 +116,7 @@ class Main extends Component {
       radius: 10
     };
     this.updateGrievance = this.updateGrievance.bind(this);
+    this.grievanceFeedback = this.grievanceFeedback.bind(this);
   }
 
   componentDidMount() {
@@ -136,6 +139,10 @@ class Main extends Component {
     Actions.UpdateGrievance();
   }
 
+  grievanceFeedback(grievanceId, idx, feedback) {
+    this.props.actions.grievanceUpdateFeedback(grievanceId, this.props.global.currentUser, idx, feedback);
+  }
+
   setCurrentLoc({longitude, latitude}) {
     //Check how to update address
     this.setState({
@@ -150,12 +157,10 @@ class Main extends Component {
       </Button>
     </View>;
     return(
-
-        <Layout footerContent={roundBtn}>
-          <GMap data={this.props.grievance.grievanceList.grievances} updateGrievance={this.updateGrievance} setCurrentLoc={this.setCurrentLoc.bind(this)} radius={this.state.radius}/>
-
+        <Layout>
+          <GMap data={this.props.grievance.grievanceList.grievances} auth={this.props.global.currentUser} grievanceFeedback={this.grievanceFeedback} updateGrievance={this.updateGrievance} setCurrentLoc={this.setCurrentLoc.bind(this)} radius={this.state.radius}/>
+          {roundBtn}
         </Layout>
-
     );
   }
 };

@@ -42,6 +42,8 @@ const {
 
   ON_GRIEVANCE_FORM_FIELD_CHANGE,
   ON_GRIEVANCE_UPDATE_FORM_FIELD_CHANGE,
+  GRIEVANCE_UPDATE_FEEDBACK_SUCCESS,
+  GRIEVANCE_UPDATE_FEEDBACK_FAILURE,
   SET_GRIEVANCE_UPDATE
 } = require('../../lib/constants').default;
 
@@ -71,7 +73,14 @@ export default function grievanceReducer(state = initialState, action) {
     dateOfResolving: '',
     resolvedUser: "0",
     status: '',
-    tag: ''
+    tag: '',
+    isUpVoted: false,
+    upVotedCount: 0,
+    curlyUrl: null,
+    curlyUrlSmall: null,
+    curlyUrlLarge: null,
+    error: null,
+    hasError: false
   });
   let recordMap;
   let newGrievance = (grievance) => new grievanceRec({
@@ -84,7 +93,12 @@ export default function grievanceReducer(state = initialState, action) {
     dateOfResolving: grievance.dateOfResolving,
     resolvedUser: grievance.resolvedUser,
     status: grievance.status,
-    tag: grievance.tag
+    tag: grievance.tag,
+    curlyUrl: grievance.curlyUrl,
+    curlyUrlSmall: grievance.curlyUrlSmall,
+    curlyUrlLarge: grievance.curlyUrlLarge,
+    isUpVoted: grievance.isUpVoted,
+    upVotedCount: grievance.upVotedCount
   });
 
   switch (action.type) {
@@ -130,6 +144,9 @@ export default function grievanceReducer(state = initialState, action) {
       .setIn([ 'grievanceUpdate', 'form','originalGrievance','description'],action.payload.description)
       .setIn([ 'grievanceUpdate', 'form','originalGrievance','dateOfReporting'], action.payload.dateOfReporting)
       .setIn([ 'grievanceUpdate', 'form','originalGrievance','dateOfResolving'],action.payload.dateOfResolving)
+      .setIn([ 'grievanceUpdate', 'form','originalGrievance','curlyUrl'],action.payload.curlyUrl)
+      .setIn([ 'grievanceUpdate', 'form','originalGrievance','curlyUrlSmall'],action.payload.curlyUrlSmall)
+      .setIn([ 'grievanceUpdate', 'form','originalGrievance','curlyUrlLarge'],action.payload.curlyUrlLarge)
       .setIn([ 'grievanceUpdate', 'form','originalGrievance','status'],action.payload.status)
       .setIn([ 'grievanceUpdate', 'form','originalGrievance','tag'],action.payload.tag)
       .setIn([ 'grievanceUpdate', 'form','originalGrievance','_id'],action.payload._id)
@@ -144,11 +161,21 @@ export default function grievanceReducer(state = initialState, action) {
       return grievance.set('description', state.getIn([ 'grievanceUpdate', 'form', 'fields', 'description']));
     });
 
+  case GRIEVANCE_UPDATE_FEEDBACK_SUCCESS:
+    return state.updateIn(['grievanceList','grievances', action.idx], function(grievance) {
+      console.log('action.payload.isUpVoted', action.payload.isUpVoted, 'upVotedCount', action.payload.upVotedCount);
+      return grievance.set('isUpVoted', action.payload.isUpVoted).set('upVotedCount', action.payload.upVotedCount);
+    });
+
+  case GRIEVANCE_UPDATE_FEEDBACK_FAILURE:
+    return state.updateIn(['grievanceList','grievances', action.idx], function(grievance) {
+      return grievance.set('hasError', true).set('error', action.payload);
+    });
+
   case GET_GRIEVANCE_SUCCESS:
     recordMap = new List(action.payload.map(function(grievance) {
       return newGrievance(grievance);
     }));
-
     nextGrievanceState = state.setIn([ 'grievanceList', 'isFetching'], false)
       .setIn([ 'grievanceList','grievances'], recordMap)
       .setIn([ 'grievanceList','error'], null);

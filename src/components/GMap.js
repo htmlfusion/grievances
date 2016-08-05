@@ -1,28 +1,25 @@
 import React, {Component} from 'react';
 import {StyleSheet, View} from 'react-native';
+import SwipeCard from './SwipeCard';
+import Swiper from 'react-native-swiper';
 import MapView from 'react-native-maps';
-import ErrorAlert from '../components/ErrorAlert';
+import ErrorAlert from './ErrorAlert';
 import Dimensions from 'Dimensions';
 var {height, width} = Dimensions.get('window');
 //Now having issues with react-native-maps, follow this steps https://github.com/lelandrichardson/react-native-maps/issues/371 to fix
 let styles = StyleSheet.create({
   container: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    height: height,
+    height: height - 60, //subtract height will be footer height
     width: width,
     justifyContent: 'flex-end',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   map: {
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
-    bottom: 0,
+    bottom: 0
   }
 });
 
@@ -33,7 +30,8 @@ export default class GMap extends Component {
     this.state = {
       region: null,
       initialRegion: null,
-      markers: this.props.data
+      markers: this.props.data,
+      currentMarker: null
     };
   }
   componentWillReceiveProps(props) {
@@ -57,11 +55,35 @@ export default class GMap extends Component {
     });
   }
 
+  mapCard(markerId) {
+    this.setState({
+      currentMarker: markerId
+    })
+  }
+
   componentWillUnmount() {
     navigator.geolocation.clearWatch(this.watchID);
   }
 
   render() {
+    let swipeCards = this.state.markers.map((marker, idx) => (
+          <SwipeCard
+            key={idx}
+            marker = {marker}
+            auth = {this.props.auth}
+            cardAction={this.props.updateGrievance.bind(this, marker, idx)}
+            grievanceFeedback={this.props.grievanceFeedback.bind(this, marker._id, idx)}
+          />
+      ));/*<Swiper horizontal={true}>
+        {this.state.markers.map((marker, idx) => (
+            <SwipeCard
+              key={idx}
+              marker = {marker}
+              cardAction={this.props.updateGrievance.bind(this, marker, idx)}
+              grievanceFeedback={this.props.grievanceFeedback.bind(this, marker._id, idx)}
+            />
+        ))}
+      </Swiper>*/;
     return (
       <View style={styles.container}>
         <MapView style={styles.map}
@@ -75,17 +97,18 @@ export default class GMap extends Component {
             fillColor="rgba(200, 0, 0, 0.5)"
             strokeColor="rgba(0,0,0,0.5)"
           />
-        {/*onPress is not working, so using onSelect(this will work only in ios). Once issue is fixed we can use onPress*/}
+        {/* onPress is not working, so using onSelect(this will work only in ios). Once issue is fixed we can use onPress*/}
+
           {this.state.markers.map((marker, idx) => (
-            <MapView.Marker
-              key={marker._id}
-              coordinate={{latitude:marker.location[0], longitude:marker.location[1]}}
-              title={marker.tag}
-              description={marker.description}
-              onSelect={() => {this.props.updateGrievance(marker, idx);}}
-            />
+              <MapView.Marker
+                key={idx}
+                coordinate={{latitude:marker.location[0], longitude:marker.location[1]}}
+                onSelect={() => {this.mapCard.bind(this, marker._id)}}
+              />
           ))}
+
         </MapView>
+        {swipeCards}
       </View>
     );
   }

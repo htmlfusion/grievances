@@ -15,7 +15,7 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import {Actions} from 'react-native-router-flux';
-import {Container, Content, Header, Button, Icon, Title, Text} from 'native-base';
+import {Container, Content, Header, Button, Icon, Title, Text, Thumbnail, Card} from 'native-base';
 /**
  * The actions we need
  */
@@ -60,6 +60,8 @@ import t from 'tcomb-form-native';
 import templates from '../components/NativeTemplates';
 import Layout from '../components/Layout';
 import ImagePicker from 'react-native-image-picker';
+import Dimensions from 'Dimensions';
+var {height, width} = Dimensions.get('window');
 let Form = t.form.Form;
 
 /**
@@ -127,8 +129,10 @@ class CreateGrievance extends Component {
         src: ''
       },
       anonymousStyle: designAnonymous,
-      reportedUser: this.props.global.currentUser.objectId
+      reportedUser: this.props.global.currentUser.objectId,
+      curlyUrl: null
     };
+    this._showUploadGallery = this._showUploadGallery.bind(this);
   }
   /**
    * ### onChange
@@ -158,7 +162,46 @@ class CreateGrievance extends Component {
     });
 
   }
+  _showUploadGallery() {
+    let uploadOptions = {
+      title: 'Select Avatar',
+      storageOptions: {
+        skipBackup: true,
+        path: 'images'
+      },
+      takePhotoButtonTitle: 'Snap & Post'
+    };
+    ImagePicker.showImagePicker(uploadOptions, (response) => {
+      console.log('response: ',response);
 
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      }
+      else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+        this.errorAlert.checkError(response.error);
+      }
+      /*else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+      }*/
+      else {
+        // You can display the image using either data...
+        const source = {uri: 'data:image/jpeg;base64,' + response.data, isStatic: true};
+
+        // or a reference to the platform specific asset location
+        if (Platform.OS === 'ios') {
+          const source = {uri: response.uri.replace('file://', ''), isStatic: true};
+        } else {
+          const source = {uri: response.uri, isStatic: true};
+        }
+
+        this.setState({
+          curlyUrl: source
+        });
+      }
+
+    });
+  }
   /**
    * ### render
    * display the form wrapped with the header and button
@@ -193,19 +236,9 @@ class CreateGrievance extends Component {
         }
       }
     };
-    let uploadOptions = {
-      title: 'Select Avatar',
-      // storageOptions: {
-      //   skipBackup: true,
-      //   path: 'images'
-      // },
-      // takePhotoButtonTitle: 'Snap & Post'
-    };
+
     //console.log('/**ImagePicker bbb: ',ImagePicker.showImagePicker);
 
-    ImagePicker.showImagePicker(uploadOptions, (response) => {
-      console.log('response: ',response);
-    });
 
     let btnAnonymous = () => {
       if (this.state.anonymousStyle.backgroundColor) {
@@ -236,10 +269,16 @@ class CreateGrievance extends Component {
         this.props.location,
         this.state.reportedUser,
         this.props.grievance.grievanceCreate.form.fields.tag,
+        this.state.curlyUrl,
         this.props.global.currentUser
       );
     };
     let headerTitle = 'Report Grievance';
+    let image = null;
+    if  (this.state.curlyUrl) {
+      console.log('cool ma this.state.curlyUrl', this.state.curlyUrl);
+      image = <Thumbnail square source={this.state.curlyUrl} size={width/2}/>;
+    }
     /**
      * Wrap the form with the header and button.  The header props are
      * mostly for support of Hot reloading. See the docs for Header
@@ -257,7 +296,12 @@ class CreateGrievance extends Component {
             value={this.state.formValues}
             onChange={this.onChange.bind(self)}
         />
-
+        <View style={{flexDirection: 'row'}}>
+          <Button ref='upload' rounded small onPress={this._showUploadGallery}>
+            <Icon name="ios-camera-outline"></Icon>
+          </Button>
+          {image}
+        </View>
         <FormButton
             /*isDisabled={!this.props.grievance.grievanceCreate.form.isValid}*/
             onPress={onButtonPress.bind(self)}

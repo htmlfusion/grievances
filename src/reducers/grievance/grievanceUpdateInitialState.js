@@ -31,6 +31,9 @@ const UpdateForm = Record({
     dateOfResolving: '',
     resolvedUser: undefined,
     status: '',
+    curlyUrl: null,
+    curlyUrlSmall: null,
+    curlyUrlLarge: null,
     tag: '',
     _id: "0",
     idx: undefined
