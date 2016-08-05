@@ -22,7 +22,6 @@ import {
  */
 const RNRF = require('react-native-router-flux');
 const {
-  Route,
   Scene,
   TabBar } = RNRF;
 
@@ -57,7 +56,7 @@ import Register from './containers/Register';
 import ForgotPassword from './containers/ForgotPassword';
 import Profile from './containers/Profile';
 import Main from './containers/Main';
-import CreateGrievance from './containers/CreateGrievance';
+//import CreateGrievance from './containers/CreateGrievance';
 import UpdateGrievance from './containers/UpdateGrievance';
 
 /**
@@ -151,61 +150,62 @@ export default function native(platform) {
       // setup the router table with App selected as the initial component
       return (
         <Provider store={store}>
-	  <Router hideNavBar={true}>
-	    <Scene key="root">
-	      <Scene key="App"
-                     component={App}
-                     title="App"
-                     initial={true}/>
+      	  <Router hideNavBar={true}>
+      	    <Scene key="root">
+      	      <Scene key="App"
+                           component={App}
+                           title="App"
+                           initial={true}/>
 
-	      <Scene key="InitialLoginForm"
-                     component={Register}
-                     title="Register" />
+      	      <Scene key="InitialLoginForm"
+                           component={Register}
+                           title="Register" />
 
-        <Scene key="Login"
-                     component={Login}
-                     title="Login"/>
+              <Scene key="Login"
+                           component={Login}
+                           title="Login"/>
 
-	      <Scene key="Register"
-                     component={Register}
-                     title="Register"/>
+      	      <Scene key="Register"
+                           component={Register}
+                           title="Register"/>
 
-	      <Scene key="ForgotPassword"
-                     component={ForgotPassword}
-                     title="ForgotPassword"
-                     type="replace" />
+      	      <Scene key="ForgotPassword"
+                           component={ForgotPassword}
+                           title="ForgotPassword"
+                           type="replace" />
 
-	      <Scene key="CreateGrievance"
-                     component={CreateGrievance}
-                     title="Create Grievance"/>
-         <Scene key="UpdateGrievance"
-                      component={UpdateGrievance}
-                      title="Update Grievance"/>
-	      <Scene key="Tabbar" tabs={true} default="Main">
-	        {/*<Scene key="Logout"
-                       title="Logout"
-                       icon={TabIcon}
-                       iconName={"sign-out"}
-                       hideNavBar={true}
-                       component={Logout}/>*/}
+      	      {/*<Scene key="CreateGrievance"
+                           component={CreateGrievance}
+                           title="Create Grievance"/>*/}
+               <Scene key="UpdateGrievance"
+                            component={UpdateGrievance}
+                            title="Update Grievance"/>
+      	      {/*<Scene key="Tabbar" tabs={true} default="Main">*/}
+      	        {/*<Scene key="Logout"
+                             title="Logout"
+                             icon={TabIcon}
+                             iconName={"sign-out"}
+                             hideNavBar={true}
+                             component={Logout}/>*/}
 
-	        <Scene key="Main"
-                       title="Grievances"
-                       iconName={"ios-home"}
-                       icon={TabIcon}
-                       hideNavBar={true}
-                       component={Main}
-                       initial={true}/>
+      	        <Scene key="Main"
+                             title="Grievances"
+                             /*iconName={"ios-home"}
+                             icon={TabIcon}
+                             hideNavBar={true}
+                             initial={true}*/
+                             component={Main}
+                             />
 
-                <Scene key="Profile"
-                       title="Settings"
-                       icon={TabIcon}
-                       iconName={"ios-person"}
-                       hideNavBar={true}
-                       component={Profile}/>
-	      </Scene>
-	    </Scene>
-	  </Router>
+                      <Scene key="Profile"
+                             title="Settings"
+                             /*icon={TabIcon}
+                             iconName={"ios-person"}
+                             hideNavBar={true}*/
+                             component={Profile}/>
+      	      {/*</Scene>*/}
+      	    </Scene>
+      	  </Router>
         </Provider>
       );
     }

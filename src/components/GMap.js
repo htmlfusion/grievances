@@ -9,7 +9,7 @@ var {height, width} = Dimensions.get('window');
 //Now having issues with react-native-maps, follow this steps https://github.com/lelandrichardson/react-native-maps/issues/371 to fix
 let styles = StyleSheet.create({
   container: {
-    height: height - 60, //subtract height will be footer height
+    height: height, //subtract height will be footer height
     width: width,
     justifyContent: 'flex-end',
     alignItems: 'center'
@@ -108,7 +108,7 @@ export default class GMap extends Component {
           ))}
 
         </MapView>
-        {swipeCards}
+        <View style={{marginBottom: this.props.cardMargin}}>{swipeCards}</View>
       </View>
     );
   }

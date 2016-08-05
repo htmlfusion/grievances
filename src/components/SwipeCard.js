@@ -35,7 +35,7 @@ export default class SwipeCard extends Component {
   }
 
   render() {
-    let upVoteMsg = "Nobody upvoted this issue",
+    let upVoteMsg = "",
       upVoteBtn = null,
       thumbnail = null;
 

@@ -11,7 +11,7 @@
  */
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import {Container, Content, Footer, Button, Text} from 'native-base';
+import {Container, Content, Footer, Button, Text, Badge} from 'native-base';
 
 /**
  * The actions we need
@@ -30,6 +30,7 @@ import {Map} from 'immutable';
  */
 import {Actions} from 'react-native-router-flux';
 import Layout from '../components/Layout';
+import CreateGrievance from './CreateGrievance';
 /**
  * The Header will display a Image and support Hot Loading
  */
@@ -90,17 +91,36 @@ function mapDispatchToProps(dispatch) {
     dispatch
   };
 }
-
+const ELLIPSE_WIDTH = width-30,
+  ELLIPSE_HEIGHT = 50;
 var styles = StyleSheet.create({
   roundBtn: {
+    fontSize: 20,
+    fontWeight: 'bold'
+  },
+  semiCircle: {
+    borderLeftWidth: 3,
+    borderRightWidth: 3,
+    borderTopLeftRadius: 50,
+    borderTopRightRadius: 50,
+    borderColor: '#000',
+    width: width,
+    alignItems: 'center',
+    backgroundColor: '#fff',
     position: 'absolute',
-    // flexDirection: 'column',
-    bottom: 200,
-    right: 10
-    /*width: width,
-    height: height,
+    bottom: 0
+  },
+  ellipse: {
+    width: ELLIPSE_WIDTH,
+    height: 30,
+    borderRadius: 10,
+    borderWidth: 2,
+    alignItems: 'center',
     justifyContent: 'center',
-    alignItems: 'center'*/
+    backgroundColor: '#fff'
+  },
+  gcontent: {
+    marginTop: ELLIPSE_HEIGHT
   }
 });
 
@@ -113,7 +133,11 @@ class Main extends Component {
     this.state = {
       currentLoc: [12.2958104, 76.63938050000002], //This has to be set to empty [] once navigator's currentLocation is working
       address: 'Mysore, Karnataka, India', //this is temprory address, have to set it based on currentLoc
-      radius: 10
+      radius: 10,
+      cbutton: {
+        height: ELLIPSE_HEIGHT,
+        text: '+'
+      }
     };
     this.updateGrievance = this.updateGrievance.bind(this);
     this.grievanceFeedback = this.grievanceFeedback.bind(this);
@@ -128,10 +152,25 @@ class Main extends Component {
   }
 
   handlePress() {
-    Actions.CreateGrievance({
+    if (this.state.cbutton.text === '+') {
+      this.setState({
+        cbutton: {
+          text: '-',
+          height: height-200
+        }
+      });
+    } else {
+      this.setState({
+        cbutton: {
+          text: '+',
+          height: ELLIPSE_HEIGHT
+        }
+      });
+    }
+    /*Actions.CreateGrievance({
       location: this.state.currentLoc,
       address: this.state.address
-    });
+    });*/
   }
 
   updateGrievance(updateState, idx) {
@@ -151,14 +190,20 @@ class Main extends Component {
   }
 
   render() {
-    let roundBtn = <View style={styles.roundBtn}>
-      <Button onPress={ this.handlePress.bind(this) } rounded >
-       {'+'}
-      </Button>
+    //For future purpose I created Ellipse View
+    let roundBtn = <View style={[styles.semiCircle, {height: this.state.cbutton.height}]}>
+      <View style={styles.ellipse}>
+        <Button transparent style={{width: ELLIPSE_WIDTH}} onPress={ this.handlePress.bind(this) }>
+         <Text style={styles.roundBtn}>{this.state.cbutton.text}</Text>
+        </Button>
+      </View>
+      <View style={styles.gcontent}>
+        <CreateGrievance location={this.state.currentLoc} address={this.state.address} transition={this.handlePress.bind(this)}/>
+      </View>
     </View>;
     return(
         <Layout>
-          <GMap data={this.props.grievance.grievanceList.grievances} auth={this.props.global.currentUser} grievanceFeedback={this.grievanceFeedback} updateGrievance={this.updateGrievance} setCurrentLoc={this.setCurrentLoc.bind(this)} radius={this.state.radius}/>
+          <GMap data={this.props.grievance.grievanceList.grievances} cardMargin={ELLIPSE_HEIGHT} auth={this.props.global.currentUser} grievanceFeedback={this.grievanceFeedback} updateGrievance={this.updateGrievance} setCurrentLoc={this.setCurrentLoc.bind(this)} radius={this.state.radius}/>
           {roundBtn}
         </Layout>
     );

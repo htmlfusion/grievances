@@ -85,15 +85,30 @@ const styles = StyleSheet.create({
     borderColor: '#2e6da4'
   },
   headerFont: {
-    color: '#fff'
+    color: '#000'
   }
 });
 
-let designAnonymous = {
-  borderColor: '#2e6da4',
-  borderWidth: 1
-};
 
+const transparentStyle = {
+  parent: {
+    borderColor: '#2e6da4',
+    borderWidth: 1
+  },
+  child: {
+    color: '#000'
+  }
+};
+const highlightStyle = {
+  parent: {
+    borderColor: '#2e6da4',
+    borderWidth: 1,
+    backgroundColor: '#337ab7'
+  },
+  child: {
+    color: '#fff'
+  }
+};
 function mapStateToProps(state) {
   return {
       ...state
@@ -128,7 +143,8 @@ class CreateGrievance extends Component {
         tag: '',
         src: ''
       },
-      anonymousStyle: designAnonymous,
+      btnMeStyle: highlightStyle,
+      anonymousStyle: transparentStyle,
       reportedUser: this.props.global.currentUser.objectId,
       curlyUrl: null
     };
@@ -240,16 +256,18 @@ class CreateGrievance extends Component {
     //console.log('/**ImagePicker bbb: ',ImagePicker.showImagePicker);
 
 
-    let btnAnonymous = () => {
-      if (this.state.anonymousStyle.backgroundColor) {
+    let btnAnonymous = (type) => {
+      if (type === 'me') {
         this.setState({
-          anonymousStyle: designAnonymous,
+          anonymousStyle: transparentStyle,
+          btnMeStyle: highlightStyle,
           reportedUser: this.props.global.currentUser.objectId
         });
       }
       else {
         this.setState({
-          anonymousStyle: Object.assign({}, this.state.anonymousStyle, {backgroundColor: '#337ab7'}),
+          anonymousStyle: highlightStyle,
+          btnMeStyle: transparentStyle,
           reportedUser: undefined
         });
       }
@@ -270,7 +288,8 @@ class CreateGrievance extends Component {
         this.state.reportedUser,
         this.props.grievance.grievanceCreate.form.fields.tag,
         this.state.curlyUrl,
-        this.props.global.currentUser
+        this.props.global.currentUser,
+        this.props.transition
       );
     };
     let headerTitle = 'Report Grievance';
@@ -285,28 +304,34 @@ class CreateGrievance extends Component {
      * for more info.
      */
     return (
-      <Layout isHeaderBack={true} headerTitle={headerTitle}>
-        <Button ref='anonymous' transparent style={this.state.anonymousStyle} onPress={btnAnonymous}>
-          <Text style={styles.headerFont}>Anonymous</Text>
-        </Button>
-        <Form
-            ref="form"
-            type={GrievanceForm}
-            options={options}
-            value={this.state.formValues}
-            onChange={this.onChange.bind(self)}
-        />
-        <View style={{flexDirection: 'row'}}>
-          <Button ref='upload' rounded small onPress={this._showUploadGallery}>
-            <Icon name="ios-camera-outline"></Icon>
-          </Button>
-          {image}
+        <View style={{width: width-30}}>
+          <View>
+            <Text>{'Report as'}</Text>
+            <Button ref='currentUser' small rounded transparent style={this.state.btnMeStyle.parent} onPress={btnAnonymous.bind(this, 'me')}>
+              <Text style={this.state.btnMeStyle.child}>{'me'}</Text>
+            </Button>
+            <Button ref='anonymous' small rounded transparent style={this.state.anonymousStyle.parent} onPress={btnAnonymous.bind(this, 'an')}>
+              <Text style={this.state.anonymousStyle.child}>?</Text>
+            </Button>
+          </View>
+          <Form
+              ref="form"
+              type={GrievanceForm}
+              options={options}
+              value={this.state.formValues}
+              onChange={this.onChange.bind(self)}
+          />
+          <View style={{flexDirection: 'row'}}>
+            <Button ref='upload' rounded small onPress={this._showUploadGallery}>
+              <Icon name="ios-camera-outline"></Icon>
+            </Button>
+            {image}
+          </View>
+          <FormButton
+              /*isDisabled={!this.props.grievance.grievanceCreate.form.isValid}*/
+              onPress={onButtonPress.bind(self)}
+              buttonText={grievanceButtonText}/>
         </View>
-        <FormButton
-            /*isDisabled={!this.props.grievance.grievanceCreate.form.isValid}*/
-            onPress={onButtonPress.bind(self)}
-            buttonText={grievanceButtonText}/>
-      </Layout>
     );
   }
 }

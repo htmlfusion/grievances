@@ -107,7 +107,7 @@ export function grievanceCreateFailure(json) {
   };
 }
 
-export function createGrievance(address, description, location, reportedUser, tag, curlyUrl, sessionToken) {
+export function createGrievance(address, description, location, reportedUser, tag, curlyUrl, sessionToken, toggleAction) {
   return dispatch => {
     dispatch(grievanceCreateRequest());
     return new AppAuthToken().getSessionToken(sessionToken)
@@ -125,7 +125,8 @@ export function createGrievance(address, description, location, reportedUser, ta
       })
       .then((json) => {
           dispatch(grievanceCreateSuccess(json));
-          Actions.pop();
+          toggleAction();
+          // Actions.pop();
       })
       .catch((error) => {
         dispatch(grievanceCreateFailure(error));

@@ -242,7 +242,8 @@ export function getSessionToken() {
         if (token) {
           dispatch(sessionTokenRequestSuccess(token));
           dispatch(logoutState());
-          Actions.Tabbar();
+          // Actions.Tabbar();
+          Actions.Main();
         } else {
           dispatch(sessionTokenRequestFailure());
           Actions.InitialLoginForm();
@@ -303,7 +304,8 @@ export function signup(fullname, email, password) {
 	    ));
 	    dispatch(logoutState());
 	    // navigate to Tabbar
-	    Actions.Tabbar();
+	    // Actions.Tabbar();
+      Actions.Main();
 	  });
       })
       .catch((error) => {
@@ -360,7 +362,8 @@ export function login(email,  password) {
 	  .then(function () {
 	    dispatch(loginSuccess(json));
 	    dispatch(logoutState());
-	    Actions.Tabbar();
+	    // Actions.Tabbar();
+      Actions.Main();
 	  });
       })
       .catch((error) => {

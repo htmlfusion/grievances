@@ -26,3 +26,4 @@ Todo
 >> Google and FB auth for login (medium)
 >> Share grievances (medium)
 >> User can set +1 for existing grievance (high) => MS
+>> Add Validation for Buttons(For form actions)=> MS
