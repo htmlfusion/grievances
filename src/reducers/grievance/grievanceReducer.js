@@ -173,6 +173,7 @@ export default function grievanceReducer(state = initialState, action) {
     });
 
   case GET_GRIEVANCE_SUCCESS:
+    console.log('cool ma', action.payload);
     recordMap = new List(action.payload.map(function(grievance) {
       return newGrievance(grievance);
     }));

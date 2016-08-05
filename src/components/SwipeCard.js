@@ -36,10 +36,11 @@ export default class SwipeCard extends Component {
 
   render() {
     let upVoteMsg = "Nobody upvoted this issue",
-      upVoteBtn = null;
+      upVoteBtn = null,
+      thumbnail = null;
 
     this.errorAlert.checkError(this.props.marker.error);
-    console.log('check ths', this.props.marker.upVotedCount);
+    console.log('check ths', this.props.marker.curlyUrlSmall);
     if (this.props.marker.upVotedCount > 0) {
       upVoteMsg = `${this.props.marker.upVotedCount} upvoted this issue`;
     }
@@ -49,14 +50,15 @@ export default class SwipeCard extends Component {
       upVoteBtn = <Button small onPress={this.props.grievanceFeedback.bind(this, 'yes')}>{'+1'}</Button>;
     }
 
+    if (this.props.marker.curlyUrlSmall) {
+      thumbnail = <Thumbnail square small source={{uri: this.props.marker.curlyUrlSmall}}/>;
+    }
     return (
       <View>
         <Card style={styles.card}>
             <TouchableWithoutFeedback onPressIn={this.props.cardAction}>
               <CardItem style= {styles.cardItem}>
-                <View>
-                  <Thumbnail square small source={this.props.marker.curlyUrlSmall}/>
-                </View>
+                <View>{thumbnail}</View>
                 <View>
                   <Title>{this.props.marker.tag}</Title>
                   <Text>{this.props.marker.description}</Text>

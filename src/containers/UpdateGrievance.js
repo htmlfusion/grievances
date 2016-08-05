@@ -204,7 +204,7 @@ class UpdateGrievance extends Component {
      */
     let image = null;
     if (this.props.grievance.grievanceUpdate.form.originalGrievance.curlyUrl) {
-      image = <Thumbnail square size={width/2} source={this.props.grievance.grievanceUpdate.form.originalGrievance.curlyUrlLarge}/>
+      image = <Thumbnail square size={width/2} source={{uri: this.props.grievance.grievanceUpdate.form.originalGrievance.curlyUrlLarge}}/>
     }
     return (
         <Layout isHeaderBack={true}>
