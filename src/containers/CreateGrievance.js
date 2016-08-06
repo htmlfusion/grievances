@@ -86,6 +86,49 @@ const styles = StyleSheet.create({
   },
   headerFont: {
     color: '#000'
+  },
+  form: {
+    width: width,
+    paddingTop: 10,
+    paddingBottom: 40,
+    paddingRight: 30,
+    paddingLeft: 30
+  },
+  myStyle: {
+    height: 30,
+    width: 120,
+    borderTopWidth: 2,
+    borderBottomWidth: 2
+  },
+  reportBtn: {
+    backgroundColor: '#fff',
+    borderTopWidth: 2,
+    borderLeftWidth: 2,
+    borderRightWidth: 2,
+    borderTopLeftRadius: 40,
+    borderTopRightRadius: 40,
+    height: 30,
+    width: 130,
+    marginTop: -30,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: 25
+  },
+  img: {
+    width: width/3,
+    height: width/3,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  arrowRight: {
+    borderBottomWidth: 15,
+    borderBottomColor: 'transparent',
+    borderLeftWidth: 20,
+    borderLeftColor: '#000',
+    borderTopWidth: 15,
+    borderTopColor: 'transparent',
+    height: 0,
+    width: 0
   }
 });
 
@@ -93,7 +136,10 @@ const styles = StyleSheet.create({
 const transparentStyle = {
   parent: {
     borderColor: '#2e6da4',
-    borderWidth: 1
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    height: 40,
+    width: 40
   },
   child: {
     color: '#000'
@@ -103,7 +149,9 @@ const highlightStyle = {
   parent: {
     borderColor: '#2e6da4',
     borderWidth: 1,
-    backgroundColor: '#337ab7'
+    backgroundColor: '#337ab7',
+    height: 40,
+    width: 40
   },
   child: {
     color: '#fff'
@@ -278,7 +326,7 @@ class CreateGrievance extends Component {
      * ```currrentUser``` object as it contains the sessionToken and
      * user objectId which Parse.com requires
      */
-    let grievanceButtonText = 'Submit Grievance';
+    let grievanceButtonText = 'Report';
     let onButtonPress = () => {
       this.props.actions.createGrievance(
         this.props.address,
@@ -295,42 +343,69 @@ class CreateGrievance extends Component {
     let headerTitle = 'Report Grievance';
     let image = null;
     if  (this.state.curlyUrl) {
-      console.log('cool ma this.state.curlyUrl', this.state.curlyUrl);
-      image = <Thumbnail square source={this.state.curlyUrl} size={width/2}/>;
+      image = <Thumbnail square source={this.state.curlyUrl} style={styles.img}/>;
     }
+    let btnMeAn = (type, displayPic, displayText, props, styleProp) => {
+      let parentStyle = Object.assign({}, {position: 'absolute', alignItems: 'center', top: -7, justifyContent: 'center'}, styleProp);
+      return (<View style={parentStyle}>
+      <View>
+        <Button ref={type} small rounded transparent style={[props.parent]} onPress={btnAnonymous.bind(this, type)}>
+          <Text style={props.child}>{displayPic}</Text>
+        </Button>
+      </View>
+      <Text>{displayText}</Text>
+    </View>);
+  };
     /**
      * Wrap the form with the header and button.  The header props are
      * mostly for support of Hot reloading. See the docs for Header
      * for more info.
      */
     return (
-        <View style={{width: width-30}}>
-          <View>
-            <Text>{'Report as'}</Text>
-            <Button ref='currentUser' small rounded transparent style={this.state.btnMeStyle.parent} onPress={btnAnonymous.bind(this, 'me')}>
-              <Text style={this.state.btnMeStyle.child}>{'me'}</Text>
-            </Button>
-            <Button ref='anonymous' small rounded transparent style={this.state.anonymousStyle.parent} onPress={btnAnonymous.bind(this, 'an')}>
-              <Text style={this.state.anonymousStyle.child}>?</Text>
-            </Button>
+        <View>
+          <View style={{borderTopWidth: 2, borderBottomWidth:2, paddingBottom: 30, paddingTop: 20}}>
+            <View style={{position: 'absolute', top: -15, left: 10}}><Text>{'Report as:'}</Text></View>
+            <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+              <View style={{flexDirection: 'row'}}>
+                <View style={styles.myStyle}>
+                  {btnMeAn('me', 'me', this.props.global.currentUser.fullname, this.state.btnMeStyle, {left: 20})}
+                </View>
+                <View style={styles.arrowRight} />
+              </View>
+              {btnMeAn('an', '?', 'Anonymous', this.state.anonymousStyle, {right: 20})}
+            </View>
           </View>
-          <Form
-              ref="form"
-              type={GrievanceForm}
-              options={options}
-              value={this.state.formValues}
-              onChange={this.onChange.bind(self)}
-          />
-          <View style={{flexDirection: 'row'}}>
-            <Button ref='upload' rounded small onPress={this._showUploadGallery}>
-              <Icon name="ios-camera-outline"></Icon>
-            </Button>
-            {image}
+          <View style={styles.form}>
+            <Form
+                ref="form"
+                type={GrievanceForm}
+                options={options}
+                value={this.state.formValues}
+                onChange={this.onChange.bind(self)}
+            />
+            {/*<View style={{marginBottom: 10, marginTop: 4}}>
+              <Text>{'Display Tags'}</Text>
+            </View>*/}
+            <View style={{flexDirection: 'row'}}>
+              <View style={[styles.img, {width: width/5}]}>
+                <View>
+                  <Button ref='upload' rounded small onPress={this._showUploadGallery}>
+                    <Icon name="ios-camera-outline"></Icon>
+                  </Button>
+                </View>
+              </View>
+              <View style={[styles.img]}>
+                {image}
+              </View>
+            </View>
           </View>
-          <FormButton
-              /*isDisabled={!this.props.grievance.grievanceCreate.form.isValid}*/
-              onPress={onButtonPress.bind(self)}
-              buttonText={grievanceButtonText}/>
+          <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderTopWidth: 2}}>
+            <View style={styles.reportBtn}>
+              <View>
+                <Button style={{width: 115}} rounded onPress={onButtonPress.bind(self)} >{grievanceButtonText}</Button>
+              </View>
+            </View>
+          </View>
         </View>
     );
   }

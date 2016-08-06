@@ -235,7 +235,7 @@ class Profile extends Component {
        emailVerifiedMsg = "Your email has been verified";
      }
     return (
-        <Layout headerRight={{action: onLogoutButtonPress.bind(self), iconName: "md-exit", isDisabled: !this.props.auth.form.isValid || this.props.auth.form.isFetching}}>
+        <Layout isHeaderBack={true} headerRight={{action: onLogoutButtonPress.bind(self), iconName: "md-exit", isDisabled: !this.props.auth.form.isValid || this.props.auth.form.isFetching}}>
           <Form
               ref="form"
               type={ProfileForm}

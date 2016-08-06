@@ -23,10 +23,10 @@ export default class Layout extends Component {
         borderColor: '#2e6da4',
         flexDirection: 'row',
         justifyContent: 'space-between'
-      },
+      }/*,
       headerStyleRight = {
         flexDirection: 'row-reverse'
-      };
+      }*/;
 
     if (this.props.isHeaderBack) {
       headerBack = <Button transparent onPress={() => Actions.pop()}>
@@ -40,7 +40,7 @@ export default class Layout extends Component {
       headerRight = <Button transparent onPress={headerRightProps.action}>
         <Icon name={headerRightProps.iconName} style={styles.headerFont} isDisabled={headerRightProps.isDisabled}/>
       </Button>;
-      headerStyle = _.extend({}, headerStyle, headerStyleRight);
+      // headerStyle = _.extend({}, headerStyle, headerStyleRight);
     }
 
     if (headerBack || headerRight || headerTitle) {

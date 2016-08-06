@@ -188,7 +188,9 @@ class Main extends Component {
       currentLoc: [longitude, latitude]
     });
   }
-
+  _profileTransition() {
+    Actions.Profile();
+  }
   render() {
     //For future purpose I created Ellipse View
     let roundBtn = <View style={[styles.semiCircle, {height: this.state.cbutton.height}]}>
@@ -203,7 +205,15 @@ class Main extends Component {
     </View>;
     return(
         <Layout>
-          <GMap data={this.props.grievance.grievanceList.grievances} cardMargin={ELLIPSE_HEIGHT} auth={this.props.global.currentUser} grievanceFeedback={this.grievanceFeedback} updateGrievance={this.updateGrievance} setCurrentLoc={this.setCurrentLoc.bind(this)} radius={this.state.radius}/>
+          <View style={{position: 'absolute', right: 10, top: 10, zIndex: 1}}>
+            <Button rounded small danger onPress={this._profileTransition.bind(this)}>{'me'}</Button>
+          </View>
+          <GMap
+            data={this.props.grievance.grievanceList.grievances}
+            cardMargin={ELLIPSE_HEIGHT} auth={this.props.global.currentUser}
+            grievanceFeedback={this.grievanceFeedback} updateGrievance={this.updateGrievance}
+            setCurrentLoc={this.setCurrentLoc.bind(this)} radius={this.state.radius}
+            />
           {roundBtn}
         </Layout>
     );
