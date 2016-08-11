@@ -1,18 +1,21 @@
 import React, {Component} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View, ScrollView, Text, TouchableOpacity} from 'react-native';
 import SwipeCard from './SwipeCard';
 import Swiper from 'react-native-swiper';
 import MapView from 'react-native-maps';
 import ErrorAlert from './ErrorAlert';
 import Dimensions from 'Dimensions';
 var {height, width} = Dimensions.get('window');
+const CARD_PREVIEW_WIDTH = 20;
+const CARD_MARGIN = 5;
+const CARD_WIDTH = width - (CARD_MARGIN + CARD_PREVIEW_WIDTH) * 2;
 //Now having issues with react-native-maps, follow this steps https://github.com/lelandrichardson/react-native-maps/issues/371 to fix
 let styles = StyleSheet.create({
   container: {
     height: height, //subtract height will be footer height
     width: width,
-    justifyContent: 'flex-end',
-    alignItems: 'center'
+    // justifyContent: 'flex-end',
+    // alignItems: 'center'
   },
   map: {
     position: 'absolute',
@@ -20,7 +23,16 @@ let styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0
-  }
+  },
+  contentContainer: {
+    flex: 1,
+    position: 'absolute',
+    bottom: 60
+  },
+  content: {
+    paddingHorizontal: CARD_PREVIEW_WIDTH,
+    alignItems: 'flex-end'
+  },
 });
 
 export default class GMap extends Component {
@@ -108,7 +120,21 @@ export default class GMap extends Component {
           ))}
 
         </MapView>
-        <View style={{marginBottom: this.props.cardMargin}}>{swipeCards}</View>
+
+        <ScrollView
+          style={styles.contentContainer}
+          ref={(scrollView) => {_scrollView = scrollView}}
+          automaticallyAdjustContentInsets={false}
+          horizontal={true}
+          decelerationRate={0}
+          snapToInterval={CARD_WIDTH + CARD_MARGIN*2}
+          snapToAlignment="start"
+          contentContainerStyle={styles.content}
+          showsHorizontalScrollIndicator={false}
+        >
+          {swipeCards}
+        </ScrollView>
+
       </View>
     );
   }

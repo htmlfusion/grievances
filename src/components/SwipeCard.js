@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, TouchableWithoutFeedback} from 'react-native';
+import {StyleSheet, View, TouchableOpacity} from 'react-native';
 import {Text, Card, CardItem, Button, Title, Thumbnail} from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Dimensions from 'Dimensions';
@@ -10,8 +10,8 @@ let styles = StyleSheet.create({
   card: {
     flexDirection: 'column',
     justifyContent: 'space-between',
-    marginBottom: 10,
-    borderBottomWidth: 1
+    borderBottomWidth: 1,
+    marginRight: 10
   },
   btns: {
     flexDirection: 'row',
@@ -66,9 +66,9 @@ export default class SwipeCard extends Component {
       thumbnail = <Thumbnail square small style={{width: height/7, height: height/7}} source={{uri: this.props.marker.curlyUrlSmall}}/>;
     }
     return (
-      <View>
+
         <Card style={styles.card}>
-            <TouchableWithoutFeedback onPressIn={this.props.cardAction}>
+            <TouchableOpacity onPress={this.props.cardAction}>
               <CardItem style= {styles.cardItem}>
                 <View>{thumbnail}</View>
                 <View style={{paddingTop: 2, paddingBottom: 2, paddingRight: 2, paddingLeft: 4, flexDirection: 'column', justifyContent: 'space-between', flex: 2}}>
@@ -80,9 +80,9 @@ export default class SwipeCard extends Component {
                   </View>
                 </View>
               </CardItem>
-            </TouchableWithoutFeedback>
+            </TouchableOpacity>
         </Card>
-      </View>
+
     );
   }
 }

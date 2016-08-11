@@ -192,7 +192,7 @@ class Main extends Component {
     Actions.Profile();
   }
   render() {
-    
+
     //For future purpose I created Ellipse View
     let roundBtn = <View style={[styles.semiCircle, {height: this.state.cbutton.height}]}>
       <View style={styles.ellipse}>
