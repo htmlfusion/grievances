@@ -35,6 +35,9 @@ import ErrorAlert from '../components/ErrorAlert';
  * The FormButton will respond to the press
  */
 import FormButton from '../components/FormButton';
+
+import MyUser from '../components/MyUser';
+import UserButton from '../components/UserButton';
 /**
  * The Header will display a Image and support Hot Loading
  */
@@ -94,12 +97,6 @@ const styles = StyleSheet.create({
     paddingRight: 30,
     paddingLeft: 30
   },
-  myStyle: {
-    height: 30,
-    width: 120,
-    borderTopWidth: 2,
-    borderBottomWidth: 2
-  },
   reportBtn: {
     backgroundColor: '#fff',
     borderTopWidth: 2,
@@ -119,16 +116,6 @@ const styles = StyleSheet.create({
     height: width/3,
     alignItems: 'center',
     justifyContent: 'center'
-  },
-  arrowRight: {
-    borderBottomWidth: 15,
-    borderBottomColor: 'transparent',
-    borderLeftWidth: 20,
-    borderLeftColor: '#000',
-    borderTopWidth: 15,
-    borderTopColor: 'transparent',
-    height: 0,
-    width: 0
   }
 });
 
@@ -142,7 +129,8 @@ const transparentStyle = {
     width: 40
   },
   child: {
-    color: '#000'
+    color: '#000',
+    fontSize: 20
   }
 };
 const highlightStyle = {
@@ -154,7 +142,8 @@ const highlightStyle = {
     width: 40
   },
   child: {
-    color: '#fff'
+    color: '#fff',
+    fontSize: 20
   }
 };
 function mapStateToProps(state) {
@@ -345,17 +334,7 @@ class CreateGrievance extends Component {
     if  (this.state.curlyUrl) {
       image = <Thumbnail square source={this.state.curlyUrl} style={styles.img}/>;
     }
-    let btnMeAn = (type, displayPic, displayText, props, styleProp) => {
-      let parentStyle = Object.assign({}, {position: 'absolute', alignItems: 'center', top: -7, justifyContent: 'center'}, styleProp);
-      return (<View style={parentStyle}>
-      <View>
-        <Button ref={type} small rounded transparent style={[props.parent]} onPress={btnAnonymous.bind(this, type)}>
-          <Text style={props.child}>{displayPic}</Text>
-        </Button>
-      </View>
-      <Text>{displayText}</Text>
-    </View>);
-  };
+    let displayPic = <Icon style={this.state.btnMeStyle.child} name="ios-person-outline" />;
     /**
      * Wrap the form with the header and button.  The header props are
      * mostly for support of Hot reloading. See the docs for Header
@@ -366,13 +345,10 @@ class CreateGrievance extends Component {
           <View style={{borderTopWidth: 2, borderBottomWidth:2, paddingBottom: 30, paddingTop: 20}}>
             <View style={{position: 'absolute', top: -15, left: 10}}><Text>{'Report as:'}</Text></View>
             <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-              <View style={{flexDirection: 'row'}}>
-                <View style={styles.myStyle}>
-                  {btnMeAn('me', 'me', this.props.global.currentUser.fullname, this.state.btnMeStyle, {left: 20})}
-                </View>
-                <View style={styles.arrowRight} />
-              </View>
-              {btnMeAn('an', '?', 'Anonymous', this.state.anonymousStyle, {right: 20})}
+              <MyUser>
+                <UserButton type={'me'} displayPic={displayPic} displayText={this.props.global.currentUser} styleProp={this.state.btnMeStyle} btnAlign={{left: 20}} btnAction={btnAnonymous.bind(this, 'me')}/>
+              </MyUser>
+              <UserButton type={'an'} displayPic={'?'} displayText={{fullname: 'Anonymous'}} styleProp={this.state.anonymousStyle} btnAlign={{right: 20}} btnAction={btnAnonymous.bind(this, 'an')}/>
             </View>
           </View>
           <View style={styles.form}>

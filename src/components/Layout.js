@@ -10,7 +10,7 @@ let styles = StyleSheet.create({
   }
 });
 export default class Layout extends Component {
-
+  
   render() {
     let headerRight = null,
       headerRightProps = this.props.headerRight,

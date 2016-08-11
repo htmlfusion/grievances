@@ -25,7 +25,10 @@ const UpdateForm = Record({
   originalGrievance: new (Record({
     address: '',
     location: [],
-    reportedUser: undefined,
+    reportedUser: new Record({
+      _id: "0",
+      fullname: ''
+    }),
     description: '',
     dateOfReporting: '',
     dateOfResolving: '',

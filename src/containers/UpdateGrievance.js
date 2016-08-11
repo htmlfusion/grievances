@@ -16,6 +16,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import {Actions} from 'react-native-router-flux';
 import {Container, Content, Header, Text, Button, Icon, Thumbnail} from 'native-base';
+import FontIcon from 'react-native-vector-icons/FontAwesome';
 import Dimensions from 'Dimensions';
 var {height, width} = Dimensions.get('window');
 /**
@@ -29,6 +30,8 @@ import * as globalActions from '../reducers/global/globalActions';
  */
 import {Map} from 'immutable';
 
+import MyUser from '../components/MyUser';
+import UserButton from '../components/UserButton';
 /**
  * The ErrorAlert will display any and all errors
  */
@@ -76,6 +79,23 @@ var styles = StyleSheet.create({
   },
   headerFont: {
     color: '#fff'
+  },
+  ellipse: {
+    borderWidth: 1,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
+    height: 25,
+    padding: 5,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  img: {
+    width: width/3,
+    height: width/3,
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 });
 
@@ -172,11 +192,25 @@ class UpdateGrievance extends Component {
       auto: 'placeholders',
       fields: {
         description: {
+          label: 'Description',
           template: nativeTextbox
         }
       }
     };
 
+    const highlightStyle = {
+      parent: {
+        borderColor: '#2e6da4',
+        borderWidth: 1,
+        backgroundColor: '#337ab7',
+        height: 40,
+        width: 40
+      },
+      child: {
+        color: '#fff',
+        fontSize: 20
+      }
+    };
     /**
      * When the button is pressed, send the users info including the
      * ```currrentUser``` object as it contains the sessionToken and
@@ -204,35 +238,66 @@ class UpdateGrievance extends Component {
      */
     let image = null;
     if (this.props.grievance.grievanceUpdate.form.originalGrievance.curlyUrl) {
-      image = <Thumbnail square size={width/2} source={{uri: this.props.grievance.grievanceUpdate.form.originalGrievance.curlyUrlLarge}}/>
+      image = <Thumbnail square style={styles.img} source={{uri: this.props.grievance.grievanceUpdate.form.originalGrievance.curlyUrlLarge}}/>
+    }
+    let headerText = (name) => {
+      if (name)
+        return name.toUpperCase();
+      else
+        return 'INCIDENT';
+    }
+    let displayPic = <Icon style={highlightStyle.child} name="ios-person-outline" />;
+    let deleteBtn = null;
+    let reportedUser = this.props.grievance.grievanceUpdate.form.originalGrievance.reportedUser;
+    if (reportedUser && this.props.global.currentUser.objectId === reportedUser._id) {
+      deleteBtn = <FormButton
+          /*isDisabled={!this.props.grievance.grievanceCreate.form.isValid}*/
+          onPress={onDeleteButtonPress.bind(self)}
+          buttonText={grievanceDeleteButtonText}/>;
+    }
+    let statusIn = this.props.grievance.grievanceUpdate.form.originalGrievance.status;
+    if (statusIn === 'new') {
+      statusIn = 'Under Investigation';
     }
     return (
-        <Layout isHeaderBack={true}>
-          <Form
-              ref="form"
-              type={GrievanceForm}
-              options={options}
-              value={this.state.formValues}
-              onChange={this.onChange.bind(self)}
-          />
-          <Text>{this.props.grievance.grievanceUpdate.form.originalGrievance.tag}</Text>
+        <Layout isHeaderBack={true} headerTitle={headerText(this.props.grievance.grievanceUpdate.form.originalGrievance.tag)}>
+
+          <View>
+            <View style={{marginBottom: 7, left: 20}}><Text>{'Reported By'}</Text></View>
+            <MyUser>
+              <UserButton type={'me'} displayPic={displayPic} displayText={reportedUser} styleProp={highlightStyle} btnAlign={{left: 20}}/>
+            </MyUser>
+          </View>
+          <View style={{paddingRight: 30, paddingLeft: 30, paddingTop: 35, paddingBottom: 15, borderBottomWidth: 1}}>
+            <View style={{flexDirection: 'row'}}>
+              <FontIcon name="map-marker" style={{fontSize: 27, flex: 1}}/><Text style={{flex: 5}}>{this.props.grievance.grievanceUpdate.form.originalGrievance.address}</Text>
+            </View>
+            <View style={{flexDirection: 'row'}}>
+              <Icon name="ios-calendar" style={{flex: 1}}/><Text style={{flex: 5}}>{this.props.grievance.grievanceUpdate.form.originalGrievance.dateOfReporting}</Text>
+            </View>
+            <View style={{flexDirection: 'row'}}>
+              <Text style={{flex: 1}}>{'Status'}</Text><View style={[styles.ellipse, {flex: 5, flexDirection: 'row'}]}><Text style={{fontSize: 30}}>{'.'}</Text><Text> {statusIn}</Text></View>
+            </View>
+          </View>
+          <View style={{paddingRight: 30, paddingLeft: 30, paddingTop: 10, paddingBottom: 10}}>
+            <Form
+                ref="form"
+                type={GrievanceForm}
+                options={options}
+                value={this.state.formValues}
+                onChange={this.onChange.bind(self)}
+            />
           {/*Get the location name based on location coordinates*/}
           {/*<Text>{this.props.grievance.grievanceUpdate.form.originalGrievance.location}</Text>*/}
           {image}
-          <Text>{this.props.grievance.grievanceUpdate.form.originalGrievance.dateOfReporting}</Text>
-          <Text>{this.props.grievance.grievanceUpdate.form.originalGrievance.address}</Text>
-          <Text>{this.props.grievance.grievanceUpdate.form.originalGrievance.reportedUser}</Text>
-          <Text>{this.props.grievance.grievanceUpdate.form.originalGrievance.dateOfResolving}</Text>
-          <Text>{this.props.grievance.grievanceUpdate.form.originalGrievance.status}</Text>
-          <Text>{this.props.grievance.grievanceUpdate.form.originalGrievance.resolvedUser}</Text>
+        </View>
+        <View style={{marginBottom: 10}}>
           <FormButton
-              /*isDisabled={!this.props.grievance.grievanceCreate.form.isValid}*/
-              onPress={onUpdateButtonPress.bind(self)}
-              buttonText={grievanceUpdateButtonText}/>
-          <FormButton
-              /*isDisabled={!this.props.grievance.grievanceCreate.form.isValid}*/
-              onPress={onDeleteButtonPress.bind(self)}
-              buttonText={grievanceDeleteButtonText}/>
+            /*isDisabled={!this.props.grievance.grievanceCreate.form.isValid}*/
+            onPress={onUpdateButtonPress.bind(self)}
+            buttonText={grievanceUpdateButtonText}/>
+        </View>
+        <View>{deleteBtn}</View>
         </Layout>
     );
   }

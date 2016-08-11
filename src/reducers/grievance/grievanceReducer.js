@@ -67,7 +67,10 @@ export default function grievanceReducer(state = initialState, action) {
     _id: "0",
     address: '',
     location: [],
-    reportedUser: "0",
+    reportedUser: new Record({
+      _id: "0",
+      fullname: ''
+    }),
     description: '',
     dateOfReporting: '',
     dateOfResolving: '',
@@ -173,7 +176,6 @@ export default function grievanceReducer(state = initialState, action) {
     });
 
   case GET_GRIEVANCE_SUCCESS:
-    console.log('cool ma', action.payload);
     recordMap = new List(action.payload.map(function(grievance) {
       return newGrievance(grievance);
     }));
