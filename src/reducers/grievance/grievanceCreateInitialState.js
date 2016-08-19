@@ -36,6 +36,8 @@ const CreateForm = Record({
     resolvedUser: undefined,
     status: '',
     tag: '',
+    curlyUrl: '',
+    curlyUrlFetching: false,
     tagHasError: false
   }))
 });

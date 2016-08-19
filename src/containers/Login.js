@@ -22,12 +22,16 @@ import * as authActions from '../reducers/auth/authActions';
  * Immutable
  */
 import {Map} from 'immutable';
-
+const {
+  LoginManager,
+  GraphRequest,
+  GraphRequestManager
+} = require('react-native-fbsdk');
 /**
  *   LoginRender
  */
 import LoginRender from '../components/LoginRender';
-
+import ErrorAlert from '../components/ErrorAlert';
 /**
  * The necessary React components
  */
@@ -72,21 +76,57 @@ function buttonPressHandler(login, email, password) {
 let Login = React.createClass({
 
   render() {
+    this.errorAlert = new ErrorAlert();
     let loginButtonText = 'Log in';
     let onButtonPress = buttonPressHandler.bind(null,
 				                this.props.actions.login,
 				                this.props.auth.form.fields.email,
 				                this.props.auth.form.fields.password
 		                               );
-
+    let fbLoginAction = () => {
+      console.log('FB login');
+      LoginManager.logInWithReadPermissions(['public_profile']).then(
+       (loginResult) => {
+         if (loginResult.isCancelled) {
+           this.errorAlert.checkError('Login cancelled');
+         } else {
+           console.log('Login success with permissions: '
+             +loginResult.grantedPermissions.toString());
+             const _responseInfoCallback = (error, result) => {
+               if (error) {
+                this.errorAlert.checkError('Error fetching data: ' + error.toString());
+               } else {
+                 let data = {};
+                console.log('Success fetching data: ' , result);
+                data.loginType = 'fb';
+                data.loginId = result.id;
+                data.email = result.email;
+                data.fullname = result.name;
+                this.props.actions.loginWithSocial(data);
+               }
+             };
+             const infoRequest = new GraphRequest(
+              '/me?fields=id,name,email', //picture.type(large),gender
+              null,
+              _responseInfoCallback
+            );
+           new GraphRequestManager().addRequest(infoRequest).start();
+         }
+       },
+       (error) => {
+         this.errorAlert.checkError('Login fail with error: ' + error);
+       }
+     );
+    };
     return(
       <LoginRender
           formType={ LOGIN }
           loginButtonText={ loginButtonText }
           onButtonPress={ onButtonPress }
           displayPasswordCheckbox={ true }
-          leftMessageType={ REGISTER }
-          rightMessageType={ FORGOT_PASSWORD }
+          rightMessageType={ REGISTER }
+          leftMessageType={ FORGOT_PASSWORD }
+          facebookLogin={fbLoginAction.bind(this)}
           auth={ this.props.auth }
           global={ this.props.global }
       />

@@ -41,7 +41,8 @@ var FormButton = React.createClass({
     return (
       <View style={styles.signin}>
         <Button block
-            isDisabled={this.props.isDisabled}
+          bordered
+            disabled={this.props.isDisabled}
             onPress={this.props.onPress}
         >
           {this.props.buttonText}

@@ -32,7 +32,10 @@ const {
   SET_GRIEVANCE_UPDATE,
 
   GRIEVANCE_UPDATE_FEEDBACK_SUCCESS,
-  GRIEVANCE_UPDATE_FEEDBACK_FAILURE
+  GRIEVANCE_UPDATE_FEEDBACK_FAILURE,
+  ON_GRIEVANCE_UPDATE_CURLYURL,
+  ON_GRIEVANCE_CREATE_USER,
+  ON_CURLY_URL_FETCHING
 } = require('../../lib/constants').default;
 
 import {Actions} from 'react-native-router-flux';
@@ -94,10 +97,11 @@ export function grievanceCreateRequest() {
     type: GRIEVANCE_CREATE_REQUEST
   };
 }
-export function grievanceCreateSuccess(json) {
+export function grievanceCreateSuccess(json, currentUser) {
   return {
     type: GRIEVANCE_CREATE_SUCCESS,
-    payload: json
+    payload: json,
+    currentUser
   };
 }
 export function grievanceCreateFailure(json) {
@@ -124,8 +128,8 @@ export function createGrievance(address, description, location, reportedUser, ta
         );
       })
       .then((json) => {
-          dispatch(grievanceCreateSuccess(json));
           toggleAction();
+          dispatch(grievanceCreateSuccess(json, sessionToken.objectId));
           // Actions.pop();
       })
       .catch((error) => {
@@ -272,5 +276,25 @@ export function onGrievanceUpdateFormFieldChange(field){
   return {
     type: ON_GRIEVANCE_UPDATE_FORM_FIELD_CHANGE,
     payload: {field: field}
+  }
+}
+
+export function onCurlyUrlUpdate(source) {
+  return {
+    type: ON_GRIEVANCE_UPDATE_CURLYURL,
+    payload: source
+  }
+}
+
+export function onGrievanceUserUpdate(user) {
+  return {
+    type: ON_GRIEVANCE_CREATE_USER,
+    payload: user
+  }
+}
+
+export function onCurlyUrlFetching() {
+  return {
+    type: ON_CURLY_URL_FETCHING
   }
 }

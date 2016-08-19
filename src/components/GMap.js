@@ -12,10 +12,10 @@ const CARD_WIDTH = width - (CARD_MARGIN + CARD_PREVIEW_WIDTH) * 2;
 //Now having issues with react-native-maps, follow this steps https://github.com/lelandrichardson/react-native-maps/issues/371 to fix
 let styles = StyleSheet.create({
   container: {
-    height: height, //subtract height will be footer height
+    height: height, //subtract height will be footer+header height
     width: width,
-    // justifyContent: 'flex-end',
-    // alignItems: 'center'
+    justifyContent: 'flex-end',
+    alignItems: 'center'
   },
   map: {
     position: 'absolute',
@@ -27,7 +27,7 @@ let styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
     position: 'absolute',
-    bottom: 60
+    bottom: 120
   },
   content: {
     paddingHorizontal: CARD_PREVIEW_WIDTH,
@@ -78,10 +78,17 @@ export default class GMap extends Component {
   }
 
   render() {
+    let cardHeight = height/8,
+      cardWidth = width-width/4,
+      thumbnailWidth = height/8;
+
     let swipeCards = this.state.markers.map((marker, idx) => (
           <SwipeCard
             key={idx}
             marker = {marker}
+            cardDimension={{width: cardWidth, height: cardHeight, marginRight: 10}}
+            noLines={4}
+            thumbnailDim={{width: thumbnailWidth, height: thumbnailWidth}}
             auth = {this.props.auth}
             cardAction={this.props.updateGrievance.bind(this, marker, idx)}
             grievanceFeedback={this.props.grievanceFeedback.bind(this, marker._id, idx)}
@@ -91,6 +98,10 @@ export default class GMap extends Component {
             <SwipeCard
               key={idx}
               marker = {marker}
+              cardDimension={{width: cardWidth, height: cardHeight, marginRight: 10}}
+              noLines={4}
+              thumbnailDim={{width: thumbnailWidth, height: thumbnailWidth}}
+              auth = {this.props.auth}
               cardAction={this.props.updateGrievance.bind(this, marker, idx)}
               grievanceFeedback={this.props.grievanceFeedback.bind(this, marker._id, idx)}
             />
@@ -120,7 +131,6 @@ export default class GMap extends Component {
           ))}
 
         </MapView>
-
         <ScrollView
           style={styles.contentContainer}
           ref={(scrollView) => {_scrollView = scrollView}}

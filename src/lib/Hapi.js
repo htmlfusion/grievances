@@ -111,6 +111,7 @@ export default class Hapi extends Backend{
         });
       })
       .catch((error) => {
+        console.log('kolavery', error);
         throw(error);
       });
 
@@ -401,6 +402,80 @@ export default class Hapi extends Backend{
         throw(error);
       });
   }
+
+  /**
+   * ### syncSocialSites
+   *
+   * @param data {authUserId, authType}
+   * {123456789, 'fbId/gId'}
+   * @return
+   * if ok, {}
+   *
+   * if error, {code: xxx, error: 'message'}
+   */
+  async syncSocialSites(data, userId) {
+    return await this._fetch({
+      method: 'PUT',
+      url: '/account/syncSocialSites/'+userId,
+      body: data
+    })
+      .then((response) => {
+
+        return response.json().then((res) => {
+          if (response.status === 200 || response.status === 201) {
+            return res;
+          } else {
+            throw(res);
+          }
+        });
+
+      })
+      .catch((error) => {
+        console.error(error);
+        throw(error);
+      });
+  }
+
+  /**
+   * ### login
+   * encode the data and and call _fetch
+   *
+   * @param data
+   *
+   *  {fullname: "barton", password: "Passw0rd!"}
+   *
+   * @returns
+   *
+   * createdAt: "2015-12-30T15:29:36.611Z"
+   * updatedAt: "2015-12-30T16:08:50.419Z"
+   * objectId: "Z4yvP19OeL"
+   * email: "barton@foo.com"
+   * sessionToken: "r:Kt9wXIBWD0dNijNIq2u5rRllW"
+   * fullname: "barton"
+   *
+   */
+  async loginWithSocial(data) {
+    return await this._fetch({
+      method: 'POST',
+      url: '/account/loginWithSocial',
+      body: data
+    })
+      .then((response) => {
+        return response.json().then((res) => {
+          if (response.status === 200 || response.status === 201) {
+            return res;
+          } else {
+            throw(res);
+          }
+        });
+      })
+      .catch((error) => {
+        console.log('kolavery', error);
+        throw(error);
+      });
+
+  }
+
   /**
    * ### _fetch
    * A generic function that prepares the request to Parse.com
@@ -442,6 +517,5 @@ export default class Hapi extends Backend{
     }
     console.log('cool to debug', url, reqOpts);
     return await fetch(url, reqOpts);
-
   }
 };

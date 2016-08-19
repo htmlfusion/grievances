@@ -25,7 +25,9 @@ const Form = Record({
     fullname: null,
     email: null,
     objectId: null,
-    emailVerified: null
+    emailVerified: null,
+    fbId: null,
+    gId: null
   })),
   disabled: false,
   error: null,
@@ -35,7 +37,8 @@ const Form = Record({
     fullname: '',
     email: '',
     emailHasError: false,
-    emailVerified: false
+    emailVerified: false,
+    socialSyncError: false
   }))
 });
 

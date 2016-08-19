@@ -14,7 +14,7 @@
 */
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import {Container, Content, Header, Button, Icon, Text} from 'native-base';
+import {Container, Content, Header, Button, Icon, Text, Grid, Col, Row} from 'native-base';
 
 /**
  * The actions we need
@@ -62,7 +62,10 @@ from 'react-native';
 import t from 'tcomb-form-native';
 import templates from '../components/NativeTemplates';
 import Layout from '../components/Layout';
-
+const {
+  LoginManager,
+  AccessToken
+} = require('react-native-fbsdk');
 let Form = t.form.Form;
 
 /**
@@ -190,7 +193,7 @@ class Profile extends Component {
      * Set up the field definitions.  If we're fetching, the fields
      * are disabled.
      */
-     let nativeTextbox = templates.nativeTextbox;
+    let nativeTextbox = templates.nativeTextbox;
     let options = {
       auto: 'placeholders',
       fields: {
@@ -234,6 +237,51 @@ class Profile extends Component {
      if (this.props.profile.form.originalProfile.emailVerified) {
        emailVerifiedMsg = "Your email has been verified";
      }
+     let onFBPress = () => {
+       console.log('FB login');
+       LoginManager.logInWithReadPermissions(['public_profile']).then(
+        (result) => {
+          if (result.isCancelled) {
+            this.errorAlert.checkError('Login cancelled');
+          } else {
+            console.log('Login success with permissions: '
+              +result.grantedPermissions.toString());
+            AccessToken.getCurrentAccessToken().then(
+              (data) => {
+                console.log('cool check error', data.userID);
+                this.props.actions.syncSocialSites(this.props.global.currentUser, data.userID ,'fbId');
+              }
+            )
+          }
+        },
+        (error) => {
+          this.errorAlert.checkError('Login fail with error: ' + error);
+        }
+      );
+     };
+     let onGPress = () => {
+      //this.props.actions.syncSocialSites(this.props.global.currentUser, data.userID ,'gId');
+       console.log('cool ma check google');
+     };
+     let fbUI = <Icon
+     disabled={!this.props.profile.form.isValid || this.props.profile.form.isFetching}
+     name="logo-facebook" onPress={onFBPress.bind(self)}/>;
+
+     if (this.props.profile.form.originalProfile.fbId) {
+       fbUI = <Icon
+       disabled={true}
+       name="logo-facebook" style={{color: '#ddd'}}/>;
+     }
+
+     let gUI = <Icon
+     disabled={!this.props.profile.form.isValid || this.props.profile.form.isFetching}
+     name="logo-google" onPress={onGPress.bind(self)}/>;
+
+     if (this.props.profile.form.originalProfile.gId) {
+       gUI = <Icon
+       disabled={true}
+       name="logo-google" style={{color: '#ddd'}}/>;
+     }
     return (
         <Layout isHeaderBack={true} headerRight={{action: onLogoutButtonPress.bind(self), iconName: "md-exit", isDisabled: !this.props.auth.form.isValid || this.props.auth.form.isFetching}}>
           <Form
@@ -243,6 +291,7 @@ class Profile extends Component {
               value={this.state.formValues}
               onChange={this.onChange.bind(self)}
           />
+
           <ItemCheckbox text={emailVerifiedMsg}
                          disabled={this.props.profile.form.originalProfile.emailVerified}
                          checked={this.props.profile.form.fields.emailVerified}
@@ -254,6 +303,21 @@ class Profile extends Component {
             onPress={onButtonPress.bind(self)}
             buttonText={profileButtonText}/>
         </View>
+        <Grid style={[styles.btn, {paddingLeft: 10}]}>
+            <Row>
+              <Col><Text>{'Sync with'}</Text></Col>
+              <Col>
+                <Row>
+                  <Col>
+                    {fbUI}
+                  </Col>
+                  <Col>
+                    {gUI}
+                  </Col>
+                </Row>
+              </Col>
+            </Row>
+        </Grid>
       </Layout>
     );
   }

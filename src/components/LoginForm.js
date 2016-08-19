@@ -83,7 +83,7 @@ var LoginForm = React.createClass({
     /*let secureTextEntry = !this.props.form.fields.showPassword;*/
 
     let password = {
-      maxLength: 12,
+      maxLength: 20,
       secureTextEntry: true,
       /*secureTextEntry: secureTextEntry,*/
       editable: !this.props.form.isFetching,
@@ -157,7 +157,6 @@ var LoginForm = React.createClass({
       value={this.props.value}
       onChange={this.props.onChange}
         />
-
     );
   }
 });

@@ -84,7 +84,6 @@ let Register = React.createClass({
           loginButtonText={ loginButtonText }
           onButtonPress={ onButtonPress }
           displayPasswordCheckbox ={ true }
-          leftMessageType={ FORGOT_PASSWORD }
           rightMessageType={ LOGIN }
           auth={ this.props.auth }
           global={ this.props.global }

@@ -44,7 +44,10 @@ const {
   ON_GRIEVANCE_UPDATE_FORM_FIELD_CHANGE,
   GRIEVANCE_UPDATE_FEEDBACK_SUCCESS,
   GRIEVANCE_UPDATE_FEEDBACK_FAILURE,
-  SET_GRIEVANCE_UPDATE
+  SET_GRIEVANCE_UPDATE,
+  ON_GRIEVANCE_UPDATE_CURLYURL,
+  ON_GRIEVANCE_CREATE_USER,
+  ON_CURLY_URL_FETCHING
 } = require('../../lib/constants').default;
 
 import InitialState from './grievanceInitialState';
@@ -110,7 +113,7 @@ export default function grievanceReducer(state = initialState, action) {
      * set the form to fetching and clear any errors
      */
   case GRIEVANCE_CREATE_REQUEST:
-    return state.setIn([ 'grievanceCreate', 'form', 'isFetching'], true)
+    return state.setIn([ 'grievanceCreate', 'form', 'disabled'], true)
       .setIn([ 'grievanceCreate', 'form', 'error'], null);
 
   case GET_GRIEVANCE_REQUEST:
@@ -119,7 +122,7 @@ export default function grievanceReducer(state = initialState, action) {
 
   case GRIEVANCE_UPDATE_REQUEST:
   case GRIEVANCE_DELETE_REQUEST:
-    return state.setIn([ 'grievanceUpdate', 'form', 'isFetching'], true)
+    return state.setIn([ 'grievanceUpdate', 'form', 'disabled'], true)
       .setIn([ 'grievanceUpdate', 'form','error'], null);
 
     /**
@@ -127,7 +130,7 @@ export default function grievanceReducer(state = initialState, action) {
      * set the form to fetching as done
      */
   case GRIEVANCE_DELETE_SUCCESS:
-    return state.setIn(['grievanceUpdate', 'form', 'isFetching'], false).
+    return state.setIn(['grievanceUpdate', 'form', 'disabled'], false).
       deleteIn(['grievanceList','grievances', state.getIn([ 'grievanceUpdate', 'form', 'originalGrievance', 'idx'])]);
 
     /**
@@ -160,7 +163,7 @@ export default function grievanceReducer(state = initialState, action) {
 
   case GRIEVANCE_UPDATE_SUCCESS:
 
-    return state.setIn([ 'grievanceUpdate', 'form', 'isFetching'], false).updateIn(['grievanceList','grievances', state.getIn([ 'grievanceUpdate', 'form', 'originalGrievance', 'idx'])], function(grievance) {
+    return state.setIn([ 'grievanceUpdate', 'form', 'disabled'], false).updateIn(['grievanceList','grievances', state.getIn([ 'grievanceUpdate', 'form', 'originalGrievance', 'idx'])], function(grievance) {
       return grievance.set('description', state.getIn([ 'grievanceUpdate', 'form', 'fields', 'description']));
     });
 
@@ -193,12 +196,14 @@ export default function grievanceReducer(state = initialState, action) {
      */
   case GRIEVANCE_CREATE_SUCCESS:
     recordMap = state.getIn(['grievanceList', 'grievances']).push(newGrievance(action.payload));
-    nextGrievanceState = state.setIn([ 'grievanceCreate','form', 'isFetching'], false)
+    nextGrievanceState = state.setIn([ 'grievanceCreate','form', 'disabled'], false)
       .setIn([ 'grievanceCreate', 'form', 'error'], null)
       /*.setIn([ 'grievanceCreate', 'form', 'fields', 'address'], '')*/
       .setIn([ 'grievanceCreate', 'form', 'fields', 'description'], '')
       .setIn([ 'grievanceCreate', 'form', 'fields', 'location'], [])
       .setIn([ 'grievanceCreate', 'form', 'fields', 'tag'], '')
+      .setIn([ 'grievanceCreate', 'form', 'fields', 'curlyUrl'], null)
+      .setIn([ 'grievanceCreate', 'form', 'fields', 'reportedUser'], action.currentUser)
       .setIn(['grievanceList', 'grievances'], recordMap);
     return nextGrievanceState;
       //Push value to grievance list
@@ -208,11 +213,11 @@ export default function grievanceReducer(state = initialState, action) {
      */
   case GRIEVANCE_DELETE_FAILURE:
   case GRIEVANCE_UPDATE_FAILURE:
-    return state.setIn([ 'grievanceUpdate', 'form', 'isFetching'], false)
+    return state.setIn([ 'grievanceUpdate', 'form', 'disabled'], false)
       .setIn([ 'grievanceUpdate', 'form','error'], action.payload);
 
   case GRIEVANCE_CREATE_FAILURE:
-    return state.setIn([ 'grievanceCreate', 'form', 'isFetching'], false)
+    return state.setIn([ 'grievanceCreate', 'form', 'disabled'], false)
       .setIn([ 'grievanceCreate', 'form','error'], action.payload);
 
     /**
@@ -301,7 +306,21 @@ export default function grievanceReducer(state = initialState, action) {
 
     case ON_GRIEVANCE_UPDATE_FORM_FIELD_CHANGE:
       return state.setIn([ 'grievanceUpdate', 'form','fields','description'], action.payload.field.description)
-        .setIn([ 'grievanceCreate', 'form','error'],null);
+        .setIn([ 'grievanceUpdate', 'form','error'],null);
+
+    case ON_GRIEVANCE_UPDATE_CURLYURL:
+      return state.setIn([ 'grievanceCreate', 'form','fields','curlyUrl'], action.payload)
+        .setIn([ 'grievanceCreate', 'form','fields','curlyUrlFetching'], false)
+        .setIn([ 'grievanceCreate', 'form','error'], null);
+
+    case ON_GRIEVANCE_CREATE_USER:
+      return state.setIn([ 'grievanceCreate', 'form','fields','reportedUser'], action.payload)
+        .setIn([ 'grievanceCreate', 'form','error'], null);
+
+    case ON_CURLY_URL_FETCHING:
+      return state.setIn([ 'grievanceCreate', 'form','fields','curlyUrlFetching'], true)
+        .setIn([ 'grievanceCreate', 'form','error'], null);
+
   }//switch
   /**
    * # Default

@@ -82,8 +82,7 @@ let ForgotPassword = React.createClass({
           loginButtonText={ loginButtonText }
           onButtonPress={ onButtonPress }
           displayPasswordCheckbox={ false }
-          leftMessageType = { REGISTER }
-          rightMessageType = { LOGIN }
+          isBack={true}
           auth={ this.props.auth }
           global={ this.props.global }
       />

@@ -64,11 +64,12 @@ import
   Text
 }
 from 'react-native';
-import {Container, Content} from 'native-base';
+import {Container, Content, Button, Icon} from 'native-base';
 
 import Dimensions from 'Dimensions';
 var {height, width} = Dimensions.get('window'); // Screen dimensions in current orientation
 
+import Layout from './Layout';
 /**
  * The states were interested in
  */
@@ -184,31 +185,29 @@ class LoginRender extends Component {
   */
   getMessage(messageType, actions) {
     let forgotPassword =
-    <TouchableHighlight
+    <Button danger bordered rounded small style={{position: 'absolute', bottom: 30, right: 10}}
         onPress={() => {
             actions.forgotPasswordState();
             Actions.ForgotPassword();
           }} >
-      <Text>Forgot Password?</Text>
-    </TouchableHighlight>;
+      <Icon name="ios-help" />
+    </Button>;
 
     let alreadyHaveAccount =
-    <TouchableHighlight
+    <FormButton
+        buttonText = {'Login'}
         onPress={() => {
-            actions.loginState();
-            Actions.Login();
-          }} >
-      <Text>Already have an account?</Text>
-    </TouchableHighlight>;
+          actions.loginState();
+          Actions.Login();
+          }} />;
 
     let register =
-    <TouchableHighlight
+    <FormButton
+        buttonText = {'Signup'}
         onPress={() => {
             actions.registerState();
             Actions.Register();
-          }} >
-      <Text>Register</Text>
-    </TouchableHighlight>;
+          }} />;
 
     switch(messageType) {
     case FORGOT_PASSWORD:
@@ -233,11 +232,24 @@ class LoginRender extends Component {
     var rightMessageType = this.props.rightMessageType;
 
     var passwordCheckbox = <Text/>;
-    let leftMessage = this.getMessage(leftMessageType, this.props.actions);
-    let rightMessage = this.getMessage(rightMessageType, this.props.actions);
-
+    let leftMessage = null;
+    let rightMessage = null;
+    let fbLogin = null;
+    let fbLoginAction = this.props.facebookLogin;
     let self = this;
 
+    if (leftMessageType) {
+      leftMessage = this.getMessage(leftMessageType, this.props.actions)
+    }
+    if (rightMessageType) {
+      rightMessage = this.getMessage(rightMessageType, this.props.actions);
+    }
+    if (fbLoginAction) {
+      let fbLogo = <Icon name="logo-facebook"/>
+      fbLogin = <FormButton
+                onPress={fbLoginAction}
+                buttonText={fbLogo}/>;
+    }
     // display the login / register / change password screens
     this.errorAlert.checkError(this.props.auth.form.error);
 
@@ -265,19 +277,10 @@ class LoginRender extends Component {
      * header props are mostly for support of Hot reloading.
      * See the docs for Header for more info.
      */
-
     return(
-      <Container style={styles.container}>
+      <Layout isHeaderBack = {this.props.isBack}>
 
       	  <Content>
-            <ScrollView horizontal={false} width={width} height={height}>
-      	    {/*<Header isFetching={this.props.auth.form.isFetching}
-                          showState={this.props.global.showState}
-                          currentState={this.props.global.currentState}
-                          onGetState={this.props.actions.getState}
-                          onSetState={this.props.actions.setState}
-      	    />*/}
-
       	    <View style={styles.inputs}>
       	      <LoginForm
                         formType={formType}
@@ -285,6 +288,7 @@ class LoginRender extends Component {
                         value={this.state.value}
                         onChange={self.onChange.bind(self)}
       	      />
+              {leftMessage}
       	      {passwordCheckbox}
             </View>
 
@@ -292,16 +296,10 @@ class LoginRender extends Component {
                       isDisabled={!this.props.auth.form.isValid || this.props.auth.form.isFetching}
                       onPress={onButtonPress}
                       buttonText={loginButtonText}/>
-
-      	    <View>
-      	      <View style={styles.forgotContainer}>
-      	        {leftMessage}
-                {rightMessage}
-              </View>
-      	    </View>
-            </ScrollView>
+            <View style={{marginTop: 10}}>{fbLogin}</View>
+      	    <View style={{marginTop: 10}}>{rightMessage}</View>
       	  </Content>
-      </Container>
+      </Layout>
     );
   }
 }

@@ -120,32 +120,8 @@ const styles = StyleSheet.create({
 });
 
 
-const transparentStyle = {
-  parent: {
-    borderColor: '#2e6da4',
-    backgroundColor: '#fff',
-    borderWidth: 1,
-    height: 40,
-    width: 40
-  },
-  child: {
-    color: '#000',
-    fontSize: 20
-  }
-};
-const highlightStyle = {
-  parent: {
-    borderColor: '#2e6da4',
-    borderWidth: 1,
-    backgroundColor: '#337ab7',
-    height: 40,
-    width: 40
-  },
-  child: {
-    color: '#fff',
-    fontSize: 20
-  }
-};
+const transparentStyle = {'bordered': true};
+const highlightStyle = {'primary': true};
 function mapStateToProps(state) {
   return {
       ...state
@@ -177,15 +153,14 @@ class CreateGrievance extends Component {
       formValues: {
         /*address: '',*/
         description: '',
-        tag: '',
-        src: ''
+        tag: ''
       },
       btnMeStyle: highlightStyle,
       anonymousStyle: transparentStyle,
-      reportedUser: this.props.global.currentUser.objectId,
-      curlyUrl: null
+      reportedUser: this.props.global.currentUser.objectId
     };
     this._showUploadGallery = this._showUploadGallery.bind(this);
+    this._setUserStyle = this._setUserStyle.bind(this);
   }
   /**
    * ### onChange
@@ -198,22 +173,38 @@ class CreateGrievance extends Component {
     this.props.actions.onGrievanceFormFieldChange(value);
     this.setState({formValues: value});
   }
+  _setUserStyle(user) {
+    if (user) {
+      this.setState({
+        anonymousStyle: transparentStyle,
+        btnMeStyle: highlightStyle
+      });
+    } else {
+      this.setState({
+        anonymousStyle: highlightStyle,
+        btnMeStyle: transparentStyle
+      });
+    }
+  }
   /**
    * ### componentWillReceiveProps
    *
    * Since the Forms are looking at the state for the values of the
    * fields, when we we need to set them
    */
-  componentWillReceiveProps(props) {
 
+  componentWillReceiveProps(props) {
+    let reportedUser = (this.state.reportedUser !== props.grievance.grievanceCreate.form.fields.reportedUser);
     this.setState({
       formValues: {
         /*address: props.grievance.grievanceCreate.form.fields.address,*/
         description: props.grievance.grievanceCreate.form.fields.description,
         tag: props.grievance.grievanceCreate.form.fields.tag
-      }
+      },
+      reportedUser: props.grievance.grievanceCreate.form.fields.reportedUser
     });
-
+    if (reportedUser)
+      this._setUserStyle(props.grievance.grievanceCreate.form.fields.reportedUser);
   }
   _showUploadGallery() {
     let uploadOptions = {
@@ -224,8 +215,8 @@ class CreateGrievance extends Component {
       },
       takePhotoButtonTitle: 'Snap & Post'
     };
+
     ImagePicker.showImagePicker(uploadOptions, (response) => {
-      console.log('response: ',response);
 
       if (response.didCancel) {
         console.log('User cancelled image picker');
@@ -238,6 +229,7 @@ class CreateGrievance extends Component {
         console.log('User tapped custom button: ', response.customButton);
       }*/
       else {
+        this.props.actions.onCurlyUrlFetching();//This is needed when we do multiple upload
         // You can display the image using either data...
         const source = {uri: 'data:image/jpeg;base64,' + response.data, isStatic: true};
 
@@ -247,10 +239,10 @@ class CreateGrievance extends Component {
         } else {
           const source = {uri: response.uri, isStatic: true};
         }
-
-        this.setState({
-          curlyUrl: source
-        });
+        this.props.actions.onCurlyUrlUpdate(source);
+        // this.setState({
+        //   curlyUrl: source
+        // });
       }
 
     });
@@ -295,18 +287,10 @@ class CreateGrievance extends Component {
 
     let btnAnonymous = (type) => {
       if (type === 'me') {
-        this.setState({
-          anonymousStyle: transparentStyle,
-          btnMeStyle: highlightStyle,
-          reportedUser: this.props.global.currentUser.objectId
-        });
+        this.props.actions.onGrievanceUserUpdate(this.props.global.currentUser.objectId);
       }
       else {
-        this.setState({
-          anonymousStyle: highlightStyle,
-          btnMeStyle: transparentStyle,
-          reportedUser: undefined
-        });
+        this.props.actions.onGrievanceUserUpdate(undefined);
       }
     };
 
@@ -322,19 +306,22 @@ class CreateGrievance extends Component {
         /*this.props.grievance.grievanceCreate.form.fields.address,*/
         this.props.grievance.grievanceCreate.form.fields.description,
         this.props.location,
-        this.state.reportedUser,
+        this.props.grievance.grievanceCreate.form.fields.reportedUser,
         this.props.grievance.grievanceCreate.form.fields.tag,
-        this.state.curlyUrl,
+        this.props.grievance.grievanceCreate.form.fields.curlyUrl,
         this.props.global.currentUser,
         this.props.transition
       );
     };
     let headerTitle = 'Report Grievance';
     let image = null;
-    if  (this.state.curlyUrl) {
-      image = <Thumbnail square source={this.state.curlyUrl} style={styles.img}/>;
+    if (this.props.grievance.grievanceCreate.form.fields.curlyUrlFetching) {
+      image = <Text>{'...Loading......'}</Text>
+    } else if  (this.props.grievance.grievanceCreate.form.fields.curlyUrl) {
+      image = <Thumbnail square source={this.props.grievance.grievanceCreate.form.fields.curlyUrl} style={styles.img}/>;
     }
-    let displayPic = <Icon style={this.state.btnMeStyle.child} name="ios-person-outline" />;
+    let displayPic = <Icon name="ios-person-outline" />;
+    let displayAnPic = <Icon name="ios-help"/>;
     /**
      * Wrap the form with the header and button.  The header props are
      * mostly for support of Hot reloading. See the docs for Header
@@ -346,9 +333,9 @@ class CreateGrievance extends Component {
             <View style={{position: 'absolute', top: -15, left: 10}}><Text>{'Report as:'}</Text></View>
             <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
               <MyUser>
-                <UserButton type={'me'} displayPic={displayPic} displayText={this.props.global.currentUser} styleProp={this.state.btnMeStyle} btnAlign={{left: 20}} btnAction={btnAnonymous.bind(this, 'me')}/>
+                <UserButton type={'me'} displayText={this.props.global.currentUser} btnType={this.state.btnMeStyle} btnAlign={{left: 20}} btnAction={btnAnonymous.bind(this, 'me')}>{displayPic}</UserButton>
               </MyUser>
-              <UserButton type={'an'} displayPic={'?'} displayText={{fullname: 'Anonymous'}} styleProp={this.state.anonymousStyle} btnAlign={{right: 20}} btnAction={btnAnonymous.bind(this, 'an')}/>
+              <UserButton type={'an'} displayText={{fullname: 'Anonymous'}} btnType={this.state.anonymousStyle} btnAlign={{right: 20}} btnAction={btnAnonymous.bind(this, 'an')}>{displayAnPic}</UserButton>
             </View>
           </View>
           <View style={styles.form}>
@@ -378,7 +365,7 @@ class CreateGrievance extends Component {
           <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderTopWidth: 2}}>
             <View style={styles.reportBtn}>
               <View>
-                <Button style={{width: 115}} rounded onPress={onButtonPress.bind(self)} >{grievanceButtonText}</Button>
+                <Button bordered style={{width: 115}} rounded onPress={onButtonPress.bind(self)} >{grievanceButtonText}</Button>
               </View>
             </View>
           </View>

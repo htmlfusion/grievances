@@ -198,19 +198,7 @@ class UpdateGrievance extends Component {
       }
     };
 
-    const highlightStyle = {
-      parent: {
-        borderColor: '#2e6da4',
-        borderWidth: 1,
-        backgroundColor: '#337ab7',
-        height: 40,
-        width: 40
-      },
-      child: {
-        color: '#fff',
-        fontSize: 20
-      }
-    };
+    const highlightStyle = {'primary': true};
     /**
      * When the button is pressed, send the users info including the
      * ```currrentUser``` object as it contains the sessionToken and
@@ -246,12 +234,12 @@ class UpdateGrievance extends Component {
       else
         return 'INCIDENT';
     }
-    let displayPic = <Icon style={highlightStyle.child} name="ios-person-outline" />;
+    let displayPic = <Icon name="ios-person-outline" />;
     let deleteBtn = null;
     let reportedUser = this.props.grievance.grievanceUpdate.form.originalGrievance.reportedUser;
     if (reportedUser && this.props.global.currentUser.objectId === reportedUser._id) {
       deleteBtn = <FormButton
-          /*isDisabled={!this.props.grievance.grievanceCreate.form.isValid}*/
+          isDisabled={!this.props.grievance.grievanceUpdate.form.disabled}
           onPress={onDeleteButtonPress.bind(self)}
           buttonText={grievanceDeleteButtonText}/>;
     }
@@ -259,13 +247,14 @@ class UpdateGrievance extends Component {
     if (statusIn === 'new') {
       statusIn = 'Under Investigation';
     }
+    
     return (
         <Layout isHeaderBack={true} headerTitle={headerText(this.props.grievance.grievanceUpdate.form.originalGrievance.tag)}>
 
           <View>
             <View style={{marginBottom: 7, left: 20}}><Text>{'Reported By'}</Text></View>
             <MyUser>
-              <UserButton type={'me'} displayPic={displayPic} displayText={reportedUser} styleProp={highlightStyle} btnAlign={{left: 20}}/>
+              <UserButton type={'me'} displayText={reportedUser} btnType={highlightStyle} btnAlign={{left: 20}}>{displayPic}</UserButton>
             </MyUser>
           </View>
           <View style={{paddingRight: 30, paddingLeft: 30, paddingTop: 35, paddingBottom: 15, borderBottomWidth: 1}}>
@@ -293,12 +282,12 @@ class UpdateGrievance extends Component {
         </View>
         <View style={{marginBottom: 10}}>
           <FormButton
-            /*isDisabled={!this.props.grievance.grievanceCreate.form.isValid}*/
+            isDisabled={!this.props.grievance.grievanceUpdate.form.disabled}
             onPress={onUpdateButtonPress.bind(self)}
             buttonText={grievanceUpdateButtonText}/>
         </View>
-        <View>{deleteBtn}</View>
-        </Layout>
+        <View style={{marginBottom: 10}}>{deleteBtn}</View>
+      </Layout>
     );
   }
 }

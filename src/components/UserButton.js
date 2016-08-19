@@ -39,10 +39,11 @@ export default class UserButton extends Component {
     if (this.props.displayText) {
       fullname=<Text>{this.props.displayText.fullname}</Text>;
     }
+
     return (<View style={parentStyle}>
       <View>
-        <Button ref={this.props.type} small rounded transparent style={this.props.styleProp.parent} onPress={this.btnAction}>
-          <Text style={this.props.styleProp.child}>{this.props.displayPic}</Text>
+        <Button ref={this.props.type} small rounded  {...this.props.btnType} onPress={this.btnAction}>
+          {this.props.children}
         </Button>
       </View>
       {fullname}

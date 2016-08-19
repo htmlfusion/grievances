@@ -18,6 +18,10 @@ const {
   PROFILE_UPDATE_SUCCESS,
   PROFILE_UPDATE_FAILURE,
 
+  PROFILE_SYNC_SOCIAL_REQUEST,
+  PROFILE_SYNC_SOCIAL_SUCCESS,
+  PROFILE_SYNC_SOCIAL_FAILURE,
+
   ON_PROFILE_FORM_FIELD_CHANGE
 } = require('../../lib/constants').default;
 
@@ -134,4 +138,51 @@ export function onProfileFormFieldChange(field,value) {
     type: ON_PROFILE_FORM_FIELD_CHANGE,
     payload: {field: field, value: value}
   };
+}
+
+/**
+* ## SyncSocialSites
+* This function is used to sync with fb, google
+* @params {number, string} authUserId, authType
+*
+**/
+export function syncSocialSites(sessionToken, authUserId, authType) {
+  return dispatch => {
+    dispatch(syncSocialSiteRequest());
+    return new AppAuthToken().getSessionToken(sessionToken)
+      .then((token) => {
+        
+        return BackendFactory(token).syncSocialSites({
+          authUserId,
+          authType
+        }, sessionToken.objectId);
+      })
+      .then(() => {
+        dispatch(syncSocialSiteSuccess(authUserId, authType));
+      })
+      .catch((error) => {
+        dispatch(syncSocialSiteFailure(error));
+      });
+
+  };
+}
+
+export function syncSocialSiteRequest() {
+  return {
+    type: PROFILE_SYNC_SOCIAL_REQUEST
+  }
+}
+
+export function syncSocialSiteSuccess(authUserId, authType) {
+  return {
+    type: PROFILE_SYNC_SOCIAL_SUCCESS,
+    payload: {type: authType, value: authUserId}
+  }
+}
+
+export function syncSocialSiteFailure(error) {
+  return {
+    type: PROFILE_SYNC_SOCIAL_FAILURE,
+    payload: error
+  }
 }

@@ -6,11 +6,11 @@ import _ from 'underscore';
 
 let styles = StyleSheet.create({
   headerFont: {
-    color: '#fff'
+
   }
 });
 export default class Layout extends Component {
-  
+
   render() {
     let headerRight = null,
       headerRightProps = this.props.headerRight,
@@ -18,6 +18,7 @@ export default class Layout extends Component {
       header,
       footerContent = this.props.footerContent,
       headerTitle = this.props.headerTitle,
+      headerChildren = this.props.headerChildren,
       headerStyle = {
         backgroundColor: '#337ab7',
         borderColor: '#2e6da4',
@@ -43,16 +44,17 @@ export default class Layout extends Component {
       // headerStyle = _.extend({}, headerStyle, headerStyleRight);
     }
 
-    if (headerBack || headerRight || headerTitle) {
+    if (headerBack || headerRight || headerTitle || headerChildren) {
 
-      header = <Header style={headerStyle}>
+      header = <Header>
         {headerBack}
         {headerTitle}
         {headerRight}
+        {headerChildren}
       </Header>;
     }
     return (
-      <Container>
+      <Container style={{flex: 1}}>
           {header}
         <Content>
           {this.props.children}

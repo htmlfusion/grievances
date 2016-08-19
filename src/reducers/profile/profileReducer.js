@@ -30,6 +30,10 @@ const {
 
   LOGOUT_SUCCESS,
 
+  PROFILE_SYNC_SOCIAL_REQUEST,
+  PROFILE_SYNC_SOCIAL_SUCCESS,
+  PROFILE_SYNC_SOCIAL_FAILURE,
+
   SET_STATE
 } = require('../../lib/constants').default;
 
@@ -57,6 +61,7 @@ export default function profileReducer(state = initialState, action) {
      */
   case GET_PROFILE_REQUEST:
   case PROFILE_UPDATE_REQUEST:
+  case PROFILE_SYNC_SOCIAL_REQUEST:
     return state.setIn(['form', 'isFetching'], true)
       .setIn(['form','error'],null);
 
@@ -83,6 +88,8 @@ export default function profileReducer(state = initialState, action) {
              action.payload.emailVerified)
       .setIn(['form','originalProfile','fullname'],action.payload.fullname)
       .setIn(['form','originalProfile','email'],action.payload.email)
+      .setIn(['form','originalProfile','fbId'],action.payload.fbId)
+      .setIn(['form','originalProfile','gId'],action.payload.gId)
       .setIn(['form','originalProfile','emailVerified'],action.payload.emailVerified)
       .setIn(['form','originalProfile','objectId'],action.payload.objectId)
       .setIn(['form','error'],null);
@@ -99,8 +106,11 @@ export default function profileReducer(state = initialState, action) {
     nextProfileState = state.setIn(['form','fields','fullname'], '')
       .setIn(['form','fields','email'], '')
       .setIn(['form','fields','emailVerified'], false)
+      .setIn(['form','fields','socialSyncError'], false)
       .setIn(['form','originalProfile','fullname'],'')
       .setIn(['form','originalProfile','email'],'')
+      .setIn(['form','originalProfile','fbId'], 0)
+      .setIn(['form','originalProfile','gId'], 0)
       .setIn(['form','originalProfile','emailVerified'],false)
       .setIn(['form','originalProfile','objectId'],null)
       .setIn(['form','error'],null);
@@ -115,6 +125,18 @@ export default function profileReducer(state = initialState, action) {
     return state.setIn(['form', 'isFetching'], false)
       .setIn(['form','error'], action.payload);
 
+  case PROFILE_SYNC_SOCIAL_FAILURE:
+    return state.setIn(['form', 'isFetching'], false)
+      .setIn(['form', 'fields', 'socialSyncError'], true)
+      .setIn(['form','error'], action.payload);
+
+  case PROFILE_SYNC_SOCIAL_SUCCESS:
+    return state.setIn(['form', 'isFetching'], false)
+      .setIn(['form', 'fields', 'socialSyncError'], false)
+      .setIn(['form', 'originalProfile', action.payload.type], action.payload.value);
+
+  case PROFILE_SYNC_SOCIAL_REQUEST:
+    return state.setIn(['form', 'isFetching'], true);
     /**
      * ### form fields have changed
      *
@@ -139,7 +161,7 @@ export default function profileReducer(state = initialState, action) {
      * and set the values into the state
      *
      */
-  case SET_STATE:
+  /*case SET_STATE:
     debugger;
     var profile  = JSON.parse(action.payload).profile.form;
     var next = state.setIn(['form','disabled'],profile.disabled)
@@ -162,7 +184,7 @@ export default function profileReducer(state = initialState, action) {
                   'emailHasError'],profile.fields.emailHasError)
           .setIn(['form','fields',
                   'emailVerified'],profile.fields.emailVerified);
-    return next;
+    return next;*/
 
   }//switch
   /**

@@ -42,7 +42,11 @@ const {
 
   RESET_PASSWORD_REQUEST,
   RESET_PASSWORD_SUCCESS,
-  RESET_PASSWORD_FAILURE
+  RESET_PASSWORD_FAILURE,
+
+  PROFILE_SYNC_SOCIAL_REQUEST,
+  PROFILE_SYNC_SOCIAL_SUCCESS,
+  PROFILE_SYNC_SOCIAL_FAILURE
 
 } = require('../../lib/constants').default;
 
@@ -356,19 +360,18 @@ export function login(email,  password) {
       email: email,
       password: password
     })
-
-      .then(function (json) {
-	return saveSessionToken(json)
-	  .then(function () {
-	    dispatch(loginSuccess(json));
-	    dispatch(logoutState());
-	    // Actions.Tabbar();
-      Actions.Main();
-	  });
-      })
-      .catch((error) => {
-	dispatch(loginFailure(error));
-      });
+    .then(function (json) {
+    	return saveSessionToken(json)
+    	  .then(function () {
+    	    dispatch(loginSuccess(json));
+    	    dispatch(logoutState());
+    	    // Actions.Tabbar();
+          Actions.Main();
+    	  });
+    })
+    .catch((error) => {
+       dispatch(loginFailure(error));
+    });
   };
 }
 
@@ -418,6 +421,31 @@ export function resetPassword(email) {
       })
       .catch((error) => {
         dispatch(resetPasswordFailure(error));
+      });
+
+  };
+}
+
+/**
+* Login using social networking sites like facebook, google
+* @param {object} data which has social networking graph response like email, fullname
+**/
+
+export function loginWithSocial(data) {
+  return dispatch => {
+    dispatch(loginRequest());
+    return BackendFactory().loginWithSocial(data)
+      .then((json) => {
+        return saveSessionToken(json)
+      	  .then(function () {
+      	    dispatch(loginSuccess(json));
+      	    dispatch(logoutState());
+      	    // Actions.Tabbar();
+            Actions.Main();
+      	  });
+      })
+      .catch((error) => {
+        dispatch(loginFailure(error));
       });
 
   };

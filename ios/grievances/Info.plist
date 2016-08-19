@@ -40,11 +40,29 @@
     <string/>
     <key>NSAppTransportSecurity</key>
     <dict>
-      <key>NSAllowsArbitraryLoads</key>
-      <true/>
+      <key>NSExceptionDomains</key>
+      <dict>
+        <key>localhost</key>
+        <dict>
+          <key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
+          <true/>
+        </dict>
+      </dict>
     </dict>
     <key>UIAppFonts</key>
     <array>
+      <string>Andale Mono.ttf</string>
+      <string>Arial Black.ttf</string>
+      <string>Arial.ttf</string>
+      <string>Comic Sans MS.ttf</string>
+      <string>Courier New.ttf</string>
+      <string>Georgia.ttf</string>
+      <string>Microsoft Sans Serif.ttf</string>
+      <string>Roboto_medium.ttf</string>
+      <string>Roboto.ttf</string>
+      <string>SF-UI-Text-Regular.otf</string>
+      <string>Skia.ttf</string>
+      <string>Times New Roman.ttf</string>
       <string>Entypo.ttf</string>
       <string>EvilIcons.ttf</string>
       <string>FontAwesome.ttf</string>
@@ -53,15 +71,24 @@
       <string>MaterialIcons.ttf</string>
       <string>Octicons.ttf</string>
       <string>Zocial.ttf</string>
-      <string>Andale Mono.ttf</string>
-      <string>Arial Black.ttf</string>
-      <string>Arial.ttf</string>
-      <string>Comic Sans MS.ttf</string>
-      <string>Courier New.ttf</string>
-      <string>Georgia.ttf</string>
-      <string>Microsoft Sans Serif.ttf</string>
-      <string>Skia.ttf</string>
-      <string>Times New Roman.ttf</string>
     </array>
+    <key>LSApplicationQueriesSchemes</key>
+    <array>
+      <string>fbauth2</string>
+      <string>fb-messenger-api</string>
+    </array>
+    <key>CFBundleURLTypes</key>
+    <array>
+      <dict>
+        <key>CFBundleURLSchemes</key>
+        <array>
+          <string>fb1757709647826901</string>
+        </array>
+      </dict>
+    </array>
+    <key>FacebookAppID</key>
+    <string>1757709647826901</string>
+    <key>FacebookDisplayName</key>
+    <string>grievances</string>
   </dict>
 </plist>
