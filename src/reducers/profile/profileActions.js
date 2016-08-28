@@ -22,7 +22,10 @@ const {
   PROFILE_SYNC_SOCIAL_SUCCESS,
   PROFILE_SYNC_SOCIAL_FAILURE,
 
-  ON_PROFILE_FORM_FIELD_CHANGE
+  ON_PROFILE_FORM_FIELD_CHANGE,
+  VERIFY_EMAIL_REQUEST,
+  VERIFY_EMAIL_SUCCESS,
+  VERIFY_EMAIL_FAILURE
 } = require('../../lib/constants').default;
 
 /**
@@ -151,7 +154,7 @@ export function syncSocialSites(sessionToken, authUserId, authType) {
     dispatch(syncSocialSiteRequest());
     return new AppAuthToken().getSessionToken(sessionToken)
       .then((token) => {
-        
+
         return BackendFactory(token).syncSocialSites({
           authUserId,
           authType
@@ -183,6 +186,46 @@ export function syncSocialSiteSuccess(authUserId, authType) {
 export function syncSocialSiteFailure(error) {
   return {
     type: PROFILE_SYNC_SOCIAL_FAILURE,
+    payload: error
+  }
+}
+
+/**
+* EmailVerify, verify email by send verification link
+* @param {sessionToken} token object used to validate
+**/
+
+export function verifyEmail(sessionToken) {
+  return dispatch => {
+    dispatch(verifyEmailRequest());
+    return new AppAuthToken().getSessionToken(sessionToken)
+      .then((token) => {
+        return BackendFactory(token).verifyEmail(sessionToken.objectId);
+      })
+      .then(() => {
+        dispatch(verifyEmailSuccess());
+      })
+      .catch((error) => {
+        dispatch(verifyEmailFailure(error));
+      });
+  };
+}
+
+export function verifyEmailRequest() {
+  return {
+    type: VERIFY_EMAIL_REQUEST
+  }
+}
+
+export function verifyEmailSuccess() {
+  return {
+    type: VERIFY_EMAIL_SUCCESS
+  }
+}
+
+export function verifyEmailFailure(error) {
+  return {
+    type: VERIFY_EMAIL_FAILURE,
     payload: error
   }
 }

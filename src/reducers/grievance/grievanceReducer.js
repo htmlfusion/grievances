@@ -47,7 +47,8 @@ const {
   SET_GRIEVANCE_UPDATE,
   ON_GRIEVANCE_UPDATE_CURLYURL,
   ON_GRIEVANCE_CREATE_USER,
-  ON_CURLY_URL_FETCHING
+  ON_CURLY_URL_FETCHING,
+  UPDATE_LOCATION_SEARCH
 } = require('../../lib/constants').default;
 
 import InitialState from './grievanceInitialState';
@@ -321,6 +322,10 @@ export default function grievanceReducer(state = initialState, action) {
       return state.setIn([ 'grievanceCreate', 'form','fields','curlyUrlFetching'], true)
         .setIn([ 'grievanceCreate', 'form','error'], null);
 
+    case UPDATE_LOCATION_SEARCH:
+      return state.setIn([ 'grievanceList', 'locationSearch'], action.payload.coords)
+        .setIn([ 'grievanceList', 'locationSearchRadius'], action.payload.radius)
+        .setIn([ 'grievanceList', 'locationSearchText'], action.payload.address);
   }//switch
   /**
    * # Default

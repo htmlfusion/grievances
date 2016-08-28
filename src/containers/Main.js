@@ -33,6 +33,7 @@ import {Map} from 'immutable';
 import {Actions} from 'react-native-router-flux';
 import Layout from '../components/Layout';
 import CreateGrievance from './CreateGrievance';
+import ErrorAlert from '../components/ErrorAlert';
 /**
  * The Header will display a Image and support Hot Loading
  */
@@ -49,6 +50,7 @@ import
 }
 from 'react-native';
 import Dimensions from 'Dimensions';
+import config from '../lib/config';
 var {height, width} = Dimensions.get('window');
 /**
  * The platform neutral button
@@ -139,6 +141,7 @@ let btnGroupDim = {
   parent: {},
   child: {}
 }
+const DEFAULT_LOCATION = [76.63938050000002, 12.2958104];
 /**
  * ## App class
  */
@@ -146,27 +149,78 @@ class Main extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentLoc: [12.2958104, 76.63938050000002], //This has to be set to empty [] once navigator's currentLocation is working
+      currentLoc: DEFAULT_LOCATION, //This has to be set to empty [] once navigator's currentLocation is working
       address: 'Mysore, Karnataka, India', //this is temprory address, have to set it based on currentLoc
-      radius: 10,
+      radius: 1000,
       cbutton: {
         height: ELLIPSE_HEIGHT,
         text: '+'
       },
       btnType: 'list'
     };
+    this.errorAlert = new ErrorAlert();
     this.updateGrievance = this.updateGrievance.bind(this);
     this.grievanceFeedback = this.grievanceFeedback.bind(this);
+    this.setCurrentLoc = this.setCurrentLoc.bind(this);
   }
 
   componentDidMount() {
-    let data = {
-      location: this.state.currentLoc,
-      radius: this.state.radius
-    };
-    this.props.actions.getGrievances(data, this.props.global.currentUser);
-  }
+    // let data = {
+    //   location: this.state.currentLoc,
+    //   radius: this.state.radius
+    // };
+    if (this.props.grievance.grievanceList.locationSearch[0] && this.props.grievance.grievanceList.locationSearch[1]) {
+      this.setCurrentLoc(this.props.grievance.grievanceList.locationSearch);
+    } else {
+      //Comment this two lines after getCurrentLocation is working properly
+      this.props.actions.updateListSearch(DEFAULT_LOCATION, '', this.state.radius);
+      this.setCurrentLoc(DEFAULT_LOCATION);
+      navigator.geolocation.getCurrentPosition(
+        (initialPosition) => {
+          let currentLoc = [initialPosition.coords.longitude, initialPosition.coords.latitude];
+          this.setState({
+            currentLoc: currentLoc
+          });
+          //Add address here
+          this.props.actions.retrieveLocation({
+            latlng: initialPosition.coords.latitude+','+initialPosition.coords.longitude,
+            key: 'AIzaSyCLj_mEPtWmyKMRQWC0dk7HkPSK-qKFmXo'
+          }).then((res) => {
+            this.setState({
+              address: res.formatted_address
+            });
+          });
+          this.props.actions.updateListSearch(currentLoc, '', this.state.radius);
+          this.setCurrentLoc(currentLoc);
+        },
+        (error) => {
+          console.log('nav error', error);
+          this.errorAlert.checkError(error.message);
+        },
+        {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
+      );
+      this.watchID = navigator.geolocation.watchPosition((lastPosition) => {
+        this.setState({
+          currentLoc: [lastPosition.coords.longitude, lastPosition.coords.latitude]
+        });
+        //Add address here
+        this.props.actions.retrieveLocation({
+          latlng: lastPosition.coords.latitude+','+lastPosition.coords.longitude,
+          key: config.G_REVERSE_API
+        }).then((res) => {
+          this.setState({
+            address: res.formatted_address
+          });
+        });
+        //this.setCurrentLoc(lastPosition.coords);
+      });
+    }
 
+
+  }
+  componentWillUnmount() {
+    navigator.geolocation.clearWatch(this.watchID);
+  }
   handlePress() {
     if (this.state.cbutton.text === '+') {
       this.props.actions.onGrievanceUserUpdate(this.props.global.currentUser.objectId);
@@ -199,11 +253,16 @@ class Main extends Component {
     this.props.actions.grievanceUpdateFeedback(grievanceId, this.props.global.currentUser, idx, feedback);
   }
 
-  setCurrentLoc({longitude, latitude}) {
+  setCurrentLoc(coords) {
     //Check how to update address
-    this.setState({
-      currentLoc: [longitude, latitude]
-    });
+    // this.setState({
+    //   currentLoc: [longitude, latitude]
+    // });
+    let data = {
+      location: coords,
+      radius: this.state.radius
+    };
+    this.props.actions.getGrievances(data, this.props.global.currentUser);
   }
   _profileTransition() {
     Actions.Profile();
@@ -237,11 +296,13 @@ class Main extends Component {
     let grievancesDisplayView;
 
     if (this.state.btnType === 'list') {
+      console.log('cool list', this.props.grievance.grievanceList.locationSearch);
       grievancesDisplayView=<GMap
         data={this.props.grievance.grievanceList.grievances}
+        coords={{latitude: this.props.grievance.grievanceList.locationSearch[1], longitude: this.props.grievance.grievanceList.locationSearch[0]}}
         cardMargin={ELLIPSE_HEIGHT} auth={this.props.global.currentUser}
         grievanceFeedback={this.grievanceFeedback} updateGrievance={this.updateGrievance}
-        setCurrentLoc={this.setCurrentLoc.bind(this)} radius={this.state.radius}
+        radius={this.props.grievance.grievanceList.locationSearchRadius}
         />;
     } else {
       grievancesDisplayView=<List
@@ -251,10 +312,10 @@ class Main extends Component {
         />;
     }
     let headerContent =<View style={{flexDirection: 'row', alignItems: 'center'}}>
-      <InputGroup style={{width: width-120}}>
-          <Icon style={{fontSize: 18}} name="ios-search" />
-          <Input placeholder="Search location" />
-      </InputGroup>
+      <Button style={{width: width-120}} onPress={()=>Actions.LocationSearch({radius: this.state.radius})}>
+          <Icon name="ios-search" />
+          {this.props.grievance.grievanceList.locationSearchText}
+      </Button>
       <View style={{flexDirection: 'row', width: 40, paddingRight: 10}}>
         <Button square small transparent onPress={this._onSetListMap.bind(this)}>
           <FontIcon style={{fontSize: 18}} name={this.state.btnType} />

@@ -35,7 +35,8 @@ const {
   GRIEVANCE_UPDATE_FEEDBACK_FAILURE,
   ON_GRIEVANCE_UPDATE_CURLYURL,
   ON_GRIEVANCE_CREATE_USER,
-  ON_CURLY_URL_FETCHING
+  ON_CURLY_URL_FETCHING,
+  UPDATE_LOCATION_SEARCH
 } = require('../../lib/constants').default;
 
 import {Actions} from 'react-native-router-flux';
@@ -297,4 +298,19 @@ export function onCurlyUrlFetching() {
   return {
     type: ON_CURLY_URL_FETCHING
   }
+}
+
+export function updateListSearch(coords, address, radius) {
+  return {
+    type: UPDATE_LOCATION_SEARCH,
+    payload: {
+      coords,
+      address,
+      radius
+    }
+  }
+}
+
+export function retrieveLocation(coords) {
+  return BackendFactory().retrieveLocation(coords);
 }

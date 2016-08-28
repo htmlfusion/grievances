@@ -476,6 +476,56 @@ export default class Hapi extends Backend{
 
   }
 
+  async retrieveLocation(coords) {
+    return await this._fetch({
+      method: 'GET',
+      url: 'https://maps.googleapis.com/maps/api/geocode/json',
+      query: coords
+    }).then((response) => {
+      return response.json().then((res) => {
+        if ((response.status === 200 || response.status === 201)) {
+          return res;
+        } else {
+          throw(res);
+        }
+      });
+    })
+    .catch((error) => {
+      throw(error);
+    });
+  }
+
+  /**
+   * ### verifyEmail
+   *
+   * @param userId {objectId}
+   * @return
+   * if ok, {}
+   *
+   * if error, {code: xxx, error: 'message'}
+   */
+  async verifyEmail(userId) {
+    return await this._fetch({
+      method: 'PUT',
+      url: '/account/reviewEmail/'+userId
+    })
+      .then((response) => {
+
+        return response.json().then((res) => {
+          if (response.status === 200 || response.status === 201) {
+            return res;
+          } else {
+            throw(res);
+          }
+        });
+
+      })
+      .catch((error) => {
+        console.error(error);
+        throw(error);
+      });
+  }
+
   /**
    * ### _fetch
    * A generic function that prepares the request to Parse.com
@@ -493,9 +543,13 @@ export default class Hapi extends Backend{
       headers: {
       }
     },
-    url = this.API_BASE_URL + opts.url;
+    url;
 
-
+    if (/^(http|https):\/\//.test(opts.url)) {
+      url = opts.url;
+    } else {
+      url = this.API_BASE_URL + opts.url;
+    }
     if (this._sessionToken) {
       reqOpts.headers['Authorization'] = 'Bearer ' + this._sessionToken;
     }

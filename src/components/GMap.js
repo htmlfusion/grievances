@@ -46,25 +46,14 @@ export default class GMap extends Component {
       currentMarker: null
     };
   }
+
   componentWillReceiveProps(props) {
-    this.state.markers = props.data;
-  }
-  componentDidMount() {
     let initialDelta = {latitudeDelta: 0.0922, longitudeDelta: 0.0421};
-    navigator.geolocation.getCurrentPosition(
-      (initialPosition) => {
-
-
-        this.setState({initialRegion: {...initialPosition.coords, ...initialDelta}});
-        this.props.setCurrentLoc(initialPosition.coords);
-      },
-      (error) => {console.log('nav error', error); this.errorAlert.checkError(error.message);},
-      {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
-    );
-    this.watchID = navigator.geolocation.watchPosition((lastPosition) => {
-      this.setState({region: {...lastPosition.coords, ...initialDelta}});
-      this.props.setCurrentLoc(lastPosition.coords);
+    this.state.markers=props.data;
+    this.setState({
+      region: {...props.coords, ...initialDelta}
     });
+    console.log('cool mahesh', this.state.region);
   }
 
   mapCard(markerId) {
@@ -73,14 +62,12 @@ export default class GMap extends Component {
     })
   }
 
-  componentWillUnmount() {
-    navigator.geolocation.clearWatch(this.watchID);
-  }
 
   render() {
     let cardHeight = height/8,
       cardWidth = width-width/4,
-      thumbnailWidth = height/8;
+      thumbnailWidth = height/8,
+      mapView = null;
 
     let swipeCards = this.state.markers.map((marker, idx) => (
           <SwipeCard
@@ -107,30 +94,32 @@ export default class GMap extends Component {
             />
         ))}
       </Swiper>*/;
+    if (this.state.region) {
+      mapView = <MapView style={styles.map}
+        region={this.state.region}
+      >
+      {/*circle is not working now, have to fix it. Once it is working replace default values with this.state.initialRegion*/}
+      <MapView.Circle
+          center={this.state.region}
+          radius={this.props.radius}
+          fillColor="rgba(200, 0, 0, 0.5)"
+          strokeColor="rgba(0,0,0,0.5)"
+        />
+      {/* onPress is not working, so using onSelect(this will work only in ios). Once issue is fixed we can use onPress*/}
+
+        {this.state.markers.map((marker, idx) => (
+            <MapView.Marker
+              key={idx}
+              coordinate={{longitude:marker.location[0], latitude:marker.location[1]}}
+              onSelect={() => {this.mapCard.bind(this, marker._id)}}
+            />
+        ))}
+
+      </MapView>;
+    }
     return (
       <View style={styles.container}>
-        <MapView style={styles.map}
-          initialRegion={this.state.initialRegion}
-          region={this.state.region}
-        >
-        {/*circle is not working now, have to fix it. Once it is working replace default values with this.state.initialRegion*/}
-        <MapView.Circle
-            center={{latitude: 12.2958104, longitude: 76.63938050000002}}
-            radius={this.props.radius}
-            fillColor="rgba(200, 0, 0, 0.5)"
-            strokeColor="rgba(0,0,0,0.5)"
-          />
-        {/* onPress is not working, so using onSelect(this will work only in ios). Once issue is fixed we can use onPress*/}
-
-          {this.state.markers.map((marker, idx) => (
-              <MapView.Marker
-                key={idx}
-                coordinate={{latitude:marker.location[0], longitude:marker.location[1]}}
-                onSelect={() => {this.mapCard.bind(this, marker._id)}}
-              />
-          ))}
-
-        </MapView>
+        {mapView}
         <ScrollView
           style={styles.contentContainer}
           ref={(scrollView) => {_scrollView = scrollView}}

@@ -12,6 +12,7 @@
  */
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import {GoogleSignin} from 'react-native-google-signin';
 
 /**
  * The actions we need
@@ -44,6 +45,7 @@ const {
   FORGOT_PASSWORD
 } = require('../lib/constants').default;
 
+const {GOOGLE_ID} = require('../lib/config');
 /**
  * ## Redux boilerplate
  */
@@ -74,7 +76,6 @@ function buttonPressHandler(login, email, password) {
 }
 
 let Login = React.createClass({
-
   render() {
     this.errorAlert = new ErrorAlert();
     let loginButtonText = 'Log in';
@@ -98,7 +99,7 @@ let Login = React.createClass({
                } else {
                  let data = {};
                 console.log('Success fetching data: ' , result);
-                data.loginType = 'fb';
+                data.loginType = 'fbId';
                 data.loginId = result.id;
                 data.email = result.email;
                 data.fullname = result.name;
@@ -118,6 +119,30 @@ let Login = React.createClass({
        }
      );
     };
+    let gLoginAction = () => {
+      console.log('google login');
+      GoogleSignin.configure({
+        iosClientId: GOOGLE_ID, // only for iOS
+      })
+      .then(() => {
+        // you can now call currentUserAsync()
+        return GoogleSignin.signIn().then((user) => {
+          let data = {};
+          console.log('Success user fetching data: ', user);
+          data.loginType = 'gId';
+          data.loginId = user.id;
+          data.email = user.email;
+          data.fullname = user.name;
+          this.props.actions.loginWithSocial(data);
+        }, (error) => {
+          this.errorAlert.checkError('Login fail with error: ' + error);
+        });
+
+      }, (error) => {
+        this.errorAlert.checkError('Login fail with error: ' + error);
+      });
+
+    };
     return(
       <LoginRender
           formType={ LOGIN }
@@ -127,6 +152,7 @@ let Login = React.createClass({
           rightMessageType={ REGISTER }
           leftMessageType={ FORGOT_PASSWORD }
           facebookLogin={fbLoginAction.bind(this)}
+          googleLogin={gLoginAction.bind(this)}
           auth={ this.props.auth }
           global={ this.props.global }
       />
