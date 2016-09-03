@@ -214,7 +214,7 @@ class LoginRender extends Component {
         actions.registerState();
         Actions.Register();
       },
-      msgText: 'Signup'
+      msgText: 'Register'
     };
 
     {/*<FormButton

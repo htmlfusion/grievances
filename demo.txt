@@ -2,7 +2,7 @@ User Login/Register/Forgot Password form
 User can login through social media like facebook/google
 User can sync their profile to the social media
 Currently I hardcoded location, once getCurrentLocation works. We can use user's current location to fetch the details
-It will get the grievances based on the current location with in a radius of 10(what does it mean for)
+It will get the grievances based on the current location with in a radius of 1km
 User can create the grievance by clicking on + icon. User can report the grievance as anonymous or himself.
 We provided the feature where any user can update the grievance description and only the creator can delete the grievance.
 Users can up-vote the grievance and can share it through social media

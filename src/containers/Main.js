@@ -11,7 +11,7 @@
  */
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import {Container, Content, Footer, Button, Text, Badge, InputGroup, Input, Icon, Header} from 'native-base';
+import {Container, Content, Footer, Button, Text, Title, InputGroup, Input, Icon, Header} from 'native-base';
 
 /**
  * The actions we need
@@ -46,7 +46,8 @@ import React, {Component} from 'react';
 import
 {
   StyleSheet,
-  View
+  View,
+  Switch
 }
 from 'react-native';
 import Dimensions from 'Dimensions';
@@ -95,19 +96,19 @@ function mapDispatchToProps(dispatch) {
     dispatch
   };
 }
-const ELLIPSE_WIDTH = width-30,
+const ELLIPSE_WIDTH = width-120,
   ELLIPSE_HEIGHT = 50;
 var styles = StyleSheet.create({
   roundBtn: {
-    fontSize: 20,
-    fontWeight: 'bold'
+    color: '#fff'
+    // fontSize: 20,
+    // fontWeight: 'bold'
   },
   semiCircle: {
-    borderLeftWidth: 3,
-    borderRightWidth: 3,
-    borderTopLeftRadius: 50,
-    borderTopRightRadius: 50,
-    borderColor: '#000',
+    borderWidth: 1,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    borderColor: '#aaa',
     width: width,
     alignItems: 'center',
     backgroundColor: '#fff',
@@ -121,12 +122,13 @@ var styles = StyleSheet.create({
   },
   ellipse: {
     width: ELLIPSE_WIDTH,
-    height: 30,
+    // height: 30,
+    bottom: 15,
     borderRadius: 10,
-    borderWidth: 2,
+    // borderWidth: 2,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#fff'
+    // backgroundColor: '#fff'
   },
   gcontent: {
     marginTop: ELLIPSE_HEIGHT
@@ -141,7 +143,7 @@ let btnGroupDim = {
   parent: {},
   child: {}
 }
-const DEFAULT_LOCATION = [76.63938050000002, 12.2958104];
+const DEFAULT_LOCATION = [77.63938050000002, 13.2958104];
 /**
  * ## App class
  */
@@ -154,7 +156,7 @@ class Main extends Component {
       radius: 1000,
       cbutton: {
         height: ELLIPSE_HEIGHT,
-        text: '+'
+        text: true
       },
       btnType: 'list'
     };
@@ -222,18 +224,18 @@ class Main extends Component {
     navigator.geolocation.clearWatch(this.watchID);
   }
   handlePress() {
-    if (this.state.cbutton.text === '+') {
+    if (this.state.cbutton.text) {
       this.props.actions.onGrievanceUserUpdate(this.props.global.currentUser.objectId);
       this.setState({
         cbutton: {
-          text: '-',
-          height: height-200
+          text: false,
+          height: height-100
         }
       });
     } else {
       this.setState({
         cbutton: {
-          text: '+',
+          text: true,
           height: ELLIPSE_HEIGHT
         }
       });
@@ -285,8 +287,8 @@ class Main extends Component {
     //For future purpose I created Ellipse View
     let roundBtn = <View style={[styles.semiCircle, {height: this.state.cbutton.height}]}>
       <View style={styles.ellipse}>
-        <Button transparent style={{width: ELLIPSE_WIDTH}} onPress={ this.handlePress.bind(this) }>
-          <Text style={styles.roundBtn}>{this.state.cbutton.text}</Text>
+        <Button rounded style={{width: ELLIPSE_WIDTH}} onPress={ this.handlePress.bind(this) }>
+          <Text style={styles.roundBtn}>{'New Grievance'}</Text>
         </Button>
       </View>
       <View style={styles.gcontent}>
@@ -296,7 +298,6 @@ class Main extends Component {
     let grievancesDisplayView;
 
     if (this.state.btnType === 'list') {
-      console.log('cool list', this.props.grievance.grievanceList.locationSearch);
       grievancesDisplayView=<GMap
         data={this.props.grievance.grievanceList.grievances}
         coords={{latitude: this.props.grievance.grievanceList.locationSearch[1], longitude: this.props.grievance.grievanceList.locationSearch[0]}}
@@ -311,21 +312,20 @@ class Main extends Component {
         grievanceFeedback={this.grievanceFeedback} updateGrievance={this.updateGrievance}
         />;
     }
-    let headerContent =<View style={{flexDirection: 'row', alignItems: 'center'}}>
-      <Button style={{width: width-120}} onPress={()=>Actions.LocationSearch({radius: this.state.radius})}>
-          <Icon name="ios-search" />
-          {this.props.grievance.grievanceList.locationSearchText}
-      </Button>
-      <View style={{flexDirection: 'row', width: 40, paddingRight: 10}}>
-        <Button square small transparent onPress={this._onSetListMap.bind(this)}>
-          <FontIcon style={{fontSize: 18}} name={this.state.btnType} />
-        </Button>
-        <Button rounded small danger onPress={this._profileTransition.bind(this)}>{'me'}</Button>
-      </View>
-    </View>;
+//We have to add title component inside Header component to make searchbox center
     return(
       <View style={{flex: 1}}>
-        <Header>{headerContent}</Header>
+        <Header>
+          <Button rounded small danger onPress={this._profileTransition.bind(this)}><Text style={{color: '#fff'}} >{'me'}</Text></Button>
+          <Title>
+              <Button style={{width: width-120, flexDirection: 'row', justifyContent: 'flex-start', overflow: 'hidden'}} onPress={()=>Actions.LocationSearch({radius: this.state.radius})}>
+              <Icon name="ios-search" />
+              {this.props.grievance.grievanceList.locationSearchText}</Button>
+          </Title>
+          <Button square small transparent onPress={this._onSetListMap.bind(this)}>
+            <FontIcon style={{fontSize: 18}} name={this.state.btnType} />
+          </Button>
+        </Header>
         <Content>
           {grievancesDisplayView}
         </Content>

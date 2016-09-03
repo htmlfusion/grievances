@@ -32,6 +32,7 @@ export default class Layout extends Component {
     if (this.props.isHeaderBack) {
       headerBack = <Button transparent onPress={() => Actions.pop()}>
         <Icon name="ios-arrow-back" style={styles.headerFont}/>
+        {'Back'}
       </Button>;
     }
     if (headerTitle) {

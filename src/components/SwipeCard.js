@@ -6,6 +6,7 @@ import Dimensions from 'Dimensions';
 import ErrorAlert from './ErrorAlert';
 var {height, width} = Dimensions.get('window');
 
+let THEME_COLOR= '#5067FF';
 let styles = StyleSheet.create({
   card: {
     flexDirection: 'column',
@@ -27,11 +28,14 @@ let styles = StyleSheet.create({
     padding: 0
   },
   upVoted: {
-    fontSize: 27,
-    color: '#337ab7'
+    fontSize: 20,
+    color: THEME_COLOR
   },
   notUpVoted: {
-    fontSize: 27
+    fontSize: 20
+  },
+  msg: {
+    color: THEME_COLOR
   }
 });
 
@@ -64,23 +68,21 @@ export default class SwipeCard extends Component {
       thumbnail = <Thumbnail square small style={this.props.thumbnailDim} source={{uri: this.props.marker.curlyUrlSmall}}/>;
     }
     return (
-
         <Card style={[styles.card, this.props.cardDimension]}>
             <TouchableOpacity onPress={this.props.cardAction}>
               <CardItem style= {styles.cardItem}>
                 <View style={{height: this.props.thumbnailDim.height}}>{thumbnail}</View>
                 <View style={{paddingTop: 2, paddingBottom: 2, paddingRight: 2, paddingLeft: 4, flexDirection: 'column', justifyContent: 'space-between', flex: 2}}>
-                  <View><Title style={{fontSize: 16, fontWeight: '500'}}>{this.props.marker.tag}</Title></View>
+                  <View><Text style={{fontSize: 16, fontWeight: '500'}}>{this.props.marker.tag}</Text></View>
                   <View style={{flex: 2, overflow: 'hidden', paddingTop: 3}}><Text numberOfLines={this.props.noLines} style={{lineHeight: 12, fontSize: 12}}>{this.props.marker.description}</Text></View>
                   <View style={styles.btns}>
-                    <View><Text note>{upVoteMsg}</Text></View>
+                    <View><Text note style={styles.msg}>{upVoteMsg}</Text></View>
                     <View>{upVoteBtn}</View>
                   </View>
                 </View>
               </CardItem>
             </TouchableOpacity>
         </Card>
-
     );
   }
 }

@@ -78,7 +78,7 @@ function buttonPressHandler(login, email, password) {
 let Login = React.createClass({
   render() {
     this.errorAlert = new ErrorAlert();
-    let loginButtonText = 'Log in';
+    let loginButtonText = 'Login';
     let onButtonPress = buttonPressHandler.bind(null,
 				                this.props.actions.login,
 				                this.props.auth.form.fields.email,

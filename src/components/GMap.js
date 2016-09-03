@@ -27,7 +27,7 @@ let styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
     position: 'absolute',
-    bottom: 120
+    bottom: 140
   },
   content: {
     paddingHorizontal: CARD_PREVIEW_WIDTH,
@@ -35,25 +35,25 @@ let styles = StyleSheet.create({
   },
 });
 
+const INITIAL_DELTA = {latitudeDelta: 0.0922, longitudeDelta: 0.0421};
+
 export default class GMap extends Component {
   constructor(props) {
     super(props);
     this.errorAlert = new ErrorAlert();
     this.state = {
-      region: null,
-      initialRegion: null,
+      region: {...this.props.coords, ...INITIAL_DELTA},
+      // initialRegion: null,
       markers: this.props.data,
       currentMarker: null
     };
   }
 
   componentWillReceiveProps(props) {
-    let initialDelta = {latitudeDelta: 0.0922, longitudeDelta: 0.0421};
     this.state.markers=props.data;
     this.setState({
-      region: {...props.coords, ...initialDelta}
+      region: {...props.coords, ...INITIAL_DELTA}
     });
-    console.log('cool mahesh', this.state.region);
   }
 
   mapCard(markerId) {
@@ -68,6 +68,7 @@ export default class GMap extends Component {
       cardWidth = width-width/4,
       thumbnailWidth = height/8,
       mapView = null;
+
 
     let swipeCards = this.state.markers.map((marker, idx) => (
           <SwipeCard
@@ -94,7 +95,7 @@ export default class GMap extends Component {
             />
         ))}
       </Swiper>*/;
-    if (this.state.region) {
+    if (this.state.region.longitude && this.state.region.latitude) {
       mapView = <MapView style={styles.map}
         region={this.state.region}
       >
