@@ -51,7 +51,8 @@ import
 {
   StyleSheet,
   View,
-  Switch
+  Switch,
+  Platform
 }
 from 'react-native';
 
