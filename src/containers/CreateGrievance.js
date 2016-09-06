@@ -335,6 +335,7 @@ class CreateGrievance extends Component {
      if (this.props.global.currentUser) {
        fullnameDisp=<Text style={styles.reporter}>{this.props.global.currentUser.fullname}</Text>
      }
+
     return (
         <View style={styles.content}>
           <View style={{borderBottomWidth:1, paddingBottom: 10, paddingTop: 5, borderColor: '#ddd'}}>
@@ -386,7 +387,7 @@ class CreateGrievance extends Component {
             </View>
           </View>
           <FormButton
-            isDisabled={this.props.grievance.grievanceCreate.form.isValid || !this.props.grievance.grievanceCreate.form.isFetching}
+            isDisabled={this.props.grievance.grievanceCreate.form.isFetching || !this.props.grievance.grievanceCreate.form.isValid}
             buttonText={grievanceButtonText}
             onPress={onButtonPress.bind(self)} />
         </View>

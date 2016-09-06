@@ -253,14 +253,12 @@ class UpdateGrievance extends Component {
     if (statusIn === 'new') {
       statusIn = 'Under Investigation';
     }
-
     return (
         <Layout isHeaderBack={true} headerTitle={headerText(this.props.grievance.grievanceUpdate.form.originalGrievance.tag)}>
           <View style={{paddingRight: 10, paddingLeft: 10, paddingTop: 10}}>
             <View style={styles.legend}>
               <View><Text note>{'Reported as'}</Text></View>
               <View><Text style={{fontWeight: '500'}}>{reportedUser.fullname}</Text></View>
-
             </View>
             <View style={styles.legend}>
               <View style={{flexDirection: 'row'}}>
@@ -287,7 +285,7 @@ class UpdateGrievance extends Component {
           </View>
           <View style={{marginBottom: 10}}>
             <FormButton
-              isDisabled={!this.props.grievance.grievanceUpdate.form.disabled}
+              isDisabled={this.props.grievance.grievanceUpdate.form.isFetching || !this.props.grievance.grievanceUpdate.form.isValid}
               onPress={onUpdateButtonPress.bind(self)}
               buttonText={grievanceUpdateButtonText}/>
           </View>

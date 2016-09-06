@@ -12,8 +12,8 @@ const {fromJS, List, Record} = require('immutable');
  * fieldValidation for validating the fields
  * formValidation for setting the form's valid flag
  */
-/*const fieldValidation = require('../../lib/fieldValidation').default;
-const formValidation = require('./grievanceFormValidation').default;*/
+// const fieldValidation = require('../../lib/fieldValidation').default;
+const formValidation = require('./grievanceFormValidation').default;
 
 /**
  * ## Actions
@@ -158,6 +158,7 @@ export default function grievanceReducer(state = initialState, action) {
       .setIn([ 'grievanceUpdate', 'form','originalGrievance','tag'],action.payload.tag)
       .setIn([ 'grievanceUpdate', 'form','originalGrievance','_id'],action.payload._id)
       .setIn([ 'grievanceUpdate', 'form','originalGrievance','idx'],action.idx)
+      .setIn([ 'grievanceUpdate', 'form','isValid'], true)
       .setIn([ 'grievanceUpdate', 'form','error'],null);
 
     return nextGrievanceState;
@@ -299,15 +300,16 @@ export default function grievanceReducer(state = initialState, action) {
   //     return next;
 
     case ON_GRIEVANCE_FORM_FIELD_CHANGE:
-      return state.setIn([ 'grievanceCreate', 'form','fields','description'], action.payload.field.description)
-        /*.setIn([ 'grievanceCreate', 'form','fields','address'],action.payload.field.address)*/
-        .setIn([ 'grievanceCreate', 'form','fields','tag'],action.payload.field.tag)
-        .setIn([ 'grievanceCreate', 'form','fields','location'],action.payload.field.location)
-        .setIn([ 'grievanceCreate', 'form','error'],null);
+      let nextState = state.setIn([ 'grievanceCreate', 'form','fields','description'], action.payload.field.description)
+      /*.setIn([ 'grievanceCreate', 'form','fields','address'],action.payload.field.address)*/
+      .setIn([ 'grievanceCreate', 'form','fields','tag'],action.payload.field.tag)
+      .setIn([ 'grievanceCreate', 'form','fields','location'],action.payload.field.location)
+      .setIn([ 'grievanceCreate', 'form','error'],null);
+      return formValidation(nextState);
 
     case ON_GRIEVANCE_UPDATE_FORM_FIELD_CHANGE:
       return state.setIn([ 'grievanceUpdate', 'form','fields','description'], action.payload.field.description)
-        .setIn([ 'grievanceUpdate', 'form','error'],null);
+      .setIn([ 'grievanceUpdate', 'form','error'],null);
 
     case ON_GRIEVANCE_UPDATE_CURLYURL:
       return state.setIn([ 'grievanceCreate', 'form','fields','curlyUrl'], action.payload)

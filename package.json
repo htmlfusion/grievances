@@ -42,7 +42,7 @@
   "dependencies": {
     "immutable": "3.7.6",
     "key-mirror": "1.0.1",
-    "native-base": "0.5.2",
+    "native-base": "^0.5.7",
     "querystring": "^0.2.0",
     "react": "^15.3.1",
     "react-native": "^0.32.0",

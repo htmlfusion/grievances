@@ -47,6 +47,7 @@ import
 {
   StyleSheet,
   View,
+  Platform,
   Switch
 }
 from 'react-native';
@@ -315,17 +316,17 @@ class Main extends Component {
 //We have to add title component inside Header component to make searchbox center
     return(
       <View style={{flex: 1}}>
-        <Header>
-          <Button rounded small danger onPress={this._profileTransition.bind(this)}><Text style={{color: '#fff'}} >{'me'}</Text></Button>
-          <Title>
-              <Button style={{width: width-120, flexDirection: 'row', justifyContent: 'flex-start', overflow: 'hidden'}} onPress={()=>Actions.LocationSearch({radius: this.state.radius})}>
-              <Icon name="ios-search" />
-              {this.props.grievance.grievanceList.locationSearchText}</Button>
-          </Title>
-          <Button square small transparent onPress={this._onSetListMap.bind(this)}>
+      {/* height has been taken from native-base header height */}
+        <View style={{flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', height: (Platform.OS === 'ios'? 64: 56)}}>
+          <View><Button rounded small danger onPress={this._profileTransition.bind(this)}><Text style={{color: '#fff'}} >{'me'}</Text></Button></View>
+          <View><Button style={{width: width-120, flexDirection: 'row', justifyContent: 'flex-start', overflow: 'hidden'}} onPress={()=>Actions.LocationSearch({radius: this.state.radius})}>
+            <Icon name="ios-search" />
+            {this.props.grievance.grievanceList.locationSearchText}
+          </Button></View>
+          <View><Button square small transparent onPress={this._onSetListMap.bind(this)}>
             <FontIcon style={{fontSize: 18}} name={this.state.btnType} />
-          </Button>
-        </Header>
+          </Button></View>
+        </View>
         <Content>
           {grievancesDisplayView}
         </Content>

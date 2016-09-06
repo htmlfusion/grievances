@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, TouchableOpacity} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {Text, Card, CardItem, Button, Title, Thumbnail} from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Dimensions from 'Dimensions';
@@ -69,19 +69,17 @@ export default class SwipeCard extends Component {
     }
     return (
         <Card style={[styles.card, this.props.cardDimension]}>
-            <TouchableOpacity onPress={this.props.cardAction}>
-              <CardItem style= {styles.cardItem}>
-                <View style={{height: this.props.thumbnailDim.height}}>{thumbnail}</View>
-                <View style={{paddingTop: 2, paddingBottom: 2, paddingRight: 2, paddingLeft: 4, flexDirection: 'column', justifyContent: 'space-between', flex: 2}}>
-                  <View><Text style={{fontSize: 16, fontWeight: '500'}}>{this.props.marker.tag}</Text></View>
-                  <View style={{flex: 2, overflow: 'hidden', paddingTop: 3}}><Text numberOfLines={this.props.noLines} style={{lineHeight: 12, fontSize: 12}}>{this.props.marker.description}</Text></View>
-                  <View style={styles.btns}>
-                    <View><Text note style={styles.msg}>{upVoteMsg}</Text></View>
-                    <View>{upVoteBtn}</View>
-                  </View>
-                </View>
-              </CardItem>
-            </TouchableOpacity>
+          <CardItem style= {styles.cardItem} onPress={this.props.cardAction}>
+            <View style={{height: this.props.thumbnailDim.height}}>{thumbnail}</View>
+            <View style={{paddingTop: 2, paddingBottom: 2, paddingRight: 2, paddingLeft: 4, flexDirection: 'column', justifyContent: 'space-between', flex: 2}}>
+              <View><Text style={{fontSize: 16, fontWeight: '500'}}>{this.props.marker.tag}</Text></View>
+              <View style={{flex: 2, overflow: 'hidden', paddingTop: 3}}><Text numberOfLines={this.props.noLines} style={{lineHeight: 12, fontSize: 12}}>{this.props.marker.description}</Text></View>
+              <View style={styles.btns}>
+                <View><Text note style={styles.msg}>{upVoteMsg}</Text></View>
+                <View>{upVoteBtn}</View>
+              </View>
+            </View>
+          </CardItem>
         </Card>
     );
   }
