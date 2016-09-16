@@ -6,9 +6,10 @@ import MapView from 'react-native-maps';
 import ErrorAlert from './ErrorAlert';
 import Dimensions from 'Dimensions';
 var {height, width} = Dimensions.get('window');
-const CARD_PREVIEW_WIDTH = 20;
+const CARD_PREVIEW_WIDTH = 35;
 const CARD_MARGIN = 5;
 const CARD_WIDTH = width - (CARD_MARGIN + CARD_PREVIEW_WIDTH) * 2;
+
 //Now having issues with react-native-maps, follow this steps https://github.com/lelandrichardson/react-native-maps/issues/371 to fix
 let styles = StyleSheet.create({
   container: {
@@ -43,7 +44,8 @@ export default class GMap extends Component {
       region: null,
       initialRegion: null,
       markers: this.props.data,
-      currentMarker: null
+      currentMarker: null,
+      visible: false
     };
   }
   componentWillReceiveProps(props) {
@@ -76,7 +78,6 @@ export default class GMap extends Component {
   componentWillUnmount() {
     navigator.geolocation.clearWatch(this.watchID);
   }
-
   render() {
     let cardHeight = height/8,
       cardWidth = width-width/4,
@@ -92,6 +93,7 @@ export default class GMap extends Component {
             auth = {this.props.auth}
             cardAction={this.props.updateGrievance.bind(this, marker, idx)}
             grievanceFeedback={this.props.grievanceFeedback.bind(this, marker._id, idx)}
+            onOpen={this.props.onOpen}
           />
       ));/*<Swiper horizontal={true}>
         {this.state.markers.map((marker, idx) => (
@@ -144,8 +146,10 @@ export default class GMap extends Component {
         >
           {swipeCards}
         </ScrollView>
+        </View>
 
-      </View>
     );
+
+
   }
 }

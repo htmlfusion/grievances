@@ -31,6 +31,7 @@ export default class ListCard extends Component {
           thumbnailDim={{width: thumbnailWidth, height: thumbnailWidth}}
           cardAction={this.props.updateGrievance.bind(this, marker, idx)}
           grievanceFeedback={this.props.grievanceFeedback.bind(this, marker._id, idx)}
+          onOpen={this.props.onOpen}
         />
     ));
 
