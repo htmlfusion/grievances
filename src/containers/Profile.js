@@ -55,11 +55,12 @@ import
   View
 }
 from 'react-native';
-
+import {GoogleSignin} from 'react-native-google-signin';
 /**
 * The form processing component
 */
 import t from 'tcomb-form-native';
+const {GOOGLE_ID} = require('../lib/config');
 import templates from '../components/NativeTemplates';
 import Layout from '../components/Layout';
 const {
@@ -233,7 +234,7 @@ class Profile extends Component {
      * mostly for support of Hot reloading. See the docs for Header
      * for more info.
      */
-     let emailVerifiedMsg = "Verify your email by clicking on this box";
+     let emailVerifiedMsg = "Verify your email by clicking on the link send to your mail";
      if (this.props.profile.form.originalProfile.emailVerified) {
        emailVerifiedMsg = "Your email has been verified";
      }
@@ -262,25 +263,40 @@ class Profile extends Component {
      let onGPress = () => {
       //this.props.actions.syncSocialSites(this.props.global.currentUser, data.userID ,'gId');
        console.log('cool ma check google');
+       GoogleSignin.configure({
+         iosClientId: GOOGLE_ID, // only for iOS
+       })
+       .then(() => {
+         // you can now call currentUserAsync()
+         return GoogleSignin.signIn().then((user) => {
+           console.log('Success user fetching data: ', user);
+           this.props.actions.syncSocialSites(this.props.global.currentUser, user.id ,'gId');
+         }, (error) => {
+           this.errorAlert.checkError('Login fail with error: ' + error);
+         });
+
+       }, (error) => {
+         this.errorAlert.checkError('Login fail with error: ' + error);
+       });
      };
      let fbUI = <Icon
-     disabled={!this.props.profile.form.isValid || this.props.profile.form.isFetching}
-     name="logo-facebook" onPress={onFBPress.bind(self)}/>;
+     disabled={true}
+     name="logo-facebook" style={{color: '#ddd'}}/>;
 
-     if (this.props.profile.form.originalProfile.fbId) {
+     if (!this.props.profile.form.originalProfile.fbId) {
        fbUI = <Icon
-       disabled={true}
-       name="logo-facebook" style={{color: '#ddd'}}/>;
+       disabled={!this.props.profile.form.isValid || this.props.profile.form.isFetching}
+       name="logo-facebook" onPress={onFBPress.bind(self)}/>;
      }
 
      let gUI = <Icon
-     disabled={!this.props.profile.form.isValid || this.props.profile.form.isFetching}
-     name="logo-google" onPress={onGPress.bind(self)}/>;
+     disabled={true}
+     name="logo-google" style={{color: '#ddd'}}/>;
 
-     if (this.props.profile.form.originalProfile.gId) {
+     if (!this.props.profile.form.originalProfile.gId) {
        gUI = <Icon
-       disabled={true}
-       name="logo-google" style={{color: '#ddd'}}/>;
+       disabled={!this.props.profile.form.isValid || this.props.profile.form.isFetching}
+       name="logo-google" onPress={onGPress.bind(self)}/>;
      }
     return (
         <Layout isHeaderBack={true} headerRight={{action: onLogoutButtonPress.bind(self), iconName: "md-exit", isDisabled: !this.props.auth.form.isValid || this.props.auth.form.isFetching}}>
@@ -293,7 +309,7 @@ class Profile extends Component {
           />
 
           <ItemCheckbox text={emailVerifiedMsg}
-                         disabled={this.props.profile.form.originalProfile.emailVerified}
+                         disabled={true}
                          checked={this.props.profile.form.fields.emailVerified}
            />
 

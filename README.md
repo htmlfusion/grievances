@@ -29,3 +29,7 @@ Todo
 >> Add Validation for Buttons(For form actions)=> MS => done
 >> Add animation
 >> Location update on reducers
+
+MVP
+>> Create anonymous user and add fullname as anonymous
+>> For login with fb using phone-no.. Tell him to create email-id

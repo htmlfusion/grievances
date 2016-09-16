@@ -2,6 +2,9 @@ package com.grievances;
 
 import android.content.Intent;
 import com.facebook.react.ReactActivity;
+import com.facebook.reactnative.androidsdk.FBSDKPackage;
+import com.i18n.reactnativei18n.ReactNativeI18n;
+import co.apptailor.googlesignin.RNGoogleSigninPackage;
 
 public class MainActivity extends ReactActivity {
 

@@ -58,6 +58,7 @@ import Profile from './containers/Profile';
 import Main from './containers/Main';
 //import CreateGrievance from './containers/CreateGrievance';
 import UpdateGrievance from './containers/UpdateGrievance';
+import LocationSearch from './containers/LocationSearch';
 
 /**
  * ### icons
@@ -180,6 +181,9 @@ export default function native(platform) {
                <Scene key="UpdateGrievance"
                             component={UpdateGrievance}
                             title="Update Grievance"/>
+              <Scene key="LocationSearch"
+                           component={LocationSearch}
+                           title="LocationSearch" />
       	      {/*<Scene key="Tabbar" tabs={true} default="Main">*/}
       	        {/*<Scene key="Logout"
                              title="Logout"

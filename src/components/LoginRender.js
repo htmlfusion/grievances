@@ -64,7 +64,8 @@ import
   Text
 }
 from 'react-native';
-import {Container, Content, Button, Icon} from 'native-base';
+
+import {Container, Content, Button, Icon, Grid, Row, Col} from 'native-base';
 
 import Dimensions from 'Dimensions';
 var {height, width} = Dimensions.get('window'); // Screen dimensions in current orientation
@@ -193,21 +194,35 @@ class LoginRender extends Component {
       <Icon name="ios-help" />
     </Button>;
 
-    let alreadyHaveAccount =
-    <FormButton
+    let alreadyHaveAccount = {
+      action: () => {
+        actions.loginState();
+        Actions.Login();
+      },
+      msgText: 'Login'
+    };
+
+    {/*<FormButton
         buttonText = {'Login'}
         onPress={() => {
           actions.loginState();
           Actions.Login();
-          }} />;
+          }} />;*/}
 
-    let register =
-    <FormButton
+    let register = {
+      action: () => {
+        actions.registerState();
+        Actions.Register();
+      },
+      msgText: 'Register'
+    };
+
+    {/*<FormButton
         buttonText = {'Signup'}
         onPress={() => {
             actions.registerState();
             Actions.Register();
-          }} />;
+          }} />*/};
 
     switch(messageType) {
     case FORGOT_PASSWORD:
@@ -230,25 +245,40 @@ class LoginRender extends Component {
     var displayPasswordCheckbox = this.props.displayPasswordCheckbox;
     var leftMessageType = this.props.leftMessageType;
     var rightMessageType = this.props.rightMessageType;
-
     var passwordCheckbox = <Text/>;
     let leftMessage = null;
-    let rightMessage = null;
+    // let rightMessage = null;
     let fbLogin = null;
     let fbLoginAction = this.props.facebookLogin;
+    let gLoginAction = this.props.googleLogin;
+    let gLogin = null;
     let self = this;
+    let onTransitionPress;
+    let propObj = {
+      isHeaderBack : this.props.isBack
+    };
 
     if (leftMessageType) {
       leftMessage = this.getMessage(leftMessageType, this.props.actions)
     }
     if (rightMessageType) {
-      rightMessage = this.getMessage(rightMessageType, this.props.actions);
+      let rightMessage = this.getMessage(rightMessageType, this.props.actions);
+      propObj.headerRight = {
+        action: rightMessage.action, text: rightMessage.msgText, isDisabled: !this.props.auth.form.isValid || this.props.auth.form.isFetching
+      };
+      propObj.dummyBack = true;
     }
     if (fbLoginAction) {
       let fbLogo = <Icon name="logo-facebook"/>
       fbLogin = <FormButton
                 onPress={fbLoginAction}
                 buttonText={fbLogo}/>;
+    }
+    if (gLoginAction) {
+      let gLogo = <Icon name="logo-google"/>
+      gLogin = <FormButton
+                onPress={gLoginAction}
+                buttonText={gLogo}/>;
     }
     // display the login / register / change password screens
     this.errorAlert.checkError(this.props.auth.form.error);
@@ -278,7 +308,7 @@ class LoginRender extends Component {
      * See the docs for Header for more info.
      */
     return(
-      <Layout isHeaderBack = {this.props.isBack}>
+      <Layout {...propObj}>
 
       	  <Content>
       	    <View style={styles.inputs}>
@@ -291,13 +321,20 @@ class LoginRender extends Component {
               {leftMessage}
       	      {passwordCheckbox}
             </View>
-
-      	    <FormButton
-                      isDisabled={!this.props.auth.form.isValid || this.props.auth.form.isFetching}
-                      onPress={onButtonPress}
-                      buttonText={loginButtonText}/>
-            <View style={{marginTop: 10}}>{fbLogin}</View>
-      	    <View style={{marginTop: 10}}>{rightMessage}</View>
+            <Grid>
+              <Row>
+        	      <Col>
+                  <FormButton
+                        isDisabled={!this.props.auth.form.isValid || this.props.auth.form.isFetching}
+                        onPress={onButtonPress}
+                        buttonText={loginButtonText}/>
+                </Col>
+              </Row>
+              <Row style={{marginTop: 10}}>
+                <Col>{fbLogin}</Col>
+                <Col>{gLogin}</Col>
+              </Row>
+            </Grid>
       	  </Content>
       </Layout>
     );

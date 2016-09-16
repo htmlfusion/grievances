@@ -12,6 +12,7 @@
 #import "RCTBundleURLProvider.h"
 #import "RCTRootView.h"
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
+#import "RNGoogleSignin.h"
 
 @implementation AppDelegate
 
@@ -43,9 +44,15 @@
             openURL:(NSURL *)url
   sourceApplication:(NSString *)sourceApplication
          annotation:(id)annotation {
-  return [[FBSDKApplicationDelegate sharedInstance] application:application
+  
+  
+    if ([RNGoogleSignin application:application openURL:url sourceApplication:sourceApplication annotation:annotation])
+    return YES;
+  
+    return [[FBSDKApplicationDelegate sharedInstance] application:application
                                                         openURL:url
                                               sourceApplication:sourceApplication
                                                      annotation:annotation];
+  
 }
 @end

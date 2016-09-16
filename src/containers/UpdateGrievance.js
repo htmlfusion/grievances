@@ -96,6 +96,12 @@ var styles = StyleSheet.create({
     height: width/3,
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  legend: {
+    borderBottomWidth: 1,
+    borderColor: '#ddd',
+    paddingTop: 10,
+    paddingBottom: 10
   }
 });
 
@@ -247,46 +253,44 @@ class UpdateGrievance extends Component {
     if (statusIn === 'new') {
       statusIn = 'Under Investigation';
     }
-    
     return (
         <Layout isHeaderBack={true} headerTitle={headerText(this.props.grievance.grievanceUpdate.form.originalGrievance.tag)}>
-
-          <View>
-            <View style={{marginBottom: 7, left: 20}}><Text>{'Reported By'}</Text></View>
-            <MyUser>
-              <UserButton type={'me'} displayText={reportedUser} btnType={highlightStyle} btnAlign={{left: 20}}>{displayPic}</UserButton>
-            </MyUser>
+          <View style={{paddingRight: 10, paddingLeft: 10, paddingTop: 10}}>
+            <View style={styles.legend}>
+              <View><Text note>{'Reported as'}</Text></View>
+              <View><Text style={{fontWeight: '500'}}>{reportedUser.fullname}</Text></View>
+            </View>
+            <View style={styles.legend}>
+              <View style={{flexDirection: 'row'}}>
+                <FontIcon name="map-marker" style={{fontSize: 27, flex: 1}}/><Text style={{flex: 5}} note>{this.props.grievance.grievanceUpdate.form.originalGrievance.address}</Text>
+              </View>
+              <View style={{flexDirection: 'row'}}>
+                <Icon name="ios-calendar" style={{flex: 1}}/><Text style={{flex: 5}} note>{this.props.grievance.grievanceUpdate.form.originalGrievance.dateOfReporting}</Text>
+              </View>
+              <View style={{flexDirection: 'row'}}>
+                <Text style={{flex: 1}}>{'Status'}</Text><Button rounded success disabled  style={{flex:4}}>{statusIn}</Button>
+              </View>
+            </View>
+            <View style={{paddingTop: 10, paddingBottom: 10}}>
+              <Form
+                  ref="form"
+                  type={GrievanceForm}
+                  options={options}
+                  value={this.state.formValues}
+                  onChange={this.onChange.bind(self)}
+              />
+            {/*Get the location name based on location coordinates*/}
+            {/*<Text>{this.props.grievance.grievanceUpdate.form.originalGrievance.location}</Text>*/}
+            {image}
           </View>
-          <View style={{paddingRight: 30, paddingLeft: 30, paddingTop: 35, paddingBottom: 15, borderBottomWidth: 1}}>
-            <View style={{flexDirection: 'row'}}>
-              <FontIcon name="map-marker" style={{fontSize: 27, flex: 1}}/><Text style={{flex: 5}}>{this.props.grievance.grievanceUpdate.form.originalGrievance.address}</Text>
-            </View>
-            <View style={{flexDirection: 'row'}}>
-              <Icon name="ios-calendar" style={{flex: 1}}/><Text style={{flex: 5}}>{this.props.grievance.grievanceUpdate.form.originalGrievance.dateOfReporting}</Text>
-            </View>
-            <View style={{flexDirection: 'row'}}>
-              <Text style={{flex: 1}}>{'Status'}</Text><View style={[styles.ellipse, {flex: 5, flexDirection: 'row'}]}><Text style={{fontSize: 30}}>{'.'}</Text><Text> {statusIn}</Text></View>
-            </View>
+          <View style={{marginBottom: 10}}>
+            <FormButton
+              isDisabled={this.props.grievance.grievanceUpdate.form.isFetching || !this.props.grievance.grievanceUpdate.form.isValid}
+              onPress={onUpdateButtonPress.bind(self)}
+              buttonText={grievanceUpdateButtonText}/>
           </View>
-          <View style={{paddingRight: 30, paddingLeft: 30, paddingTop: 10, paddingBottom: 10}}>
-            <Form
-                ref="form"
-                type={GrievanceForm}
-                options={options}
-                value={this.state.formValues}
-                onChange={this.onChange.bind(self)}
-            />
-          {/*Get the location name based on location coordinates*/}
-          {/*<Text>{this.props.grievance.grievanceUpdate.form.originalGrievance.location}</Text>*/}
-          {image}
+          <View style={{marginBottom: 10}}>{deleteBtn}</View>
         </View>
-        <View style={{marginBottom: 10}}>
-          <FormButton
-            isDisabled={!this.props.grievance.grievanceUpdate.form.disabled}
-            onPress={onUpdateButtonPress.bind(self)}
-            buttonText={grievanceUpdateButtonText}/>
-        </View>
-        <View style={{marginBottom: 10}}>{deleteBtn}</View>
       </Layout>
     );
   }

@@ -32,18 +32,28 @@ export default class Layout extends Component {
     if (this.props.isHeaderBack) {
       headerBack = <Button transparent onPress={() => Actions.pop()}>
         <Icon name="ios-arrow-back" style={styles.headerFont}/>
+        {'Back'}
       </Button>;
     }
     if (headerTitle) {
       headerTitle = <Title><Text style={styles.headerFont}>{headerTitle}</Text></Title>;
     }
     if (headerRightProps) {
-      headerRight = <Button transparent onPress={headerRightProps.action}>
-        <Icon name={headerRightProps.iconName} style={styles.headerFont} isDisabled={headerRightProps.isDisabled}/>
+      let btnText;
+      if (headerRightProps.iconName) {
+        btnText=<Icon name={headerRightProps.iconName} style={styles.headerFont} />;
+      } else {
+        btnText=headerRightProps.text;
+
+      }
+      headerRight = <Button transparent onPress={headerRightProps.action} isDisabled={headerRightProps.isDisabled}>
+        {btnText}
       </Button>;
       // headerStyle = _.extend({}, headerStyle, headerStyleRight);
     }
-
+    if (this.props.dummyBack) {
+      headerBack = <Button transparent>{''}</Button>;
+    }
     if (headerBack || headerRight || headerTitle || headerChildren) {
 
       header = <Header>

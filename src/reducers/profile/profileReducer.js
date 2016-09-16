@@ -34,6 +34,10 @@ const {
   PROFILE_SYNC_SOCIAL_SUCCESS,
   PROFILE_SYNC_SOCIAL_FAILURE,
 
+  VERIFY_EMAIL_REQUEST,
+  VERIFY_EMAIL_SUCCESS,
+  VERIFY_EMAIL_FAILURE,
+
   SET_STATE
 } = require('../../lib/constants').default;
 
@@ -136,7 +140,17 @@ export default function profileReducer(state = initialState, action) {
       .setIn(['form', 'originalProfile', action.payload.type], action.payload.value);
 
   case PROFILE_SYNC_SOCIAL_REQUEST:
+  case VERIFY_EMAIL_REQUEST:
     return state.setIn(['form', 'isFetching'], true);
+
+  case VERIFY_EMAIL_SUCCESS:
+    return state.setIn(['form', 'originalProfile', 'emailVerified'], true)
+      .setIn(['form', 'isFetching'], false)
+      .setIn(['form', 'fields', 'emailVerified'], true);
+
+  case VERIFY_EMAIL_FAILURE:
+    return state.setIn(['form', 'isFetching'], false)
+      .setIn(['form','error'], action.payload);
     /**
      * ### form fields have changed
      *

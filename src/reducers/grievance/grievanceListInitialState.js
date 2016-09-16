@@ -26,6 +26,9 @@ const ListForm = Record({
   error: null,
   isValid: false,
   isFetching: false,
+  locationSearch: [],
+  locationSearchText: '',
+  locationSearchRadius: 0,
   grievances: new List()
 });
 

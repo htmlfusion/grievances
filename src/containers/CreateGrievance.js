@@ -51,6 +51,7 @@ import
 {
   StyleSheet,
   View,
+  Switch,
   Platform
 }
 from 'react-native';
@@ -81,7 +82,9 @@ const actions = [
 
 const styles = StyleSheet.create({
   content: {
-    marginTop: 10
+    marginTop: 10,
+    paddingRight: 10,
+    paddingLeft: 10
   },
   header: {
     backgroundColor: '#337ab7',
@@ -94,8 +97,6 @@ const styles = StyleSheet.create({
     width: width,
     paddingTop: 10,
     paddingBottom: 40,
-    paddingRight: 30,
-    paddingLeft: 30
   },
   reportBtn: {
     backgroundColor: '#fff',
@@ -116,6 +117,9 @@ const styles = StyleSheet.create({
     height: width/3,
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  reporter: {
+    fontWeight: '500'
   }
 });
 
@@ -157,7 +161,8 @@ class CreateGrievance extends Component {
       },
       btnMeStyle: highlightStyle,
       anonymousStyle: transparentStyle,
-      reportedUser: this.props.global.currentUser.objectId
+      reportedUser: this.props.global.currentUser.objectId,
+      trueSwitchIsOn: false
     };
     this._showUploadGallery = this._showUploadGallery.bind(this);
     this._setUserStyle = this._setUserStyle.bind(this);
@@ -203,8 +208,7 @@ class CreateGrievance extends Component {
       },
       reportedUser: props.grievance.grievanceCreate.form.fields.reportedUser
     });
-    if (reportedUser)
-      this._setUserStyle(props.grievance.grievanceCreate.form.fields.reportedUser);
+
   }
   _showUploadGallery() {
     let uploadOptions = {
@@ -322,20 +326,41 @@ class CreateGrievance extends Component {
     }
     let displayPic = <Icon name="ios-person-outline" />;
     let displayAnPic = <Icon name="ios-help"/>;
+    let fullnameDisp = null;
     /**
      * Wrap the form with the header and button.  The header props are
      * mostly for support of Hot reloading. See the docs for Header
      * for more info.
      */
+     if (this.props.global.currentUser) {
+       fullnameDisp=<Text style={styles.reporter}>{this.props.global.currentUser.fullname}</Text>
+     }
+
     return (
-        <View>
-          <View style={{borderTopWidth: 2, borderBottomWidth:2, paddingBottom: 30, paddingTop: 20}}>
-            <View style={{position: 'absolute', top: -15, left: 10}}><Text>{'Report as:'}</Text></View>
+        <View style={styles.content}>
+          <View style={{borderBottomWidth:1, paddingBottom: 10, paddingTop: 5, borderColor: '#ddd'}}>
+            <View><Text note>{'Report as:'}</Text></View>
             <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-              <MyUser>
-                <UserButton type={'me'} displayText={this.props.global.currentUser} btnType={this.state.btnMeStyle} btnAlign={{left: 20}} btnAction={btnAnonymous.bind(this, 'me')}>{displayPic}</UserButton>
-              </MyUser>
-              <UserButton type={'an'} displayText={{fullname: 'Anonymous'}} btnType={this.state.anonymousStyle} btnAlign={{right: 20}} btnAction={btnAnonymous.bind(this, 'an')}>{displayAnPic}</UserButton>
+              <View style={{flex: 5}}>
+                {fullnameDisp}
+              </View>
+              <View style={{flex: 2}}>
+                <Switch
+                  onValueChange={(value) => {
+                    let reporter = 'an';
+                    if (!value) {
+                      reporter = 'me';
+                    }
+                    btnAnonymous.bind(this, reporter);
+                    this.setState({trueSwitchIsOn: value})
+                  }}
+                  value={this.state.trueSwitchIsOn}
+                />
+              </View>
+              <View style={{flex: 3}}>
+                <Text style={styles.reporter}>{'Anonymous'}</Text>
+              </View>
+              {/* btnAnonymous.bind(this, 'me') */}
             </View>
           </View>
           <View style={styles.form}>
@@ -349,26 +374,22 @@ class CreateGrievance extends Component {
             {/*<View style={{marginBottom: 10, marginTop: 4}}>
               <Text>{'Display Tags'}</Text>
             </View>*/}
+            <View>
+              <Button ref='upload' style={{width: width/2}} rounded onPress={this._showUploadGallery}>
+                {'Add Photos'}
+              </Button>
+            </View>
             <View style={{flexDirection: 'row'}}>
-              <View style={[styles.img, {width: width/5}]}>
-                <View>
-                  <Button ref='upload' rounded small onPress={this._showUploadGallery}>
-                    <Icon name="ios-camera-outline"></Icon>
-                  </Button>
-                </View>
-              </View>
+
               <View style={[styles.img]}>
                 {image}
               </View>
             </View>
           </View>
-          <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderTopWidth: 2}}>
-            <View style={styles.reportBtn}>
-              <View>
-                <Button bordered style={{width: 115}} rounded onPress={onButtonPress.bind(self)} >{grievanceButtonText}</Button>
-              </View>
-            </View>
-          </View>
+          <FormButton
+            isDisabled={this.props.grievance.grievanceCreate.form.isFetching || !this.props.grievance.grievanceCreate.form.isValid}
+            buttonText={grievanceButtonText}
+            onPress={onButtonPress.bind(self)} />
         </View>
     );
   }

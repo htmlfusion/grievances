@@ -7,6 +7,7 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookSdk;
 import com.facebook.reactnative.androidsdk.FBSDKPackage;
 import com.facebook.react.ReactApplication;
+import co.apptailor.googlesignin.RNGoogleSigninPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.burnweb.rnsimplealertdialog.RNSimpleAlertDialogPackage;
 import com.airbnb.android.react.maps.MapsPackage;
@@ -37,6 +38,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
             new MainReactPackage(),
+            new RNGoogleSigninPackage(),
             new VectorIconsPackage(),
             new RNSimpleAlertDialogPackage(),
             new MapsPackage(),
