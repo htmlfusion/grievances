@@ -12,3 +12,12 @@ Email functionality is working but it is moving to spam
 
 Todo:
 Display tags while entering tag in the textbox
+
+<<<+++>>>>
+  Distance from the border and the content:- 8pt
+  Each element distance:-5pt
+  Text size should be 11pt to 16pt=> heading=20pt+, body text=16pt, small text=11pt, line height as 120-145%
+  https://designcode.io/iosdesign
+  Button/Header or any content height 30-60pt
+  San Francisco font
+  

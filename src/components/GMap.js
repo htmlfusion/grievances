@@ -64,9 +64,9 @@ export default class GMap extends Component {
 
 
   render() {
-    let cardHeight = height/8,
+    let cardHeight = height/6,
       cardWidth = width-width/4,
-      thumbnailWidth = height/8,
+      thumbnailWidth = height/7,
       mapView = null;
 
 
@@ -76,7 +76,7 @@ export default class GMap extends Component {
             marker = {marker}
             cardDimension={{width: cardWidth, height: cardHeight, marginRight: 10}}
             noLines={4}
-            thumbnailDim={{width: thumbnailWidth, height: thumbnailWidth}}
+            thumbnailDim={{width: thumbnailWidth, height: thumbnailWidth, borderRadius: 10}}
             auth = {this.props.auth}
             cardAction={this.props.updateGrievance.bind(this, marker, idx)}
             grievanceFeedback={this.props.grievanceFeedback.bind(this, marker._id, idx)}
