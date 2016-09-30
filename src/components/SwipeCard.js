@@ -5,6 +5,15 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import Dimensions from 'Dimensions';
 import ErrorAlert from './ErrorAlert';
 
+const {
+  ShareDialog
+} = require('react-native-fbsdk');
+const  shareLinkContent = {
+  contentType: 'link',
+  contentUrl: "https://facebook.com",
+  contentDescription: 'Wow, check out this great site!',
+};
+
 var {height, width} = Dimensions.get('window');
 
 let THEME_COLOR= '#5067FF';
@@ -75,8 +84,9 @@ export default class SwipeCard extends Component {
             <View style={{paddingTop: 2, paddingBottom: 2, paddingRight: 2, paddingLeft: 4, flexDirection: 'column', justifyContent: 'space-between', flex: 2}}>
               <View><Text style={{fontSize: 16, fontWeight: '500'}}>{this.props.marker.tag}</Text></View>
                 <View style={{flex: 1}}>
-                  <Button transparent onPress={this.props.onOpen}>
-                    <Icon name="share-alt"/>
+                  <Button transparent >
+                    <Icon name="social-facebook"/>
+                    <Icon name="social-googleplus"/>
                   </Button>
                 </View>
               <View style={{flex: 2, overflow: 'hidden', paddingTop: 3}}><Text numberOfLines={this.props.noLines} style={{lineHeight: 12, fontSize: 12}}>{this.props.marker.description}</Text></View>
