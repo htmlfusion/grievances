@@ -21,7 +21,8 @@ let styles = StyleSheet.create({
   card: {
     flexDirection: 'column',
     justifyContent: 'space-between',
-    borderBottomWidth: 1
+    borderBottomWidth: 1,
+    padding: 8
   },
   btns: {
     flexDirection: 'row',
@@ -69,7 +70,7 @@ export default class SwipeCard extends Component {
       upVoteBtn = <Icon style={styles.upVoted} name="thumbs-up" onPress={this.props.grievanceFeedback.bind(this, 'no')}/>;
     } else if (this.props.auth) {
       if (this.props.marker.reportedUser && this.props.auth.objectId === this.props.marker.reportedUser._id)
-        upVoteMsg = upVoteMsg+' upvoted';
+        upVoteMsg = upVoteMsg+' upvotes';
       else
         upVoteBtn = <Icon style={styles.notUpVoted} name="thumbs-up" onPress={this.props.grievanceFeedback.bind(this, 'yes')}/>;
     }
@@ -81,7 +82,7 @@ export default class SwipeCard extends Component {
         <Card style={[styles.card, this.props.cardDimension]}>
           <CardItem style= {styles.cardItem} onPress={this.props.cardAction}>
             <View style={{height: this.props.thumbnailDim.height}}>{thumbnail}</View>
-            <View style={{paddingTop: 2, paddingBottom: 2, paddingRight: 2, paddingLeft: 4, flexDirection: 'column', justifyContent: 'space-between', flex: 2}}>
+            <View style={{paddingLeft: 5, flexDirection: 'column', justifyContent: 'space-between', flex: 2}}>
               <View><Text style={{fontSize: 16, fontWeight: '500'}}>{this.props.marker.tag}</Text></View>
                 <View style={{flex: 1}}>
                   <Button transparent >

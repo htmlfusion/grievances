@@ -17,8 +17,11 @@ export default class ListCard extends Component {
       markers: this.props.data
     };
   }
+  componentWillReceiveProps(props) {
+    this.state.markers=props.data;
+  }
   render() {
-    let cardHeight = height/10,
+    let cardHeight = height/8,
       thumbnailWidth = height/10;
 
     let listItems = this.state.markers.map((marker, idx) => (
@@ -27,8 +30,8 @@ export default class ListCard extends Component {
           marker = {marker}
           auth = {this.props.auth}
           noLines={2}
-          cardDimension={{width: width, height: cardHeight}}
-          thumbnailDim={{width: thumbnailWidth, height: thumbnailWidth}}
+          cardDimension={{width: width, height: cardHeight, borderTopWidth: 0}}
+          thumbnailDim={{width: thumbnailWidth, height: thumbnailWidth, borderRadius: 10}}
           cardAction={this.props.updateGrievance.bind(this, marker, idx)}
           grievanceFeedback={this.props.grievanceFeedback.bind(this, marker._id, idx)}
           onOpen={this.props.onOpen}
@@ -36,7 +39,7 @@ export default class ListCard extends Component {
     ));
 
     return (
-      <List>
+      <List style={{borderTopWidth: 1, borderTopColor: '#ddd'}}>
          <ScrollView>{listItems}</ScrollView>
      </List>
     );

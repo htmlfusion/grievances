@@ -77,7 +77,8 @@ var styles = StyleSheet.create({
     backgroundColor: 'transparent'
   },
   btn: {
-    marginTop: 10
+    marginTop: 8,
+    marginBottom: 8
   },
 
   headerFont: {
@@ -234,9 +235,10 @@ class Profile extends Component {
      * mostly for support of Hot reloading. See the docs for Header
      * for more info.
      */
-     let emailVerifiedMsg = "Verify your email by clicking on the link send to your mail";
+    let emailVerified = <View style={{flexDirection: 'row', alignItems: 'center'}}><Icon name="ios-alert" style={{marginRight: 5, color: '#d9534f'}}/><Text>{"Check the link in your email and verify"}</Text></View>;
      if (this.props.profile.form.originalProfile.emailVerified) {
-       emailVerifiedMsg = "Your email has been verified";
+       emailVerified = <ItemCheckbox text={"Your email has been verified"}
+                         checked={this.props.profile.form.fields.emailVerified}/>;
      }
      let onFBPress = () => {
        console.log('FB login');
@@ -300,19 +302,16 @@ class Profile extends Component {
      }
     return (
         <Layout isHeaderBack={true} headerRight={{action: onLogoutButtonPress.bind(self), iconName: "md-exit", isDisabled: !this.props.auth.form.isValid || this.props.auth.form.isFetching}}>
+        <View style={{paddingTop: 8, paddingBottom: 8, paddingLeft: 10, paddingRight: 10}}>
           <Form
-              ref="form"
-              type={ProfileForm}
-              options={options}
-              value={this.state.formValues}
-              onChange={this.onChange.bind(self)}
-          />
-
-          <ItemCheckbox text={emailVerifiedMsg}
-                         disabled={true}
-                         checked={this.props.profile.form.fields.emailVerified}
-           />
-
+                ref="form"
+                type={ProfileForm}
+                options={options}
+                value={this.state.formValues}
+                onChange={this.onChange.bind(self)}
+            />
+        </View>
+        <View style={{paddingLeft: 10, paddingRight: 10}}>{emailVerified}</View>
         <View style={styles.btn}>
           <FormButton
             isDisabled={!this.props.profile.form.isValid || this.props.profile.form.isFetching}

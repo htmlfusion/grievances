@@ -5,11 +5,11 @@ import Swiper from 'react-native-swiper';
 import MapView from 'react-native-maps';
 import ErrorAlert from './ErrorAlert';
 import Dimensions from 'Dimensions';
+
 var {height, width} = Dimensions.get('window');
-const CARD_PREVIEW_WIDTH = 35;
+const CARD_PREVIEW_WIDTH = 20;
 const CARD_MARGIN = 5;
 const CARD_WIDTH = width - (CARD_MARGIN + CARD_PREVIEW_WIDTH) * 2;
-
 //Now having issues with react-native-maps, follow this steps https://github.com/lelandrichardson/react-native-maps/issues/371 to fix
 let styles = StyleSheet.create({
   container: {
@@ -69,9 +69,9 @@ export default class GMap extends Component {
   // }
 
   render() {
-    let cardHeight = height/8,
+    let cardHeight = height/6,
       cardWidth = width-width/4,
-      thumbnailWidth = height/8,
+      thumbnailWidth = height/7,
       mapView = null;
 
 
@@ -81,7 +81,7 @@ export default class GMap extends Component {
             marker = {marker}
             cardDimension={{width: cardWidth, height: cardHeight, marginRight: 10}}
             noLines={4}
-            thumbnailDim={{width: thumbnailWidth, height: thumbnailWidth}}
+            thumbnailDim={{width: thumbnailWidth, height: thumbnailWidth, borderRadius: 10}}
             auth = {this.props.auth}
             cardAction={this.props.updateGrievance.bind(this, marker, idx)}
             grievanceFeedback={this.props.grievanceFeedback.bind(this, marker._id, idx)}
@@ -140,10 +140,8 @@ export default class GMap extends Component {
         >
           {swipeCards}
         </ScrollView>
-        </View>
 
+      </View>
     );
-
-
   }
 }

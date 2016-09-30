@@ -94,9 +94,9 @@ const styles = StyleSheet.create({
     color: '#000'
   },
   form: {
-    width: width,
-    paddingTop: 10,
-    paddingBottom: 40,
+    width: width-20,
+    paddingTop: 8,
+    paddingBottom: 8
   },
   reportBtn: {
     backgroundColor: '#fff',
@@ -113,10 +113,9 @@ const styles = StyleSheet.create({
     paddingTop: 25
   },
   img: {
-    width: width/3,
+    width: (width/2)+20,
     height: width/3,
-    alignItems: 'center',
-    justifyContent: 'center'
+    borderRadius: 10
   },
   reporter: {
     fontWeight: '500'
@@ -338,9 +337,9 @@ class CreateGrievance extends Component {
 
     return (
         <View style={styles.content}>
-          <View style={{borderBottomWidth:1, paddingBottom: 10, paddingTop: 5, borderColor: '#ddd'}}>
+          <View style={{borderBottomWidth:1, paddingTop: 8, paddingBottom: 8, borderColor: '#ddd'}}>
             <View><Text note>{'Report as:'}</Text></View>
-            <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+            <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
               <View style={{flex: 5}}>
                 {fullnameDisp}
               </View>
@@ -374,12 +373,12 @@ class CreateGrievance extends Component {
             {/*<View style={{marginBottom: 10, marginTop: 4}}>
               <Text>{'Display Tags'}</Text>
             </View>*/}
-            <View>
+            <View style={{marginBottom: 5}}>
               <Button ref='upload' style={{width: width/2}} rounded onPress={this._showUploadGallery}>
                 {'Add Photos'}
               </Button>
             </View>
-            <View style={{flexDirection: 'row'}}>
+            <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
 
               <View style={[styles.img]}>
                 {image}

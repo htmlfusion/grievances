@@ -335,7 +335,7 @@ class Main extends Component {
     return(
       <View style={{flex: 1}}>
       {/* height has been taken from native-base header height */}
-        <View style={{flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', height: (Platform.OS === 'ios'? 64: 56)}}>
+        <View style={{flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', height: (Platform.OS === 'ios'? 64: 56), paddingTop: 20}}>
           <View><Button rounded small danger onPress={this._profileTransition.bind(this)}><Text style={{color: '#fff'}} >{'me'}</Text></Button></View>
           <View><Button style={{width: width-120, flexDirection: 'row', justifyContent: 'flex-start', overflow: 'hidden'}} onPress={()=>Actions.LocationSearch({radius: this.state.radius})}>
             <Icon name="ios-search" />
