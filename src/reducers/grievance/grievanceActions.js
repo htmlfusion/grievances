@@ -105,12 +105,12 @@ export function grievanceCreateSuccess(json, currentUser) {
     currentUser
   };
 }
-export function grievanceCreateFailure(json) {
-  return {
-    type: GRIEVANCE_CREATE_FAILURE,
-    payload: json
-  };
-}
+// export function grievanceCreateFailure(json) {
+//   return {
+//     type: GRIEVANCE_CREATE_FAILURE,
+//     payload: json
+//   };
+// }
 
 export function createGrievance(address, description, location, reportedUser, tag, curlyUrl, sessionToken, toggleAction) {
   return dispatch => {

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, ScrollView, Text, TouchableOpacity} from 'react-native';
+import {StyleSheet, View, ScrollView, Text, TouchableOpacity, Animated} from 'react-native';
 import SwipeCard from './SwipeCard';
 import Swiper from 'react-native-swiper';
 import MapView from 'react-native-maps';
@@ -109,7 +109,7 @@ export default class GMap extends Component {
       {/* onPress is not working, so using onSelect(this will work only in ios). Once issue is fixed we can use onPress*/}
 
         {this.state.markers.map((marker, idx) => (
-            <MapView.Marker
+            <MapView.Marker.Animated
               key={idx}
               coordinate={{longitude:marker.location[0], latitude:marker.location[1]}}
               onSelect={() => {this.mapCard.bind(this, marker._id)}}
@@ -118,12 +118,19 @@ export default class GMap extends Component {
 
       </MapView>;
     }
+    var _scrollView = ScrollView;
     return (
       <View style={styles.container}>
         {mapView}
         <ScrollView
           style={styles.contentContainer}
-          ref={(scrollView) => {_scrollView = scrollView}}
+          ref={(scrollView) => {
+            _scrollView =  scrollView;
+          }}
+          onScroll= {() => {
+            console.log('hey budy');
+          }}
+          scrollEventThrottle={200}
           automaticallyAdjustContentInsets={false}
           horizontal={true}
           decelerationRate={0}

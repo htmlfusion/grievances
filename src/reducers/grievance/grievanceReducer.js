@@ -107,6 +107,15 @@ export default function grievanceReducer(state = initialState, action) {
     isUpVoted: grievance.isUpVoted,
     upVotedCount: grievance.upVotedCount
   });
+  let calculateDistance = (initialLongLat, finalLongLat) => {
+    let R = 6371*1000; //Radius of the Earth in KM
+    let deg2Rad = (val) => val * (Math.PI/180);
+    let dlon = deg2Rad(finalLongLat[0] - initialLongLat[0]);
+    let dlat = deg2Rad(finalLongLat[1] - initialLongLat[1]);
+    let a = (Math.sin(dlat/2) * Math.sin(dlat/2)) + Math.cos(deg2Rad(initialLongLat[1])) * Math.cos(deg2Rad(finalLongLat[1])) * (Math.sin(dlon/2) * Math.sin(dlon/2));
+    let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return R * c;//Value returns in meters
+  }
 
   switch (action.type) {
     /**
@@ -197,17 +206,22 @@ export default function grievanceReducer(state = initialState, action) {
      *
      */
   case GRIEVANCE_CREATE_SUCCESS:
-    recordMap = state.getIn(['grievanceList', 'grievances']).push(newGrievance(action.payload));
-    nextGrievanceState = state.setIn([ 'grievanceCreate','form', 'disabled'], false)
-      .setIn([ 'grievanceCreate', 'form', 'error'], null)
-      /*.setIn([ 'grievanceCreate', 'form', 'fields', 'address'], '')*/
-      .setIn([ 'grievanceCreate', 'form', 'fields', 'description'], '')
-      .setIn([ 'grievanceCreate', 'form', 'fields', 'location'], [])
-      .setIn([ 'grievanceCreate', 'form', 'fields', 'tag'], '')
-      .setIn([ 'grievanceCreate', 'form', 'fields', 'curlyUrl'], null)
-      .setIn([ 'grievanceCreate', 'form', 'fields', 'reportedUser'], action.currentUser)
-      .setIn(['grievanceList', 'grievances'], recordMap);
-    return nextGrievanceState;
+    if (calculateDistance(state.getIn(['grievanceList', 'locationSearch']), action.payload.location) <= state.getIn(['grievanceList', 'locationSearchRadius'])) {
+      recordMap = state.getIn(['grievanceList', 'grievances']).push(newGrievance(action.payload));
+      nextGrievanceState = state.setIn([ 'grievanceCreate','form', 'disabled'], false)
+        .setIn([ 'grievanceCreate', 'form', 'error'], null)
+        /*.setIn([ 'grievanceCreate', 'form', 'fields', 'address'], '')*/
+        .setIn([ 'grievanceCreate', 'form', 'fields', 'description'], '')
+        .setIn([ 'grievanceCreate', 'form', 'fields', 'location'], [])
+        .setIn([ 'grievanceCreate', 'form', 'fields', 'tag'], '')
+        .setIn([ 'grievanceCreate', 'form', 'fields', 'curlyUrl'], null)
+        .setIn([ 'grievanceCreate', 'form', 'fields', 'reportedUser'], action.currentUser)
+        .setIn(['grievanceList', 'grievances'], recordMap);
+      return nextGrievanceState;
+    } else {
+      return state;
+    }
+
       //Push value to grievance list
     /**
      * ### Request fails

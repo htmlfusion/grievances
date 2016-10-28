@@ -14,9 +14,12 @@ To work on this,
 
 Todo
 >> Animation on grievance card and marker
->> Donot add grievance on location search and add button to go back to current location
->> Add force touch feature for creating grievance (V2)
+>> Donot add grievance on location search and add button to go back to current location >> done
+>> Add force touch feature for creating grievance (V2) >> not for this release
+
+Select marker and highlight corresponding card (converse can be true). onPress marker event, and scroll card event => set state on GMap=> By default initial card has to be highlighted => Pass that state value to marker and card
 
 MVP
 >> Create anonymous user and add fullname as anonymous
 >> For login with fb using phone-no.. Tell them to create email-id
+>> Remove default location in main.js file
