@@ -89,7 +89,9 @@ let App = React.createClass({
   render() {
     return(
       <Container>
-	       <Content><Text>App Startup Screen</Text></Content>
+        <Content>
+          <Text>App Startup Screen</Text>
+        </Content>
       </Container>
     );
   }

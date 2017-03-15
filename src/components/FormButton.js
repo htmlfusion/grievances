@@ -17,7 +17,7 @@ const
   View
 } = ReactNative;
 
-import {Button} from 'native-base';
+import {Button, Text, Icon} from 'native-base';
 
 
 /**
@@ -38,6 +38,13 @@ var FormButton = React.createClass({
    * Display the Button
    */
   render() {
+    let btnText = this.props.buttonText || null,
+      btnIcon = this.props.buttonIcon || null;
+
+    if (btnText) {
+      btnText = <Text>{this.props.buttonText}</Text>
+    }
+
     return (
       <View style={styles.signin}>
         <Button block
@@ -45,7 +52,8 @@ var FormButton = React.createClass({
             disabled={this.props.isDisabled}
             onPress={this.props.onPress}
         >
-          {this.props.buttonText}
+          {btnText}
+          {btnIcon}
         </Button>
       </View>
     );

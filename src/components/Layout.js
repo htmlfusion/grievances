@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Container, Content, Header, Footer, Button, Icon,Title,Text} from 'native-base';
+import {Container, Content, Header, Footer, Button, Icon,Title,Text, Left, Right, Body} from 'native-base';
 import {StyleSheet, View} from 'react-native';
 import {Actions} from 'react-native-router-flux';
 import _ from 'underscore';
@@ -19,9 +19,8 @@ export default class Layout extends Component {
       footerContent = this.props.footerContent,
       headerTitle = this.props.headerTitle,
       headerChildren = this.props.headerChildren,
+      noHeaderRight = this.props.noHeaderRight || null,
       headerStyle = {
-        backgroundColor: '#337ab7',
-        borderColor: '#2e6da4',
         flexDirection: 'row',
         justifyContent: 'space-between'
       }/*,
@@ -30,43 +29,54 @@ export default class Layout extends Component {
       }*/;
 
     if (this.props.isHeaderBack) {
-      headerBack = <Button transparent onPress={() => Actions.pop()}>
-        <Icon name="ios-arrow-back" style={styles.headerFont}/>
-        {''}
-      </Button>;
+      headerBack = <Left><Button transparent onPress={() => Actions.pop()}>
+        <Icon name="ios-arrow-back" />
+      </Button></Left>;
+    }
+    if (noHeaderRight) {
+      noHeaderRight = <Right></Right>;
     }
     if (headerTitle) {
-      headerTitle = <Title><Text style={styles.headerFont}>{headerTitle}</Text></Title>;
+      headerTitle = <Body>
+        <Title>
+          {headerTitle}
+        </Title>
+      </Body>;
     }
     if (headerRightProps) {
       let btnText;
       if (headerRightProps.iconName) {
-        btnText=<Icon name={headerRightProps.iconName} style={styles.headerFont} />;
+        btnText=<Icon name={headerRightProps.iconName} />;
       } else {
-        btnText=headerRightProps.text;
-
+        btnText=<Text>{headerRightProps.text}</Text>;
       }
-      headerRight = <Button transparent onPress={headerRightProps.action} isDisabled={headerRightProps.isDisabled}>
-        {btnText}
-      </Button>;
+      headerRight = <Right>
+        <Button transparent onPress={headerRightProps.action} isDisabled={headerRightProps.isDisabled}>
+          {btnText}
+        </Button>
+      </Right>;
       // headerStyle = _.extend({}, headerStyle, headerStyleRight);
     }
     if (this.props.dummyBack) {
-      headerBack = <Button transparent>{''}</Button>;
+      headerBack = <Left>
+        <Button transparent></Button>
+      </Left>;
     }
+
     if (headerBack || headerRight || headerTitle || headerChildren) {
 
       header = <Header>
         {headerBack}
         {headerTitle}
         {headerRight}
+        {noHeaderRight}
         {headerChildren}
       </Header>;
     }
     return (
       <Container style={{flex: 1}}>
           {header}
-        <Content>
+        <Content style={{paddingRight: 10, paddingLeft: 10}}>
           {this.props.children}
         </Content>
         {/*<Footer>

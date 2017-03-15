@@ -332,13 +332,15 @@ class CreateGrievance extends Component {
      * for more info.
      */
      if (this.props.global.currentUser) {
-       fullnameDisp=<Text style={styles.reporter}>{this.props.global.currentUser.fullname}</Text>
+       fullnameDisp=<Text style={StyleSheet.flatten(styles.reporter)}>{this.props.global.currentUser.fullname}</Text>
      }
 
     return (
         <View style={styles.content}>
           <View style={{borderBottomWidth:1, paddingTop: 8, paddingBottom: 8, borderColor: '#ddd'}}>
-            <View><Text note>{'Report as:'}</Text></View>
+            <View>
+              <Text note>{'Report as:'}</Text>
+            </View>
             <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
               <View style={{flex: 5}}>
                 {fullnameDisp}
@@ -357,7 +359,7 @@ class CreateGrievance extends Component {
                 />
               </View>
               <View style={{flex: 3}}>
-                <Text style={styles.reporter}>{'Anonymous'}</Text>
+                <Text style={StyleSheet.flatten(styles.reporter)}>{'Anonymous'}</Text>
               </View>
               {/* btnAnonymous.bind(this, 'me') */}
             </View>
@@ -375,7 +377,7 @@ class CreateGrievance extends Component {
             </View>*/}
             <View style={{marginBottom: 5}}>
               <Button ref='upload' style={{width: width/2}} rounded onPress={this._showUploadGallery}>
-                {'Add Photos'}
+                <Text>{'Add Photos'}</Text>
               </Button>
             </View>
             <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>

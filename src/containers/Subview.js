@@ -107,14 +107,14 @@ let Subview = React.createClass({
 
     return(
       <View>
-	<NavigationBar
+	     <NavigationBar
             title={ titleConfig }
             leftButton={ leftButtonConfig }
-	/>
-	<View style={ styles.container }>
-	  <Text style={ styles.summary }>Subview</Text>
-	</View>
-      </View>
+	           />
+    	<View style={ styles.container }>
+    	  <Text style={ styles.summary }>Subview</Text>
+    	</View>
+     </View>
     );
   }
 });

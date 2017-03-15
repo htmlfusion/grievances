@@ -302,16 +302,18 @@ class Profile extends Component {
      }
     return (
         <Layout isHeaderBack={true} headerRight={{action: onLogoutButtonPress.bind(self), iconName: "md-exit", isDisabled: !this.props.auth.form.isValid || this.props.auth.form.isFetching}}>
-        <View style={{paddingTop: 8, paddingBottom: 8, paddingLeft: 10, paddingRight: 10}}>
-          <Form
+          <View style={{paddingTop: 8, paddingBottom: 8, paddingLeft: 10, paddingRight: 10}}>
+            <Form
                 ref="form"
                 type={ProfileForm}
                 options={options}
                 value={this.state.formValues}
                 onChange={this.onChange.bind(self)}
             />
+          </View>
+        <View style={{paddingLeft: 10, paddingRight: 10}}>
+          {emailVerified}
         </View>
-        <View style={{paddingLeft: 10, paddingRight: 10}}>{emailVerified}</View>
         <View style={styles.btn}>
           <FormButton
             isDisabled={!this.props.profile.form.isValid || this.props.profile.form.isFetching}
@@ -320,7 +322,9 @@ class Profile extends Component {
         </View>
         <Grid style={[styles.btn, {paddingLeft: 10}]}>
             <Row>
-              <Col><Text>{'Sync with'}</Text></Col>
+              <Col>
+                <Text>{'Sync with'}</Text>
+              </Col>
               <Col>
                 <Row>
                   <Col>

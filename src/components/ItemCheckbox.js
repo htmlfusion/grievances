@@ -163,7 +163,9 @@ var ItemCheckbox = React.createClass({
                   size={20}
               />*/}
               <CheckBox checked={this.state.checked}/>
-              <Text> {this.props.text}</Text>
+              <Text>
+                {this.props.text}
+              </Text>
             </View>
           </TouchableWithoutFeedback>
         </View>
@@ -180,7 +182,9 @@ var ItemCheckbox = React.createClass({
                     size={20}
                 />*/}
                 <CheckBox checked={this.state.checked}/>
-                <Text> {this.props.text}</Text>
+                <Text>
+                  {this.props.text}
+                </Text>
               </View>
             </TouchableHighlight>
           </View>

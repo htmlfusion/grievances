@@ -69,15 +69,31 @@ export default class SwipeCard extends Component {
       thumbnail = <Thumbnail square small style={this.props.thumbnailDim} source={{uri: this.props.marker.curlyUrlSmall}}/>;
     }
     return (
-        <Card style={[styles.card, this.props.cardDimension]}>
-          <CardItem style= {styles.cardItem} onPress={this.props.cardAction}>
-            <View style={{height: this.props.thumbnailDim.height}}>{thumbnail}</View>
+        <Card style={{...StyleSheet.flatten(styles.card), ...this.props.cardDimension}}>
+          <CardItem style= {StyleSheet.flatten(styles.cardItem)} onPress={this.props.cardAction}>
+            <View style={{height: this.props.thumbnailDim.height}}>
+              {thumbnail}
+            </View>
             <View style={{paddingLeft: 5, flexDirection: 'column', justifyContent: 'space-between', flex: 2}}>
-              <View><Text style={{fontSize: 16, fontWeight: '500'}}>{this.props.marker.tag}</Text></View>
-              <View style={{flex: 2, overflow: 'hidden', paddingTop: 3}}><Text numberOfLines={this.props.noLines} style={{lineHeight: 12, fontSize: 12}}>{this.props.marker.description}</Text></View>
+              <View>
+                <Text style={{fontSize: 16, fontWeight: '500'}}>
+                  {this.props.marker.tag}
+                </Text>
+              </View>
+              <View style={{flex: 2, overflow: 'hidden', paddingTop: 3}}>
+                <Text numberOfLines={this.props.noLines} style={{lineHeight: 12, fontSize: 12}}>
+                  {this.props.marker.description}
+                </Text>
+              </View>
               <View style={styles.btns}>
-                <View><Text note style={styles.msg}>{upVoteMsg}</Text></View>
-                <View>{upVoteBtn}</View>
+                <View>
+                  <Text note style={StyleSheet.flatten(styles.msg)}>
+                    {upVoteMsg}
+                  </Text>
+                </View>
+                <View>
+                  {upVoteBtn}
+                </View>
               </View>
             </View>
           </CardItem>

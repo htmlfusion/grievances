@@ -39,7 +39,9 @@ export default class ListCard extends Component {
 
     return (
       <List style={{borderTopWidth: 1, borderTopColor: '#ddd'}}>
-         <ScrollView>{listItems}</ScrollView>
+         <ScrollView>
+          {listItems}
+         </ScrollView>
      </List>
     );
   }

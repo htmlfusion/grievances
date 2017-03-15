@@ -96,7 +96,7 @@ export default class GMap extends Component {
         ))}
       </Swiper>*/;
     if (this.state.region.longitude && this.state.region.latitude) {
-      mapView = <MapView style={styles.map}
+      mapView = <MapView style={StyleSheet.flatten(styles.map)}
         region={this.state.region}
       >
       {/*circle is not working now, have to fix it. Once it is working replace default values with this.state.initialRegion*/}
@@ -123,7 +123,7 @@ export default class GMap extends Component {
       <View style={styles.container}>
         {mapView}
         <ScrollView
-          style={styles.contentContainer}
+          style={StyleSheet.flatten(styles.contentContainer)}
           ref={(scrollView) => {
             _scrollView =  scrollView;
           }}
@@ -136,7 +136,7 @@ export default class GMap extends Component {
           decelerationRate={0}
           snapToInterval={CARD_WIDTH + CARD_MARGIN*2}
           snapToAlignment="start"
-          contentContainerStyle={styles.content}
+          contentContainerStyle={StyleSheet.flatten(styles.content)}
           showsHorizontalScrollIndicator={false}
         >
           {swipeCards}

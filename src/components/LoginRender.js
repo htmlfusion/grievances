@@ -145,10 +145,10 @@ class LoginRender extends Component {
   componentWillReceiveProps(nextprops) {
     this.setState({
       value: {
-	fullname: nextprops.auth.form.fields.fullname,
-	email: nextprops.auth.form.fields.email,
-	password: nextprops.auth.form.fields.password/*,
-	passwordAgain: nextprops.auth.form.fields.passwordAgain*/
+      	fullname: nextprops.auth.form.fields.fullname,
+      	email: nextprops.auth.form.fields.email,
+      	password: nextprops.auth.form.fields.password/*,
+      	passwordAgain: nextprops.auth.form.fields.passwordAgain*/
       }
     });
   }
@@ -225,12 +225,12 @@ class LoginRender extends Component {
           }} />*/};
 
     switch(messageType) {
-    case FORGOT_PASSWORD:
-      return forgotPassword;
-    case LOGIN:
-      return alreadyHaveAccount;
-    case REGISTER:
-      return register;
+      case FORGOT_PASSWORD:
+        return forgotPassword;
+      case LOGIN:
+        return alreadyHaveAccount;
+      case REGISTER:
+        return register;
     }
   }
 
@@ -272,13 +272,13 @@ class LoginRender extends Component {
       let fbLogo = <Icon name="logo-facebook"/>
       fbLogin = <FormButton
                 onPress={fbLoginAction}
-                buttonText={fbLogo}/>;
+                buttonIcon={fbLogo}/>;
     }
     if (gLoginAction) {
       let gLogo = <Icon name="logo-google"/>
       gLogin = <FormButton
                 onPress={gLoginAction}
-                buttonText={gLogo}/>;
+                buttonIcon={gLogo}/>;
     }
     // display the login / register / change password screens
     this.errorAlert.checkError(this.props.auth.form.error);
@@ -331,8 +331,12 @@ class LoginRender extends Component {
                 </Col>
               </Row>
               <Row style={{marginTop: 10}}>
-                <Col>{fbLogin}</Col>
-                <Col>{gLogin}</Col>
+                <Col>
+                  {fbLogin}
+                </Col>
+                <Col>
+                  {gLogin}
+                </Col>
               </Row>
             </Grid>
       	  </Content>

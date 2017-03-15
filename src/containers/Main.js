@@ -101,7 +101,9 @@ const ELLIPSE_WIDTH = width-120,
   ELLIPSE_HEIGHT = 50;
 var styles = StyleSheet.create({
   roundBtn: {
-    color: '#fff'
+    color: '#fff',
+    textAlign: 'center',
+    flex: 1
     // fontSize: 20,
     // fontWeight: 'bold'
   },
@@ -289,7 +291,7 @@ class Main extends Component {
     let roundBtn = <View style={[styles.semiCircle, {height: this.state.cbutton.height}]}>
       <View style={styles.ellipse}>
         <Button rounded style={{width: ELLIPSE_WIDTH}} onPress={ this.handlePress.bind(this) }>
-          <Text style={styles.roundBtn}>{'New Grievance'}</Text>
+          <Text style={StyleSheet.flatten(styles.roundBtn)}>{'New Grievance'}</Text>
         </Button>
       </View>
       <View style={styles.gcontent}>
@@ -318,14 +320,22 @@ class Main extends Component {
       <View style={{flex: 1}}>
       {/* height has been taken from native-base header height */}
         <View style={{flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', height: (Platform.OS === 'ios'? 64: 56), paddingTop: 20}}>
-          <View><Button rounded small danger onPress={this._profileTransition.bind(this)}><Text style={{color: '#fff'}} >{'me'}</Text></Button></View>
-          <View><Button style={{width: width-120, flexDirection: 'row', justifyContent: 'flex-start', overflow: 'hidden'}} onPress={()=>Actions.LocationSearch({radius: this.state.radius})}>
-            <Icon name="ios-search" />
-            {this.props.grievance.grievanceList.locationSearchText}
-          </Button></View>
-          <View><Button square small transparent onPress={this._onSetListMap.bind(this)}>
-            <FontIcon style={{fontSize: 18}} name={this.state.btnType} />
-          </Button></View>
+          <View style={{flex: 2, justifyContent: 'center', flexDirection: 'row', height: '100%'}}>
+            <Button rounded small danger style={{height: '100%'}} onPress={this._profileTransition.bind(this)}>
+              <Text style={{color: '#fff'}} >{'me'}</Text>
+            </Button>
+          </View>
+          <View style={{flex: 6}}>
+            <Button style={{width: '100%'}} onPress={()=>Actions.LocationSearch({radius: this.state.radius})}>
+              <Icon name="ios-search" />
+              <Text>{this.props.grievance.grievanceList.locationSearchText}</Text>
+            </Button>
+          </View>
+          <View style={{flex: 1}}>
+            <Button square small transparent onPress={this._onSetListMap.bind(this)}>
+              <FontIcon style={{fontSize: 24}} name={this.state.btnType} />
+            </Button>
+          </View>
         </View>
         <Content>
           {grievancesDisplayView}

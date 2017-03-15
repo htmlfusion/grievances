@@ -95,7 +95,9 @@ class LocationSearch extends Component {
     return(
       <Layout>
         <View style={{flexDirection: 'row', top: 20}}>
-          <Button transparent onPress={Actions.pop}><Icon name="ios-arrow-back"/></Button>
+          <Button transparent onPress={Actions.pop}>
+            <Icon name="ios-arrow-back"/>
+          </Button>
           <GooglePlacesAutocomplete
             placeholder='Search location'
             minLength={2} // minimum length of text to search
@@ -124,7 +126,7 @@ class LocationSearch extends Component {
               },
               predefinedPlacesDescription: {
                 color: '#1faadb',
-              },
+              }
             }}
             currentLocation={true} // Will add a 'Current location' button at the top of the predefined places list
             currentLocationLabel="Current location"
