@@ -5,14 +5,14 @@ import android.util.Log;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookSdk;
-import com.facebook.reactnative.androidsdk.FBSDKPackage;
 import com.facebook.react.ReactApplication;
-import com.microsoft.codepush.react.CodePush;
-import co.apptailor.googlesignin.RNGoogleSigninPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.burnweb.rnsimplealertdialog.RNSimpleAlertDialogPackage;
-import com.airbnb.android.react.maps.MapsPackage;
 import com.imagepicker.ImagePickerPackage;
+import com.i18n.reactnativei18n.ReactNativeI18n;
+import co.apptailor.googlesignin.RNGoogleSigninPackage;
+import com.facebook.reactnative.androidsdk.FBSDKPackage;
+import com.microsoft.codepush.react.CodePush;
 import com.facebook.reactnative.androidsdk.FBSDKPackage;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
@@ -45,12 +45,13 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
             new MainReactPackage(),
-            new CodePush(null, getApplicationContext(), BuildConfig.DEBUG),
-            new RNGoogleSigninPackage(),
             new VectorIconsPackage(),
             new RNSimpleAlertDialogPackage(),
-            new MapsPackage(),
             new ImagePickerPackage(),
+            new ReactNativeI18n(),
+            new RNGoogleSigninPackage(),
+            new FBSDKPackage(),
+            new CodePush(null, getApplicationContext(), BuildConfig.DEBUG),
             new FBSDKPackage(mCallbackManager)
       );
     }

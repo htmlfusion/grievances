@@ -23,3 +23,5 @@ MVP
 >> Create anonymous user and add fullname as anonymous
 >> For login with fb using phone-no.. Tell them to create email-id
 >> Remove default location in main.js file
+
+Apple-ID philippe@afternow.io
