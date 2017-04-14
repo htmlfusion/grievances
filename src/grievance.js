@@ -135,7 +135,7 @@ class TabIcon extends Component {
 
 export default function native(platform) {
 
-  let Snowflake = React.createClass({
+  let Grievance = React.createClass({
     render() {
 
       const store = configureStore(getInitialState());
@@ -218,5 +218,5 @@ export default function native(platform) {
    * registerComponent to the AppRegistery and off we go....
    */
 
-  AppRegistry.registerComponent('grievances', () => Snowflake);
+  AppRegistry.registerComponent('grievances', () => Grievance);
 }

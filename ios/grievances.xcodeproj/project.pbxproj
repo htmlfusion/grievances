@@ -82,6 +82,7 @@
 		9ED8AC6986F944B39DAC2684 /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5E0D60FD0889466E8CF61801 /* EvilIcons.ttf */; };
 		A6A54E1FECEE479E984BA580 /* Microsoft Sans Serif.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C108853A55624881A17E703A /* Microsoft Sans Serif.ttf */; };
 		AB57333428DC46DEAAE4C42C /* Rubik-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A899F34FB2B9484E9A52B494 /* Rubik-MediumItalic.ttf */; };
+		B3AADEEF3DE94DA2AE6CE715 /* libReactNativeConfig.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BED68068F684F12A07E40D2 /* libReactNativeConfig.a */; };
 		B4F7DEB7169842B69769CCD6 /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D11204C62D58451F9E9E5F55 /* Octicons.ttf */; };
 		BC3982A2BBD04D83A29CBEF8 /* Times New Roman.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8443A9127AA54E28BDA70635 /* Times New Roman.ttf */; };
 		BFF9ED98FE9640B896206EED /* rubicon-icon-font.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 68701B13F1874940B0AB3CD8 /* rubicon-icon-font.ttf */; };
@@ -303,6 +304,13 @@
 			remoteGlobalIDString = 9FD355121D3E4A2900D06170;
 			remoteInfo = RNGoogleSignin;
 		};
+		3D6364331EA13AD400874969 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0B695C5AD2EE4E9E8580D7E6 /* ReactNativeConfig.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = EB2648DF1C7BE17A00B8F155;
+			remoteInfo = ReactNativeConfig;
+		};
 		3D866C141D7820790031E749 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 1D5F157F833940B28155D2B3 /* RNI18n.xcodeproj */;
@@ -356,6 +364,7 @@
 		03BDD349E4FA4620B1B4978D /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/native-base/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
 		0AA8A654F58C4078970194A0 /* libRNI18n.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNI18n.a; sourceTree = "<group>"; };
 		0AAF54C3D9E04C1CAD0A04E2 /* Rubik-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-Regular.ttf"; path = "../node_modules/native-base/Fonts/Rubik-Regular.ttf"; sourceTree = "<group>"; };
+		0B695C5AD2EE4E9E8580D7E6 /* ReactNativeConfig.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = ReactNativeConfig.xcodeproj; path = "../node_modules/react-native-config/ios/ReactNativeConfig.xcodeproj"; sourceTree = "<group>"; };
 		0FBAAE4291B84A52935C38EA /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/native-base/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 		125E11797C5A4CFAA1A04491 /* Rubik-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-Italic.ttf"; path = "../node_modules/native-base/Fonts/Rubik-Italic.ttf"; sourceTree = "<group>"; };
 		139105B61AF99BAD00B5F7CC /* RCTSettings.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTSettings.xcodeproj; path = "../node_modules/react-native/Libraries/Settings/RCTSettings.xcodeproj"; sourceTree = "<group>"; };
@@ -375,6 +384,7 @@
 		319AEB7A17F44922A44D0E09 /* Comic Sans MS.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Comic Sans MS.ttf"; path = "../node_modules/native-base/Fonts/Comic Sans MS.ttf"; sourceTree = "<group>"; };
 		38B54CB9637E4A43B268FE38 /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/native-base/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
 		3A3B4AACC0D44225A13B4274 /* Georgia.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Georgia.ttf; path = "../node_modules/native-base/Fonts/Georgia.ttf"; sourceTree = "<group>"; };
+		3BED68068F684F12A07E40D2 /* libReactNativeConfig.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libReactNativeConfig.a; sourceTree = "<group>"; };
 		3C4364FFCBD744D98133E1CA /* Arial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Arial.ttf; path = "../node_modules/native-base/Fonts/Arial.ttf"; sourceTree = "<group>"; };
 		3D2397001E77E4EC0074A7DB /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
 		3D4C0F56A9A54BA580249A5E /* Roboto_medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Roboto_medium.ttf; path = "../node_modules/native-base/Fonts/Roboto_medium.ttf"; sourceTree = "<group>"; };
@@ -487,6 +497,7 @@
 				FF2D0A6C22374E758E38586C /* libRNI18n.a in Frameworks */,
 				7F19102A4EEF4DD7ACEE09FB /* libRCTFBSDK.a in Frameworks */,
 				80E092DFE19C42EA8555854C /* libCodePush.a in Frameworks */,
+				B3AADEEF3DE94DA2AE6CE715 /* libReactNativeConfig.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -670,6 +681,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		3D6364141EA13AD400874969 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3D6364341EA13AD400874969 /* libReactNativeConfig.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		3D866C031D7820790031E749 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -717,6 +736,7 @@
 				1D5F157F833940B28155D2B3 /* RNI18n.xcodeproj */,
 				5D4473D04E484D8583FC2FF6 /* RCTFBSDK.xcodeproj */,
 				02879B975C9D41D5B7F558A2 /* CodePush.xcodeproj */,
+				0B695C5AD2EE4E9E8580D7E6 /* ReactNativeConfig.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -927,6 +947,10 @@
 				{
 					ProductGroup = 146834001AC3E56700842450 /* Products */;
 					ProjectRef = 146833FF1AC3E56700842450 /* React.xcodeproj */;
+				},
+				{
+					ProductGroup = 3D6364141EA13AD400874969 /* Products */;
+					ProjectRef = 0B695C5AD2EE4E9E8580D7E6 /* ReactNativeConfig.xcodeproj */;
 				},
 				{
 					ProductGroup = 3D60A4141D68434000833B6C /* Products */;
@@ -1150,6 +1174,13 @@
 			remoteRef = 3D60A4171D68434000833B6C /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		3D6364341EA13AD400874969 /* libReactNativeConfig.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libReactNativeConfig.a;
+			remoteRef = 3D6364331EA13AD400874969 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		3D866C151D7820790031E749 /* libRNI18n.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -1332,6 +1363,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1353,6 +1385,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
@@ -1381,6 +1414,7 @@
 					"$(SRCROOT)/../node_modules/react-native-i18n/RNI18n",
 					"$(SRCROOT)/../node_modules/react-native-fbsdk/ios/RCTFBSDK/**",
 					"$(SRCROOT)/../node_modules/react-native-code-push/ios/CodePush/**",
+					"$(SRCROOT)/../node_modules/react-native-config/ios/ReactNativeConfig",
 				);
 				INFOPLIST_FILE = grievances/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1413,6 +1447,7 @@
 					"$(SRCROOT)/../node_modules/react-native-i18n/RNI18n",
 					"$(SRCROOT)/../node_modules/react-native-fbsdk/ios/RCTFBSDK/**",
 					"$(SRCROOT)/../node_modules/react-native-code-push/ios/CodePush/**",
+					"$(SRCROOT)/../node_modules/react-native-config/ios/ReactNativeConfig",
 				);
 				INFOPLIST_FILE = grievances/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
